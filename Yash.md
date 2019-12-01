@@ -17,8 +17,12 @@ From Image-to-Image Translation to Disease Detection and Localization](http://op
 [Robust Person Re-identification by Modelling Feature Uncertainty](http://openaccess.thecvf.com/content_ICCV_2019/papers/Yu_Robust_Person_Re-Identification_by_Modelling_Feature_Uncertainty_ICCV_2019_paper.pdf)
 
 
-### Strange idea, to be rechecked
+### Interesting Papers
 [A Robust Learning Approach to Domain Adaptive Object Detection](http://openaccess.thecvf.com/content_ICCV_2019/papers/Khodabandeh_A_Robust_Learning_Approach_to_Domain_Adaptive_Object_Detection_ICCV_2019_paper.pdf)
+
+[CCNet: Criss-Cross Attention for Semantic Segmentation](http://openaccess.thecvf.com/content_ICCV_2019/papers/Huang_CCNet_Criss-Cross_Attention_for_Semantic_Segmentation_ICCV_2019_paper.pdf)
+
+[Asymmetric Non-local Neural Networks for Semantic Segmentation](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhu_Asymmetric_Non-Local_Neural_Networks_for_Semantic_Segmentation_ICCV_2019_paper.pdf)
 
 
 
