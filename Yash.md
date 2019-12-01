@@ -24,6 +24,8 @@ From Image-to-Image Translation to Disease Detection and Localization](http://op
 
 [Asymmetric Non-local Neural Networks for Semantic Segmentation](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhu_Asymmetric_Non-Local_Neural_Networks_for_Semantic_Segmentation_ICCV_2019_paper.pdf)
 
+[Feature Weighting and Boosting for Few-Shot Segmentation](http://openaccess.thecvf.com/content_ICCV_2019/papers/Nguyen_Feature_Weighting_and_Boosting_for_Few-Shot_Segmentation_ICCV_2019_paper.pdf)
+
 
 
 ### Task relevant papers
