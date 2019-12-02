@@ -11,9 +11,25 @@
 | [Multi-hop Selector Network for Multi-turn Response Selection in Retrieval-based Chatbots](https://www.aclweb.org/anthology/D19-1011.pdf) | Choose what part of context in relevant  |   No |
 | [Entity-Consistent End-to-end Task-Oriented Dialogue System with KBRetriever](https://www.aclweb.org/anthology/D19-1013.pdf) |  distant supervision and Gumbel-Softmax technique.   |   No |
 | [Building Task-Oriented Visual Dialog Systems Through Alternative Optimization Between Dialog Policy and Language Generationn](https://www.aclweb.org/anthology/D19-1014.pdf) | YES    |   No |
+| [Knowledge-Enriched Transformer for Emotion Detection in Textual Conversations](https://www.aclweb.org/anthology/D19-1016.pdf) | Knowledge Enriched Transformer    |   YES |
+| [Justifying Recommendations using Distantly-Labeled Reviews andFine-Grained Aspects](https://www.aclweb.org/anthology/D19-1018.pdf) | Explaination Generation    |   MAYBE |
+| [Open Relation Extraction: Relational Knowledge Transfer fromSupervised Data to Unsupervised Data](https://www.aclweb.org/anthology/D19-1021.pdf) | Using both existing and new knowledge bases    |   YES |
+| [Improving Relation Extraction with Knowledge-attention](https://www.aclweb.org/anthology/D19-1022.pdf) | BS    |   No |
 | [Attention is not not explaination](https://www.aclweb.org/anthology/D19-1002.pdf) | BS    |   No |
-| [Attention is not not explaination](https://www.aclweb.org/anthology/D19-1002.pdf) | BS    |   No |
-| [Attention is not not explaination](https://www.aclweb.org/anthology/D19-1002.pdf) | BS    |   No |
-| [Attention is not not explaination](https://www.aclweb.org/anthology/D19-1002.pdf) | BS    |   No |
-| [Attention is not not explaination](https://www.aclweb.org/anthology/D19-1002.pdf) | BS    |   No |
-| [Attention is not not explaination](https://www.aclweb.org/anthology/D19-1002.pdf) | BS    |   No |
+| [Tackling Long-Tailed Relations and Uncommon Entities in KnowledgeGraph Completion ∗  ](https://www.aclweb.org/anthology/D19-1024.pdf) |  Meta Learning for Uncommon relations   |   YES |
+| [ Low-Resource Name Tagging Learned with Weakly Labeled Data ](https://www.aclweb.org/anthology/D19-1025.pdf) | Combining high and low quality data    |   NR MAYBE |
+| [ Learning Dynamic Context Augmentation for Global Entity Linking ](https://www.aclweb.org/anthology/D19-1029.pdf) |  Sequentially accumulates info for Global Linking   |   MAYBE |
+| [ Self-Attention Enhanced CNNs and Collaborative Curriculum Learning for Distantly Supervised Relation Extraction](https://www.aclweb.org/anthology/D19-1037.pdf) |  INteresting   |   YES |
+| [ Convert Resurce Rich to Resource Poor Language ](https://www.aclweb.org/anthology/D19-1038.pdf) | Okay    |   YES |
+| [  Hierarchical Text Classification with Reinforced Label Assignment](https://www.aclweb.org/anthology/D19-1042.pdf) | RL with Hier for CLustering     |   NR |
+| [ Investigating Capsule Network and Semantic Feature on Hyperplanes forText Classification ](https://www.aclweb.org/anthology/D19-1043.pdf) |     |   YES |
+| [ Label-Specific Document Representation for Multi-Label Text Classification ](https://www.aclweb.org/anthology/D19-1044.pdf) | Using Labels as well for classification    |   NICE IDEA |
+| [  ](https://www.aclweb.org/anthology/D19-1002.pdf) |     |   YES |
+| [  ](https://www.aclweb.org/anthology/D19-1002.pdf) |     |   YES |
+| [  ](https://www.aclweb.org/anthology/D19-1002.pdf) |     |   YES |
+| [  ](https://www.aclweb.org/anthology/D19-1002.pdf) |     |   YES |
+| [  ](https://www.aclweb.org/anthology/D19-1002.pdf) |     |   YES |
+| [  ](https://www.aclweb.org/anthology/D19-1002.pdf) |     |   YES |
+| [  ](https://www.aclweb.org/anthology/D19-1002.pdf) |     |   YES |
+| [  ](https://www.aclweb.org/anthology/D19-1002.pdf) |     |   YES |
+| [  ](https://www.aclweb.org/anthology/D19-1002.pdf) |     |   YES |
