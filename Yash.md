@@ -16,6 +16,8 @@ From Image-to-Image Translation to Disease Detection and Localization](http://op
 
 [Robust Person Re-identification by Modelling Feature Uncertainty](http://openaccess.thecvf.com/content_ICCV_2019/papers/Yu_Robust_Person_Re-Identification_by_Modelling_Feature_Uncertainty_ICCV_2019_paper.pdf)
 
+[Spatio-Temporal Fusion based Convolutional Sequence Learning for Lip
+Reading](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhang_Spatio-Temporal_Fusion_Based_Convolutional_Sequence_Learning_for_Lip_Reading_ICCV_2019_paper.pdf)
 
 ### Interesting Papers
 [A Robust Learning Approach to Domain Adaptive Object Detection](http://openaccess.thecvf.com/content_ICCV_2019/papers/Khodabandeh_A_Robust_Learning_Approach_to_Domain_Adaptive_Object_Detection_ICCV_2019_paper.pdf)
@@ -25,6 +27,12 @@ From Image-to-Image Translation to Disease Detection and Localization](http://op
 [Asymmetric Non-local Neural Networks for Semantic Segmentation](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhu_Asymmetric_Non-Local_Neural_Networks_for_Semantic_Segmentation_ICCV_2019_paper.pdf)
 
 [Feature Weighting and Boosting for Few-Shot Segmentation](http://openaccess.thecvf.com/content_ICCV_2019/papers/Nguyen_Feature_Weighting_and_Boosting_for_Few-Shot_Segmentation_ICCV_2019_paper.pdf)
+
+[SSAP: Single-Shot Instance Segmentation With Affinity Pyramid](http://openaccess.thecvf.com/content_ICCV_2019/papers/Gao_SSAP_Single-Shot_Instance_Segmentation_With_Affinity_Pyramid_ICCV_2019_paper.pdf)
+
+
+[Context-Aware Feature and Label Fusion for Facial Action Unit Intensity
+Estimation With Partially Labeled Data](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhang_Context-Aware_Feature_and_Label_Fusion_for_Facial_Action_Unit_Intensity_ICCV_2019_paper.pdf)
 
 
 
