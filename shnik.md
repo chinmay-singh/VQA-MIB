@@ -1,5 +1,20 @@
 # Table for Papers
 
+## Topics to read
+
+- Graph convolution networks
+- Variational AutoEncoders
+- Capsule Networks
+- Transformer Networks
+- Beam search
+- Bi-Affin
+- BiDAF Learning
+- Continual Learning
+- Imitation Learning
+- Domain Adaptation
+- Dirichlet Latent Variables
+- Cross Attention
+
 Paper | Name? | Abstract? | Topic  
 --- | --- | --- | ---
 [Interaction over Interaction Networks](https://www.aclweb.org/anthology/P19-1001.pdf) | :heavy_check_mark: | Deep "utterance-response" interaction networks | Dialogue
@@ -27,3 +42,30 @@ Paper | Name? | Abstract? | Topic
 [Towards Unsupervised Text Classification Leveraging Experts and Word Embeddings](https://www.aclweb.org/anthology/P19-1036.pdf) | :x: | uses textual similarity between different words | text classification
 [Disentangled Representation Learning for Non-Parallel Text Style Transfer](https://www.aclweb.org/anthology/P19-1041.pdf) | :heavy_check_mark: | Looks like an interesting read on style transfer by disentangled representations (also see in CV) | style transfer
 [Cross-Sentence Grammatical Error Correction](https://www.aclweb.org/anthology/P19-1042.pdf) | :heavy_check_mark: | Grammar Error Correction with context | error correction
+[Learning Emphasis Selection for Written Text in Visual
+Media from Crowd-Sourced Label Distributions](https://www.aclweb.org/anthology/P19-1112.pdf) | :heavy_check_mark: | employs an end to end label distribution learning model | Emphasis selection
+[Improving Neural Language Models by Segmenting, Attending, and Predicting the Future](https://www.aclweb.org/anthology/P19-1144.pdf) | :heavy_check_mark: Nice Work | Improving language models by phrase segmentation | Improving languge models
+[Visually Grounded Neural Syntax Acquisition](https://www.aclweb.org/anthology/P19-1180.pdf) | :heavy_check_mark: | joint visual-semantic embedding space | Visual grounding for syntax parsing
+[Stay on the Path: Instruction Fidelity in Vision-and-Language Navigation](https://www.aclweb.org/anthology/P19-1081.pdf) | :heavy_check_mark: | New metric for language understanding in navigation, new dataset, google research | vision and language navigation 
+[Expressing Visual Relationships via Language](https://www.aclweb.org/anthology/P19-1182.pdf) | :heavy_check_mark: Nice work | New datsets and attention based baselines on visual relationships using language | relationship between pairs of images
+[Weakly-Supervised Spatio-Temporally Grounding Natural Sentence in Video](https://www.aclweb.org/anthology/P19-1183.pdf) | :heavy_check_mark: Nice Work | Localizing the given sentence in the given video | vision and language
+[The PhotoBook Dataset: Building Common Ground through Visually-Grounded Dialogue](https://www.aclweb.org/anthology/P19-1184.pdf) | :heavy_check_mark: | Dataset on dialogues with visual context | Dialogue with images in context
+[Keep Meeting Summaries on Topic: ive Multi-Modal Meeting Summarization](https://www.aclweb.org/anthology/P19-1209.pdf) | :heavy_check_mark: | Multi people meeting summarization using video and transcript | multimodal summarization
+[Cross-Modal Commentator: Automatic Machine Commenting Based on Cross-Modal Information](https://www.aclweb.org/anthology/P19-1257.pdf) | :heavy_check_mark: | Commenting on articles inculcating information from images also | commenting on articles
+[Textbook Question Answering with Multi-modal Context Graph Understanding and Self-supervised Open-set Comprehension](https://www.aclweb.org/anthology/P19-1347.pdf) | :heavy_check_mark: Excellent Work | Textbook question answering considering images in text along with out of domain knowledge using GCN | TQA
+[ELI5: Long Form Question Answering](https://www.aclweb.org/anthology/P19-1346.pdf) | :heavy_check_mark: | A dataset from r/explainlikeimfive | Long form question answering
+[Generating Question Relevant Captions to Aid Visual Question Answering](https://www.aclweb.org/anthology/P19-1348.pdf) | :heavy_check_mark: nice | Image captioning to help in visual qa via online gradient based method |  VQA
+[Multi-grained Attention with Object-level Grounding for Visual Question Answering](https://www.aclweb.org/anthology/P19-1349.pdf) | :heavy_check_mark:, Nice | learns explicit word object correspondence by word level attentions | VQA
+[Psycholinguistics Meets Continual Learning: Measuring Catastrophic Forgetting in Visual Question Answering](https://www.aclweb.org/anthology/P19-1350.pdf) | :heavy_check_mark: | Devised a set of linguistically informed VQA tasks | VQA
+[Improving Visual Question Answering by Referring to Generated Paragraph Captions](https://www.aclweb.org/anthology/P19-1351.pdf) | :heavy_check_mark: | Given image and paragraph description, answer the asked question | VQA
+[Towards Multimodal Sarcasm Detection (An Obviously Perfect Paper)](https://www.aclweb.org/anthology/P19-1455.pdf) | :heavy_check_mark: | MUStARD dataset, video+audio -> sarcasm, code available | Sarcasm detection 
+[Like a Baby: Visually Situated Neural Language Acquisition](https://www.aclweb.org/anthology/P19-1506.pdf) | :heavy_check_mark: | use of visual context in training to predict next word | vision and language
+[Ordinal and Attribute Aware Response Generation in a Multimodal Dialogue System](https://www.aclweb.org/anthology/P19-1540.pdf) | :heavy_check_mark: | position and attribute aware attention mechanism for dialogue system | Dialogue system
+[Multimodal Transformer Networks for End-to-End Video-Grounded Dialogue Systems](https://www.aclweb.org/anthology/P19-1564.pdf) | :heavy_check_mark: | Multimodal transformer network | video based dialogue
+[Storyboarding of Recipes: Grounded Contextual Generation](https://www.aclweb.org/anthology/P19-1606.pdf) | :heavy_check_mark: | text generation (how to) from images |  text generation
+[Latent Variable Model for Multi-modal Translation](https://www.aclweb.org/anthology/P19-1642.pdf) | :heavy_check_mark: | images at training time but not at testing time | translation
+[Identifying Visible Actions in Lifestyle Vlogs](https://www.aclweb.org/anthology/P19-1643.pdf) | :heavy_check_mark: | identifies if actions mentioned in the speech description of a video are visually present | vision and language
+[A Corpus for Reasoning about Natural Language Grounded
+in Photographs](https://www.aclweb.org/anthology/P19-1644.pdf) | :heavy_check_mark: | dataset of natural lang and phots, task to determine if the caption is fitting for the given image |  Dataset on visual reasoning
+[Learning to Discover, Ground and Use Words with Segmental Neural Language Models](https://www.aclweb.org/anthology/P19-1645.pdf) | :heavy_check_mark: | language modeling with grounding in nonlinguistic modalities | visual context, language modeling
+[What Should I Ask? Using Conversationally Informative Rewards for Goal-oriented Visual Dialog.](https://www.aclweb.org/anthology/P19-1646.pdf) | :heavy_check_mark: | end to end visual dialogue system with rl, then generate questions about image | visual dialogue with RL
