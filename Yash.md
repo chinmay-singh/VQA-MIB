@@ -32,6 +32,17 @@ Autoencoder for Unsupervised Anomaly Detection](http://openaccess.thecvf.com/con
 
 [Kernel Modeling Super-Resolution on Real Low-Resolution Images](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhou_Kernel_Modeling_Super-Resolution_on_Real_Low-Resolution_Images_ICCV_2019_paper.pdf)
 
+[Prior Guided Dropout for Robust Visual Localization in Dynamic Environments](http://openaccess.thecvf.com/content_ICCV_2019/papers/Huang_Prior_Guided_Dropout_for_Robust_Visual_Localization_in_Dynamic_Environments_ICCV_2019_paper.pdf)
+
+[Unsupervised Pre-Training of Image Features on Non-Curated Data](http://openaccess.thecvf.com/content_ICCV_2019/papers/Caron_Unsupervised_Pre-Training_of_Image_Features_on_Non-Curated_Data_ICCV_2019_paper.pdf)
+
+must read [Linearized Multi-Sampling for Differentiable Image Transformation](http://openaccess.thecvf.com/content_ICCV_2019/papers/Jiang_Linearized_Multi-Sampling_for_Differentiable_Image_Transformation_ICCV_2019_paper.pdf)
+
+proposing a replacement for bilinear interpolation [CARAFE: Content-Aware ReAssembly of FEatures](http://openaccess.thecvf.com/content_ICCV_2019/papers/Wang_CARAFE_Content-Aware_ReAssembly_of_FEatures_ICCV_2019_paper.pdf)
+
+[Siamese Networks: The Tale of Two Manifolds
+](http://openaccess.thecvf.com/content_ICCV_2019/papers/Roy_Siamese_Networks_The_Tale_of_Two_Manifolds_ICCV_2019_paper.pdf)
+
 ### Interesting Papers
 [A Robust Learning Approach to Domain Adaptive Object Detection](http://openaccess.thecvf.com/content_ICCV_2019/papers/Khodabandeh_A_Robust_Learning_Approach_to_Domain_Adaptive_Object_Detection_ICCV_2019_paper.pdf)
 
@@ -42,7 +53,6 @@ Autoencoder for Unsupervised Anomaly Detection](http://openaccess.thecvf.com/con
 [Feature Weighting and Boosting for Few-Shot Segmentation](http://openaccess.thecvf.com/content_ICCV_2019/papers/Nguyen_Feature_Weighting_and_Boosting_for_Few-Shot_Segmentation_ICCV_2019_paper.pdf)
 
 [SSAP: Single-Shot Instance Segmentation With Affinity Pyramid](http://openaccess.thecvf.com/content_ICCV_2019/papers/Gao_SSAP_Single-Shot_Instance_Segmentation_With_Affinity_Pyramid_ICCV_2019_paper.pdf)
-
 
 [Context-Aware Feature and Label Fusion for Facial Action Unit Intensity
 Estimation With Partially Labeled Data](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhang_Context-Aware_Feature_and_Label_Fusion_for_Facial_Action_Unit_Intensity_ICCV_2019_paper.pdf)
@@ -59,6 +69,14 @@ similar to above [Zero-Shot Emotion Recognition via Affective Structural Embeddi
 [The Sound of Motions](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhao_The_Sound_of_Motions_ICCV_2019_paper.pdf)
 
 [Deep Multi-Model Fusion for Single-Image Dehazing](http://openaccess.thecvf.com/content_ICCV_2019/papers/Deng_Deep_Multi-Model_Fusion_for_Single-Image_Dehazing_ICCV_2019_paper.pdf)
+
+[An Internal Learning Approach to Video Inpainting](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhang_An_Internal_Learning_Approach_to_Video_Inpainting_ICCV_2019_paper.pdf)
+
+[Lifelong GAN: Continual Learning for Conditional Image Generation](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhai_Lifelong_GAN_Continual_Learning_for_Conditional_Image_Generation_ICCV_2019_paper.pdf)
+
+kuch samjha nhi but log mast h paper k, dekhna h mast bhi lag raha[Bayesian Relational Memory for Semantic Visual Navigation](http://openaccess.thecvf.com/content_ICCV_2019/papers/Wu_Bayesian_Relational_Memory_for_Semantic_Visual_Navigation_ICCV_2019_paper.pdf)
+
+must read [Understanding Deep Networks via Extremal Perturbations and Smooth Masks](http://openaccess.thecvf.com/content_ICCV_2019/papers/Fong_Understanding_Deep_Networks_via_Extremal_Perturbations_and_Smooth_Masks_ICCV_2019_paper.pdf)
 
 ### Task relevant papers
 [Goal-Driven Sequential Data Abstraction](http://openaccess.thecvf.com/content_ICCV_2019/papers/Muhammad_Goal-Driven_Sequential_Data_Abstraction_ICCV_2019_paper.pdf)
@@ -98,3 +116,16 @@ Spatial Relation Recognition](http://openaccess.thecvf.com/content_ICCV_2019/pap
 
 kaafi mast paper [Taking a HINT: Leveraging Explanations to Make
 Vision and Language Models More Grounded](http://openaccess.thecvf.com/content_ICCV_2019/papers/Selvaraju_Taking_a_HINT_Leveraging_Explanations_to_Make_Vision_and_Language_ICCV_2019_paper.pdf)
+
+[Align2Ground: Weakly Supervised Phrase Grounding Guided by
+Image-Caption Alignment](http://openaccess.thecvf.com/content_ICCV_2019/papers/Datta_Align2Ground_Weakly_Supervised_Phrase_Grounding_Guided_by_Image-Caption_Alignment_ICCV_2019_paper.pdf)
+
+[Adaptive Reconstruction Network for Weakly Supervised
+Referring Expression Grounding](http://openaccess.thecvf.com/content_ICCV_2019/papers/Liu_Adaptive_Reconstruction_Network_for_Weakly_Supervised_Referring_Expression_Grounding_ICCV_2019_paper.pdf)
+
+[Hierarchy Parsing for Image Captioning](http://openaccess.thecvf.com/content_ICCV_2019/papers/Yao_Hierarchy_Parsing_for_Image_Captioning_ICCV_2019_paper.pdf)
+
+[Controllable Video Captioning with POS Sequence Guidance
+Based on Gated Fusion Network](http://openaccess.thecvf.com/content_ICCV_2019/papers/Wang_Controllable_Video_Captioning_With_POS_Sequence_Guidance_Based_on_Gated_ICCV_2019_paper.pdf)
+
+
