@@ -19,6 +19,19 @@ From Image-to-Image Translation to Disease Detection and Localization](http://op
 [Spatio-Temporal Fusion based Convolutional Sequence Learning for Lip
 Reading](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhang_Spatio-Temporal_Fusion_Based_Convolutional_Sequence_Learning_for_Lip_Reading_ICCV_2019_paper.pdf)
 
+[Relation Parsing Neural Network for Human-Object Interaction Detection](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhou_Relation_Parsing_Neural_Network_for_Human-Object_Interaction_Detection_ICCV_2019_paper.pdf)
+
+[Transferability and Hardness of Supervised Classification Tasks](http://openaccess.thecvf.com/content_ICCV_2019/papers/Tran_Transferability_and_Hardness_of_Supervised_Classification_Tasks_ICCV_2019_paper.pdf)
+
+[S4L: Self-Supervised Semi-Supervised Learning](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhai_S4L_Self-Supervised_Semi-Supervised_Learning_ICCV_2019_paper.pdf)
+
+[Memorizing Normality to Detect Anomaly: Memory-augmented Deep
+Autoencoder for Unsupervised Anomaly Detection](http://openaccess.thecvf.com/content_ICCV_2019/papers/Gong_Memorizing_Normality_to_Detect_Anomaly_Memory-Augmented_Deep_Autoencoder_for_Unsupervised_ICCV_2019_paper.pdf)
+
+[Learning Rich Features at High-Speed for Single-Shot Object Detection](http://openaccess.thecvf.com/content_ICCV_2019/papers/Wang_Learning_Rich_Features_at_High-Speed_for_Single-Shot_Object_Detection_ICCV_2019_paper.pdf)
+
+[Kernel Modeling Super-Resolution on Real Low-Resolution Images](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhou_Kernel_Modeling_Super-Resolution_on_Real_Low-Resolution_Images_ICCV_2019_paper.pdf)
+
 ### Interesting Papers
 [A Robust Learning Approach to Domain Adaptive Object Detection](http://openaccess.thecvf.com/content_ICCV_2019/papers/Khodabandeh_A_Robust_Learning_Approach_to_Domain_Adaptive_Object_Detection_ICCV_2019_paper.pdf)
 
@@ -34,7 +47,18 @@ Reading](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhang_Spatio-Temp
 [Context-Aware Feature and Label Fusion for Facial Action Unit Intensity
 Estimation With Partially Labeled Data](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhang_Context-Aware_Feature_and_Label_Fusion_for_Facial_Action_Unit_Intensity_ICCV_2019_paper.pdf)
 
+[Zero-Shot Anticipation for Instructional Activities](http://openaccess.thecvf.com/content_ICCV_2019/papers/Sener_Zero-Shot_Anticipation_for_Instructional_Activities_ICCV_2019_paper.pdf)
 
+[Attention-Aware Polarity Sensitive Embedding for Affective Image Retrieval](http://openaccess.thecvf.com/content_ICCV_2019/papers/Yao_Attention-Aware_Polarity_Sensitive_Embedding_for_Affective_Image_Retrieval_ICCV_2019_paper.pdf)
+
+similar to above [Zero-Shot Emotion Recognition via Affective Structural Embedding
+](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhan_Zero-Shot_Emotion_Recognition_via_Affective_Structural_Embedding_ICCV_2019_paper.pdf)
+
+[Interactive Sketch & Fill: Multiclass Sketch-to-Image Translation](http://openaccess.thecvf.com/content_ICCV_2019/papers/Ghosh_Interactive_Sketch__Fill_Multiclass_Sketch-to-Image_Translation_ICCV_2019_paper.pdf)
+
+[The Sound of Motions](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhao_The_Sound_of_Motions_ICCV_2019_paper.pdf)
+
+[Deep Multi-Model Fusion for Single-Image Dehazing](http://openaccess.thecvf.com/content_ICCV_2019/papers/Deng_Deep_Multi-Model_Fusion_for_Single-Image_Dehazing_ICCV_2019_paper.pdf)
 
 ### Task relevant papers
 [Goal-Driven Sequential Data Abstraction](http://openaccess.thecvf.com/content_ICCV_2019/papers/Muhammad_Goal-Driven_Sequential_Data_Abstraction_ICCV_2019_paper.pdf)
@@ -57,3 +81,20 @@ Based on Ordinal Regression](http://openaccess.thecvf.com/content_ICCV_2019/pape
 kaafi relevant [Fine-Grained Action Retrieval Through Multiple Parts-of-Speech Embeddings](http://openaccess.thecvf.com/content_ICCV_2019/papers/Wray_Fine-Grained_Action_Retrieval_Through_Multiple_Parts-of-Speech_Embeddings_ICCV_2019_paper.pdf)
 
 [Pose-Guided Feature Alignment for Occluded Person Re-Identification](http://openaccess.thecvf.com/content_ICCV_2019/papers/Miao_Pose-Guided_Feature_Alignment_for_Occluded_Person_Re-Identification_ICCV_2019_paper.pdf)
+
+[Layout-induced Video Representation for
+Recognizing Agent-in-Place Actions
+](http://openaccess.thecvf.com/content_ICCV_2019/papers/Yu_Layout-Induced_Video_Representation_for_Recognizing_Agent-in-Place_Actions_ICCV_2019_paper.pdf)
+
+kaafi relevant [Exploring Overall Contextual Information for Image Captioning in Human-Like
+Cognitive Style](http://openaccess.thecvf.com/content_ICCV_2019/papers/Ge_Exploring_Overall_Contextual_Information_for_Image_Captioning_in_Human-Like_Cognitive_ICCV_2019_paper.pdf)
+
+[Detecting Unseen Visual Relations Using Analogies](http://openaccess.thecvf.com/content_ICCV_2019/papers/Peyre_Detecting_Unseen_Visual_Relations_Using_Analogies_ICCV_2019_paper.pdf)
+
+[Unconstrained Foreground Object Search](http://openaccess.thecvf.com/content_ICCV_2019/papers/Zhao_Unconstrained_Foreground_Object_Search_ICCV_2019_paper.pdf)
+
+very important dataset [SpatialSense: An Adversarially Crowdsourced Benchmark for
+Spatial Relation Recognition](http://openaccess.thecvf.com/content_ICCV_2019/papers/Yang_SpatialSense_An_Adversarially_Crowdsourced_Benchmark_for_Spatial_Relation_Recognition_ICCV_2019_paper.pdf)
+
+kaafi mast paper [Taking a HINT: Leveraging Explanations to Make
+Vision and Language Models More Grounded](http://openaccess.thecvf.com/content_ICCV_2019/papers/Selvaraju_Taking_a_HINT_Leveraging_Explanations_to_Make_Vision_and_Language_ICCV_2019_paper.pdf)
