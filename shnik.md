@@ -2,20 +2,20 @@
 
 ## Topics to read
 
-- Graph convolution networks
-- Variational AutoEncoders
-- Capsule Networks
-- Transformer Networks
-- Beam search
-- Bi-Affin
-- BiDAF Learning
-- Continual Learning
-- Imitation Learning
-- Domain Adaptation
-- Dirichlet Latent Variables
-- Cross Attention
+- [ ] Graph convolution networks
+- [ ] Variational AutoEncoders
+- [ ] Capsule Networks
+- [ ] Transformer Networks
+- [ ] Beam search
+- [ ] Bi-Affin
+- [ ] BiDAF Learning
+- [ ] Continual Learning
+- [ ] Imitation Learning
+- [ ] Domain Adaptation
+- [ ] Dirichlet Latent Variables
+- [ ] Cross Attention
 
-Paper | Name? | Abstract? | Topic  
+Paper | Again? | Abstract Summary | Topic  
 --- | --- | --- | ---
 [Interaction over Interaction Networks](https://www.aclweb.org/anthology/P19-1001.pdf) | :heavy_check_mark: | Deep "utterance-response" interaction networks | Dialogue
 [Incremental Transformer with Deliberation Decoder for Document Grounded Conversations](https://www.aclweb.org/anthology/P19-1002.pdf) | :x: | same as title | Dialogue
@@ -69,3 +69,15 @@ Media from Crowd-Sourced Label Distributions](https://www.aclweb.org/anthology/P
 in Photographs](https://www.aclweb.org/anthology/P19-1644.pdf) | :heavy_check_mark: | dataset of natural lang and phots, task to determine if the caption is fitting for the given image |  Dataset on visual reasoning
 [Learning to Discover, Ground and Use Words with Segmental Neural Language Models](https://www.aclweb.org/anthology/P19-1645.pdf) | :heavy_check_mark: | language modeling with grounding in nonlinguistic modalities | visual context, language modeling
 [What Should I Ask? Using Conversationally Informative Rewards for Goal-oriented Visual Dialog.](https://www.aclweb.org/anthology/P19-1646.pdf) | :heavy_check_mark: | end to end visual dialogue system with rl, then generate questions about image | visual dialogue with RL
+[Symbolic Inductive Bias for Visually Grounded Learning of Spoken Language](https://www.aclweb.org/anthology/P19-1647.pdf) | :heavy_check_mark: | Text with speech, speech with images, text with images | spoken language processing
+[Multi-step Reasoning via Recurrent Dual Attention for Vi-sual Dialog](https://www.aclweb.org/anthology/P19-1648.pdf) | :heavy_check_mark: | visual dialog by iteratively refining semantic representation | Visual Dialogue
+[Informative Image Captioning with External Sources of Information](https://www.aclweb.org/anthology/P19-1650.pdf) | :heavy_check_mark: | integrating image info together with fine grained labels | Image captionning
+[CoDraw: Collaborative Drawing as a Testbed for Grounded Goal-driven Communication](https://www.aclweb.org/anthology/P19-1651.pdf) | :heavy_check_mark:, Nice work FAIR | two agents, one teller, other drawer | Natural language dialogue
+[Bridging by Word: Image Grounded Vocabulary Construction for Visual Captioning](https://www.aclweb.org/anthology/P19-1652.pdf) | :heavy_check_mark: | Generate a restricted vocabulary grounded by images | Image captioning
+[Distilling Translations with Visual Awareness](https://www.aclweb.org/anthology/P19-1653.pdf) | :heavy_check_mark: | translation using textual context in stage 1 and visual context in stage 2 (only if required) | translation
+[VIFIDEL: Evaluating the Visual Fidelity of Image Descritions](https://www.aclweb.org/anthology/P19-1654.pdf) | :heavy_check_mark: | a new metric for generated image descriptions based on objects depicted and words in description | metric for image description
+[Are You Looking? Grounding to Multiple Modalities in Vision-and-Language Navigation](https://www.aclweb.org/anthology/P19-1655.pdf) | :heavy_check_mark: | vision and language navigation: improve by using multiple modalities individually, combinedely using might hurt result | vision and language navigation 
+[Multimodal Transformer for Unaligned Multimodal Language Sequences](https://www.aclweb.org/anthology/P19-1656.pdf) | :heavy_check_mark: | cross modAl attention based transformer modEl | General language modeling and multimodal grounding
+[Visual Story Post-Editing](https://www.aclweb.org/anthology/P19-1658.pdf) | :heavy_check_mark: | Edit visual stories created by models using training from this dataset | dataset on edition visual stories
+[Multimodal ive Summarization for How2 Videos](https://www.aclweb.org/anthology/P19-1659.pdf) | :heavy_check_mark: | multi-modal seq-to-seq modal for summarization and a new metric | Summarization
+
