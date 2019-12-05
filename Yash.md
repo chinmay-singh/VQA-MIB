@@ -43,6 +43,24 @@ proposing a replacement for bilinear interpolation [CARAFE: Content-Aware ReAsse
 [Siamese Networks: The Tale of Two Manifolds
 ](http://openaccess.thecvf.com/content_ICCV_2019/papers/Roy_Siamese_Networks_The_Tale_of_Two_Manifolds_ICCV_2019_paper.pdf)
 
+[Adversarial Feedback Loop](http://openaccess.thecvf.com/content_ICCV_2019/papers/Shama_Adversarial_Feedback_Loop_ICCV_2019_paper.pdf)
+
+[Attention Augmented Convolutional Networks](http://openaccess.thecvf.com/content_ICCV_2019/papers/Bello_Attention_Augmented_Convolutional_Networks_ICCV_2019_paper.pdf)
+
+new way of training [Continual Learning by Asymmetric Loss Approximation
+with Single-Side Overestimation](http://openaccess.thecvf.com/content_ICCV_2019/papers/Park_Continual_Learning_by_Asymmetric_Loss_Approximation_With_Single-Side_Overestimation_ICCV_2019_paper.pdf)
+
+replacement of pooling methods
+
+[LIP: Local Importance-based Pooling
+](http://openaccess.thecvf.com/content_ICCV_2019/papers/Gao_LIP_Local_Importance-Based_Pooling_ICCV_2019_paper.pdf)
+
+[Global Feature Guided Local Pooling](http://openaccess.thecvf.com/content_ICCV_2019/papers/Kobayashi_Global_Feature_Guided_Local_Pooling_ICCV_2019_paper.pdf)
+
+kuch nya sa h, pehli baar dekha [Hyperpixel Flow: Semantic Correspondence with Multi-layer Neural Features](http://openaccess.thecvf.com/content_ICCV_2019/papers/Min_Hyperpixel_Flow_Semantic_Correspondence_With_Multi-Layer_Neural_Features_ICCV_2019_paper.pdf)
+
+
+
 ### Interesting Papers
 [A Robust Learning Approach to Domain Adaptive Object Detection](http://openaccess.thecvf.com/content_ICCV_2019/papers/Khodabandeh_A_Robust_Learning_Approach_to_Domain_Adaptive_Object_Detection_ICCV_2019_paper.pdf)
 
