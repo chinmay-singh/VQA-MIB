@@ -42,8 +42,7 @@ Paper | Again? | Abstract Summary | Topic
 [Towards Unsupervised Text Classification Leveraging Experts and Word Embeddings](https://www.aclweb.org/anthology/P19-1036.pdf) | :x: | uses textual similarity between different words | text classification
 [Disentangled Representation Learning for Non-Parallel Text Style Transfer](https://www.aclweb.org/anthology/P19-1041.pdf) | :heavy_check_mark: | Looks like an interesting read on style transfer by disentangled representations (also see in CV) | style transfer
 [Cross-Sentence Grammatical Error Correction](https://www.aclweb.org/anthology/P19-1042.pdf) | :heavy_check_mark: | Grammar Error Correction with context | error correction
-[Learning Emphasis Selection for Written Text in Visual
-Media from Crowd-Sourced Label Distributions](https://www.aclweb.org/anthology/P19-1112.pdf) | :heavy_check_mark: | employs an end to end label distribution learning model | Emphasis selection
+[Learning Emphasis Selection for Written Text in Visual Media from Crowd-Sourced Label Distributions](https://www.aclweb.org/anthology/P19-1112.pdf) | :heavy_check_mark: | employs an end to end label distribution learning model | Emphasis selection
 [Improving Neural Language Models by Segmenting, Attending, and Predicting the Future](https://www.aclweb.org/anthology/P19-1144.pdf) | :heavy_check_mark: Nice Work | Improving language models by phrase segmentation | Improving languge models
 [Visually Grounded Neural Syntax Acquisition](https://www.aclweb.org/anthology/P19-1180.pdf) | :heavy_check_mark: | joint visual-semantic embedding space | Visual grounding for syntax parsing
 [Stay on the Path: Instruction Fidelity in Vision-and-Language Navigation](https://www.aclweb.org/anthology/P19-1081.pdf) | :heavy_check_mark: | New metric for language understanding in navigation, new dataset, google research | vision and language navigation 
