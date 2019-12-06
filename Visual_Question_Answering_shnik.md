@@ -76,6 +76,34 @@ A detailed analysis of what kind of questions and what type of answers is given 
 
 1. Baselines
 
+	- __Random__: Randomly choose an answer from top 1k answers in VQA train/val dataset
+	- __Prior "Yes"__: Always select the most popular answer ("Yes")
+	- __Per Q-type Prior__: For open ended, pick the most common answer per question type and for multiple choice pick the answer most similar to that of open ended
+	- __K Nearest Neighbours__: For open ended choose the most common from first k nearest neighbours and for multiple choice pick the one that is most similar to that for open ended answer
+
+2. Methods
+
+	The proposed method generated a 2 channel vision + language model that culminates with a softmax over K possible outputs.
+
+	- __Image Channel__: This channel provides an embedding for the image. 2 types of embeddings are experimented.
+		
+		- __I__: The activations from the last hidden layer of VGG are used as 4096 dimensions embeddings.
+		- __norm I__: These are l2 normalized activations from the last hidden layer of VGG.
+
+	- __Question Channel__: This channel provides an embedding for the question. 3 types of embeddings are experimented.
+
+		- __Bag of Words Question__: The top 1,000 words in the questions are used to create a bag-of-words representation. Since there is a strong correlation between the words that start a question and the answer (see Fig. 5), we find the top 10 first, second, and third words of the questions and create a 30 dimensional bag-of-words representation. These features are concatenated to get a 1,030-dim embedding for the question.
 	
+		- __LSTM Q__: An LSTM with one hidden layer is used to obtain 1024-dim embedding for the question. The embedding obtained from the LSTM is a concatenation of last cell state and last hidden state representations (each being 512-dim) from the hidden layer of the LSTM. Each question word is encoded with 300-dim embedding by a fully-connected layer + tanh non-linearity which is then fed to the LSTM. The input vocabulary to the embedding layer consists of all the question words seen in the training dataset 
+	
+		- __deeper LSTM Q__: An LSTM with two hidden layers is used to obtain 2048-dim embedding for the question. The embedding obtained from the LSTM is a concatenation of last cell state and last hidden state representations (each being 512-dim) from each of the two hidden layers of the LSTM. Hence 2 (hidden layers) x 2 (cell state and hidden state) x 512 (dimensionality of each of the cell states, as well as hidden states) in Fig. 8. This is followed by a fully-connected layer + tanh non-linearity to transform 2048-dim embedding to 1024-dim. The question words are encoded in the same way as in LSTM Q.
 
+![Illustration of the dataset](images/model.png?raw=true)
 
+### Section 6: VQA Challenge and Workshop
+
+See the web link
+
+### Section 7: Conclusion and Discussion
+
+### Appendix
