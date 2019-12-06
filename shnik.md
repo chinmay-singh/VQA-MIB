@@ -79,3 +79,8 @@ Paper | Again? | Abstract Summary | Topic
 [Visual Story Post-Editing](https://www.aclweb.org/anthology/P19-1658.pdf) | :heavy_check_mark: | Edit visual stories created by models using training from this dataset | dataset on edition visual stories
 [Multimodal ive Summarization for How2 Videos](https://www.aclweb.org/anthology/P19-1659.pdf) | :heavy_check_mark: | multi-modal seq-to-seq modal for summarization and a new metric | Summarization
 
+
+
+## Papers Summary
+
+1. Visual Question Answering
