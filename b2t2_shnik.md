@@ -54,7 +54,7 @@ Two types of architecture are proposed and discussed here.
 
 Class distribution is modeled as:
 
-_p(l = 1 | I, T)_ = 1 / (1 + e<sup>-&psi;(_E_(_T_))<sup>T</sup>_D_&phi;(_I_)
+_p(l = 1 | I, T)_ = 1 / (1 + e<sup>-&psi;(_E_(_T_))<sup>T</sup>_D_&phi;(_I_)</sup>)
 
 and the corresponding architecture is shown as:
 
