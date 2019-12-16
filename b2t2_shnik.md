@@ -56,7 +56,7 @@ The dual encoder model does not condition the extraction of features of any kind
 
 Class distribution is modeled as:
 
-<center>_p(l = 1 | I, T)_ = 1 / (1 + e<sup>-&psi;(_E_(_T_))<sup>T</sup>_D_&phi;(_I_)</sup>)</center>
+<center>__p(l = 1 | I, T)_ = 1 / (1 + e<sup>-&psi;(_E_(_T_))<sup>T</sup>_D_&phi;(_I_)</sup>)__</center>
 
 and the corresponding architecture is shown as:
 
