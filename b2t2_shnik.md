@@ -52,9 +52,11 @@ Two types of architecture are proposed and discussed here.
 
 1. __Dual Encoder__:
 
+The dual encoder model does not condition the extraction of features of any kind, textual or visual based on the analysis of the other. It basically takes the "dot prodct" of image features with the passage (text) features to find a single value and uses a sigmoid function to squash the results between zero and one. The target might be just to somehow implicitly fuse visual and textual information and back propagate end to end to achieve good results.
+
 Class distribution is modeled as:
 
-_p(l = 1 | I, T)_ = 1 / (1 + e<sup>-&psi;(_E_(_T_))<sup>T</sup>_D_&phi;(_I_)</sup>)
+<center>_p(l = 1 | I, T)_ = 1 / (1 + e<sup>-&psi;(_E_(_T_))<sup>T</sup>_D_&phi;(_I_)</sup>)</center>
 
 and the corresponding architecture is shown as:
 
@@ -62,3 +64,37 @@ and the corresponding architecture is shown as:
 
 
 2. __B2T2__:
+
+Class distribution is modeled as:
+
+![B2T2 Distribution](images/b2t2distri.png?raw=true)
+
+where a<sub>l</sub> &isin; R<sup>h</sup>, b<sub>l</sub> &isin; R, and are learned parameters. E'(I,B,R,T) is a non-contextualized representation for each token and of its position in text, but also of the content and position of the bounding boxes. The key difference from “Dual Encoder” is that text,  imageand bounding boxes are combined at the level of the non-contextualized token representations rather than right before the classification decision.
+
+![B2T2 Distribution](images/b2t2et.png?raw=true)
+
+The corresponding architecture of full B2T2 is shown here,
+
+![B2T2 Diagram](images/earlyfusion.png?raw=true)
+
+How are the embeddings calculated is shown in the following image
+
+![B2T2 embeddings](images/embb.png?raw=true)
+
+3. __Loss Funtion__: 
+
+Binary crossentropy loss is used for label l.
+
+4. __Pretraining of B2T2__:
+
+Two tasks are used for pretraining 
+	
+	i) imposter identification
+	ii) masked language model prediction
+
+For the task of imposter identification, a random image is give a negative sampled caption and the model is asked to predict whether it is a suitable caption for the image and for the task of MLM, it is like in BERT where random tokens are masked and the model is asked to predict the tokens.
+
+The pretraining of the model is done on the dataset __Conceptual Captions__.
+
+![B2T2 pretraining](images/pretrain.png?raw=true)
+
