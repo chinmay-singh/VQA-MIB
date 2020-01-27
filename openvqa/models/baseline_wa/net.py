@@ -72,6 +72,11 @@ class Net(nn.Module):
     '''
     def __init__(self, __C, pretrained_emb, token_size, answer_size, pretrain_emb_ans, token_size_ans, noise_sigma = 0.1):
         super(Net, self).__init__()
+        if pretrain_emb_ans is None:
+            self.eval_flag = True
+        else:
+            self.eval_flag = False
+
         self.__C = __C
 
         self.embedding = nn.Embedding(
@@ -89,7 +94,8 @@ class Net(nn.Module):
             self.embedding.weight.data.copy_(torch.from_numpy(pretrained_emb))
 
             #Edits
-            self.ans_embedding.weight.data.copy_(torch.from_numpy(pretrain_emb_ans))
+            if not self.eval_flag:
+                self.ans_embedding.weight.data.copy_(torch.from_numpy(pretrain_emb_ans))
             #End of Edits
 
         self.lstm = nn.LSTM(
@@ -183,14 +189,18 @@ class Net(nn.Module):
         # self.noise_sigma is to be passed
         noise_vec = self.noise_sigma*torch.randn(proj_feat.shape).cuda()
         proj_feat += noise_vec
-        ans_feat += noise_vec
+        if not self.eval_flag:
+            ans_feat += noise_vec
 
 
         # randomly sample a number 'u' between zero and one
         u = torch.rand(1).cuda() 
 
         # now we can fuse the vector
-        fused_feat = torch.add(torch.mul(u, proj_feat), torch.mul(1-u, ans_feat))
+        if not self.eval_flag:
+            fused_feat = torch.add(torch.mul(u, proj_feat), torch.mul(1-u, ans_feat))
+        else:
+            fused_feat = proj_feat
 
 
         return proj_feat, ans_feat, fused_feat
