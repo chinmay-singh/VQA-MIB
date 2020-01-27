@@ -13,6 +13,13 @@ class BaseDataSet(Data.Dataset):
     def __init__(self):
         self.token_to_ix = None
         self.pretrained_emb = None
+        #Edits
+
+        self.pretrained_emb_ans = None
+        self.token_to_ix_ans = None
+
+        #End of Edits
+
         self.ans_to_ix = None
         self.ix_to_ans = None
 
@@ -31,7 +38,7 @@ class BaseDataSet(Data.Dataset):
 
     def __getitem__(self, idx):
 
-        ques_ix_iter, ans_iter, iid = self.load_ques_ans(idx)
+        ques_ix_iter, ans_ix_iter, ans_iter, iid = self.load_ques_ans(idx)
 
         frcn_feat_iter, grid_feat_iter, bbox_feat_iter = self.load_img_feats(idx, iid)
 
@@ -40,7 +47,9 @@ class BaseDataSet(Data.Dataset):
             torch.from_numpy(grid_feat_iter),\
             torch.from_numpy(bbox_feat_iter),\
             torch.from_numpy(ques_ix_iter),\
+            torch.from_numpy(ans_ix_iter),\
             torch.from_numpy(ans_iter)
+            
 
 
     def __len__(self):

@@ -29,7 +29,7 @@ class PATH:
             'vqa': {
                 'train': self.DATA_PATH['vqa'] + '/feats' + '/train2014',
                 'val': self.DATA_PATH['vqa'] + '/feats' + '/val2014',
-                'test': self.DATA_PATH['vqa'] + '/feats' + '/test2015',
+                'test': self.DATA_PATH['vqa'] + '/feats' + '/test2015'
             },
             'gqa': {
                 'default-frcn': self.DATA_PATH['gqa'] + '/feats' + '/gqa-frcn',
@@ -51,7 +51,7 @@ class PATH:
                 'val-anno': self.DATA_PATH['vqa'] + '/raw' + '/v2_mscoco_val2014_annotations.json',
                 'vg': self.DATA_PATH['vqa'] + '/raw' + '/VG_questions.json',
                 'vg-anno': self.DATA_PATH['vqa'] + '/raw' + '/VG_annotations.json',
-                'test': self.DATA_PATH['vqa'] + '/raw' + '/v2_OpenEnded_mscoco_test2015_questions.json',
+                'test': self.DATA_PATH['vqa'] + '/raw' + '/v2_OpenEnded_mscoco_test2015_questions.json'
             },
             'gqa': {
                 'train': self.DATA_PATH['gqa'] + '/raw' + '/questions1.2/train_balanced_questions.json',

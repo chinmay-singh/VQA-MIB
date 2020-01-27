@@ -46,11 +46,16 @@ def test_engine(__C, dataset, state_dict=None, validation=False):
     ans_size = dataset.ans_size
     pretrained_emb = dataset.pretrained_emb
 
+    #Make changes to this Net implementation
+
+
     net = ModelLoader(__C).Net(
         __C,
         pretrained_emb,
         token_size,
-        ans_size
+        ans_size,
+        None,                       #Pretrained Embeddings matrix of the answer has to be None if the testing  is running
+        13488                           #Size of these embeddings would be this
     )
     net.cuda()
     net.eval()
@@ -73,6 +78,7 @@ def test_engine(__C, dataset, state_dict=None, validation=False):
             grid_feat_iter,
             bbox_feat_iter,
             ques_ix_iter,
+            _,              #Answer_ix_iter is nothing of relevance here in test
             ans_iter
     ) in enumerate(dataloader):
 
@@ -85,12 +91,16 @@ def test_engine(__C, dataset, state_dict=None, validation=False):
         grid_feat_iter = grid_feat_iter.cuda()
         bbox_feat_iter = bbox_feat_iter.cuda()
         ques_ix_iter = ques_ix_iter.cuda()
+        # edits
+        ans_ix = torch.ones((__C.EVAL_BATCH_SIZE, 4, ), dtype=torch.int64)
+        # edits end
 
-        pred = net(
+        pred, random_tensor1, random_tensor2 = net(
             frcn_feat_iter,
             grid_feat_iter,
             bbox_feat_iter,
-            ques_ix_iter
+            ques_ix_iter,
+            ans_ix #Where ans_ix_iter would have been
         )
         pred_np = pred.cpu().data.numpy()
         pred_argmax = np.argmax(pred_np, axis=1)

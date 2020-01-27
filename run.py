@@ -4,7 +4,7 @@
 # --------------------------------------------------------
 
 from openvqa.models.model_loader import CfgLoader
-from utils.exec import Execution
+from utils.exec import Execution 
 import argparse, yaml
 
 
@@ -24,21 +24,31 @@ def parse_args():
                            'mcan_small',
                            'mcan_large',
                            'ban_4',
+                           #Edits
+                           'ban_wa',
+                           'baseline_wa',
+                           #End of Edits
                            'ban_8',
                            'mfb',
                            'mfh',
                            'mem',
-                           'butd'
+                           'butd',
+                           'baseline'
                            ]
                         ,
                       help='{'
                            'mcan_small,'
                            'mcan_large,'
+                            #Edits
+                           'ban_wa,'
+                           'baseline_wa,'
+                           #End of Edits
                            'ban_4,'
                            'ban_8,'
                            'mfb,'
                            'mfh,'
                            'butd,'
+                           'baseline,'
                            '}'
                         ,
                       type=str, required=True)
@@ -119,6 +129,22 @@ def parse_args():
     parser.add_argument('--NW', dest='NUM_WORKERS',
                       help='multithreaded loading to accelerate IO',
                       type=int)
+
+    parser.add_argument('--CAP_DIST', dest='LOSS_FUNCTION',
+                      help='Capping the Euclidean distance for the Fusion',
+                      default=0.3,
+                      type=float)
+
+    parser.add_argument('--APLHA', dest='LOSS_INTERP',
+                      help='ALPHA: Combining parameter for interpolation Loss',
+                      default=1.0,
+                      type=float)
+
+    parser.add_argument('--BETA', dest='LOSS_INTERP',
+                      help='BETA: Combining parameter for interpolation Loss',
+                      default=30.0,
+                      type=float)
+
 
     parser.add_argument('--PINM', dest='PIN_MEM',
                       choices=['True', 'False'],

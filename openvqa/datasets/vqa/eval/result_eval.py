@@ -2,7 +2,7 @@ from openvqa.datasets.vqa.eval.vqa import VQA
 from openvqa.datasets.vqa.eval.vqaEval import VQAEval
 import json, pickle
 import numpy as np
-
+import wandb
 
 def eval(__C, dataset, ans_ix_list, pred_list, result_eval_file, ensemble_file, log_file, valid=False):
     result_eval_file = result_eval_file + '.json'
@@ -66,8 +66,10 @@ def eval(__C, dataset, ans_ix_list, pred_list, result_eval_file, ensemble_file, 
         logfile = open(log_file, 'a+')
 
         logfile.write("Overall Accuracy is: %.02f\n" % (vqaEval.accuracy['overall']))
+        wandb.log({"Overall Accuracy": vqaEval.accuracy['overall']})
         for ansType in vqaEval.accuracy['perAnswerType']:
             logfile.write("%s : %.02f " % (ansType, vqaEval.accuracy['perAnswerType'][ansType]))
+            wandb.log({ansType: vqaEval.accuracy['perAnswerType'][ansType]})
         logfile.write("\n\n")
         logfile.close()
 

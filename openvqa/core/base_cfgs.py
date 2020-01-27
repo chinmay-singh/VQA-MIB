@@ -42,6 +42,15 @@ class BaseCfgs(PATH):
         # Print loss every iteration
         self.VERBOSE = True
 
+        # Weight for interpolation loss
+        self.ALPHA = 1
+
+        # Weight for fusion loss
+        self.BETA = 30.0
+
+        # Maximum cap for distance betwen any vectors
+        self.CAP_DIST = 0.3
+
 
         # ------------------------------
         # ---- Data Provider Params ----

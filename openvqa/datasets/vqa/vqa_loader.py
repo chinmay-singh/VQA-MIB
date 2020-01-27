@@ -65,11 +65,27 @@ class DataSet(BaseDataSet):
         self.qid_to_ques = self.ques_load(self.ques_list)
 
         # Tokenize
+        # For tokenizing we need a spacy tool, declaring here
+        self.spacy_tool = en_vectors_web_lg.load()
+        print('spacy_tool is loaded but will be used when getitem is called')
+        print('')
         self.token_to_ix, self.pretrained_emb = self.tokenize(stat_ques_list, __C.USE_GLOVE)
         self.token_size = self.token_to_ix.__len__()
         print(' ========== Question token vocab size:', self.token_size)
 
         # Answers statistic
+        # Tokenize and make a vocabulary of each word in the answer as seperate tokens
+
+
+        #Edits
+        #Added the initialization of these two only when mode is train
+        if __C.RUN_MODE in ['train']:
+            print("hello! its training dataset loading time")
+            self.token_to_ix_ans , self.pretrained_emb_ans = self.tokenize_ans(self.ans_list,__C.USE_GLOVE)
+            self.token_size_ans = self.token_to_ix_ans.__len__()
+            
+        #ENd of our edit
+
         self.ans_to_ix, self.ix_to_ans = self.ans_stat('openvqa/datasets/vqa/answer_dict.json')
         # self.ans_to_ix, self.ix_to_ans = self.ans_stat(stat_ans_list, ans_freq=8)
         self.ans_size = self.ans_to_ix.__len__()
@@ -107,13 +123,13 @@ class DataSet(BaseDataSet):
             'CLS': 2,
         }
 
-        spacy_tool = None
+        #spacy_tool = None
         pretrained_emb = []
         if use_glove:
-            spacy_tool = en_vectors_web_lg.load()
-            pretrained_emb.append(spacy_tool('PAD').vector)
-            pretrained_emb.append(spacy_tool('UNK').vector)
-            pretrained_emb.append(spacy_tool('CLS').vector)
+            #spacy_tool = en_vectors_web_lg.load()
+            pretrained_emb.append(self.spacy_tool('PAD').vector)
+            pretrained_emb.append(self.spacy_tool('UNK').vector)
+            pretrained_emb.append(self.spacy_tool('CLS').vector)
 
         for ques in stat_ques_list:
             words = re.sub(
@@ -126,11 +142,51 @@ class DataSet(BaseDataSet):
                 if word not in token_to_ix:
                     token_to_ix[word] = len(token_to_ix)
                     if use_glove:
-                        pretrained_emb.append(spacy_tool(word).vector)
+                        pretrained_emb.append(self.spacy_tool(word).vector)
 
         pretrained_emb = np.array(pretrained_emb)
 
         return token_to_ix, pretrained_emb
+   
+    '''
+    Added the function tokenize_ans, which creates the embeddings of all the
+    words in the answers. The answers are taken from the answer_dict
+    '''
+    
+    def tokenize_ans(self, ans_list, use_glove):
+
+
+        token_to_ix_ans = {
+            'PAD': 0,
+            'UNK': 1,
+            'CLS': 2,
+        }
+
+        pretrained_emb_ans = []
+        if use_glove:
+
+            pretrained_emb_ans.append(self.spacy_tool('PAD').vector)
+            pretrained_emb_ans.append(self.spacy_tool('UNK').vector)
+            pretrained_emb_ans.append(self.spacy_tool('CLS').vector)
+
+        for ans in ans_list:
+            #Taking out the multiple choice/ most voted ans of the question
+            multi_choice_ans = ans['multiple_choice_answer']
+
+            multi_choice_ans = prep_ans(multi_choice_ans)
+
+            words = multi_choice_ans.split()
+
+            for word in words:
+                if word not in token_to_ix_ans:
+                    token_to_ix_ans[word] = len(token_to_ix_ans)
+                    if use_glove:
+                        pretrained_emb_ans.append(self.spacy_tool(word).vector)
+
+        pretrained_emb_ans = np.array(pretrained_emb_ans)
+
+        return token_to_ix_ans, pretrained_emb_ans
+    
 
 
     # def ans_stat(self, stat_ans_list, ans_freq):
@@ -178,8 +234,12 @@ class DataSet(BaseDataSet):
 
             # Process answer
             ans_iter = self.proc_ans(ans, self.ans_to_ix)
+            
+            #Edits
+            ans_ix_iter = self.proc_ans_tokens(ans, self.token_to_ix_ans, max_token = 4)
+            #End of Edits
 
-            return ques_ix_iter, ans_iter, iid
+            return ques_ix_iter, ans_ix_iter, ans_iter, iid
 
         else:
             ques = self.ques_list[idx]
@@ -187,7 +247,7 @@ class DataSet(BaseDataSet):
 
             ques_ix_iter = self.proc_ques(ques, self.token_to_ix, max_token=14)
 
-            return ques_ix_iter, np.zeros(1), iid
+            return ques_ix_iter, np.zeros(1), np.zeros(1), iid # will have to check, at the time of eval how is processing done
 
 
     def load_img_feats(self, idx, iid):
@@ -257,6 +317,28 @@ class DataSet(BaseDataSet):
 
         return ques_ix
 
+    #Edits
+
+    def proc_ans_tokens(self, ans, token_to_ix_ans, max_token):
+        
+        ans_ix = np.zeros(max_token, np.int64)
+
+        words = prep_ans(ans['multiple_choice_answer']).split()
+
+        for ix, word in enumerate(words):
+            if word in token_to_ix_ans:
+                ans_ix[ix] = token_to_ix_ans[word]
+            else:
+                ans_ix[ix] = token_to_ix_ans['UNK']
+
+            if ix + 1 == max_token:
+                break
+
+        return ans_ix
+
+
+    #End of Edits
+
 
     def get_score(self, occur):
         if occur == 0:
@@ -273,6 +355,8 @@ class DataSet(BaseDataSet):
 
     def proc_ans(self, ans, ans_to_ix):
         ans_score = np.zeros(ans_to_ix.__len__(), np.float32)
+        ans_emb = None
+        flag = False # indicates whether the embeddings of most probable answer is already made
         ans_prob_dict = {}
 
         for ans_ in ans['answers']:
@@ -281,6 +365,12 @@ class DataSet(BaseDataSet):
                 ans_prob_dict[ans_proc] = 1
             else:
                 ans_prob_dict[ans_proc] += 1
+
+            '''
+            Here we create the embedding of the most probable answer,
+            in future we can also take the weighted average of embeddings
+            of all the possible answers.
+            '''
 
         if self.__C.LOSS_FUNC in ['kld']:
             for ans_ in ans_prob_dict:

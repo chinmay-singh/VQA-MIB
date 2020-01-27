@@ -8,6 +8,7 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.data as Data
+import wandb
 from openvqa.models.model_loader import ModelLoader
 from openvqa.utils.optim import get_optim, adjust_lr
 from utils.test_engine import test_engine, ckpt_proc
@@ -20,12 +21,22 @@ def train_engine(__C, dataset, dataset_eval=None):
     ans_size = dataset.ans_size
     pretrained_emb = dataset.pretrained_emb
 
+    #Edits
+    pretrained_emb_ans = dataset.pretrained_emb_ans
+    token_size_ans = dataset.token_size_ans
+    #End of Edits
+
+    print("Model being used is {}".format(__C.MODEL_USE))
+
     net = ModelLoader(__C).Net(
         __C,
         pretrained_emb,
         token_size,
-        ans_size
+        ans_size,
+        pretrained_emb_ans,
+        token_size_ans
     )
+
     net.cuda()
     net.train()
 
@@ -108,6 +119,13 @@ def train_engine(__C, dataset, dataset_eval=None):
     logfile.write(str(__C))
     logfile.close()
 
+    # initializing the wandb project
+    # TODO to change the name of project later, once the proper coding starts
+    wandb.init("openvqa", name=__C.MODEL_USE, config=__C)
+
+    # obtain histogram of each gradients in network as it trains
+    wandb.watch(net, log="all")
+
     # Training script
     for epoch in range(start_epoch, __C.MAX_EPOCH):
 
@@ -139,7 +157,13 @@ def train_engine(__C, dataset, dataset_eval=None):
                 grid_feat_iter,
                 bbox_feat_iter,
                 ques_ix_iter,
+
+                #Edits
+                ans_ix_iter,
+                #End of Edits
+
                 ans_iter
+
         ) in enumerate(dataloader):
 
             optim.zero_grad()
@@ -148,6 +172,9 @@ def train_engine(__C, dataset, dataset_eval=None):
             grid_feat_iter = grid_feat_iter.cuda()
             bbox_feat_iter = bbox_feat_iter.cuda()
             ques_ix_iter = ques_ix_iter.cuda()
+            #Edits
+            ans_ix_iter = ans_ix_iter.cuda()
+            #End of Edits
             ans_iter = ans_iter.cuda()
 
             loss_tmp = 0
@@ -166,26 +193,89 @@ def train_engine(__C, dataset, dataset_eval=None):
                 sub_ques_ix_iter = \
                     ques_ix_iter[accu_step * __C.SUB_BATCH_SIZE:
                                  (accu_step + 1) * __C.SUB_BATCH_SIZE]
+                #Edits
+                sub_ans_ix_iter = \
+                    ans_ix_iter[accu_step * __C.SUB_BATCH_SIZE:
+                                 (accu_step + 1) * __C.SUB_BATCH_SIZE]
+                #End of Edits
+
                 sub_ans_iter = \
                     ans_iter[accu_step * __C.SUB_BATCH_SIZE:
                              (accu_step + 1) * __C.SUB_BATCH_SIZE]
 
-                pred = net(
+                
+                # when making predictions also pass the ans_iter which is a dictionary from which you
+                # can extract answers and pass them through decoders
+                pred_img_ques, pred_ans, pred_fused = net(
                     sub_frcn_feat_iter,
                     sub_grid_feat_iter,
                     sub_bbox_feat_iter,
-                    sub_ques_ix_iter
+                    sub_ques_ix_iter,
+                    sub_ans_ix_iter
                 )
+                
+                # we need to change the loss terms accordingly
+                # now we need to modify the loss terms for the same
+                
+                #Edits: creating the loss items for each of the prediction vector
+                loss_item_img_ques = [pred_img_ques, sub_ans_iter]
+                loss_item_ans = [pred_ans, sub_ans_iter]
+                loss_item_interp = [pred_fused, sub_ans_iter]
 
-                loss_item = [pred, sub_ans_iter]
+                
                 loss_nonlinear_list = __C.LOSS_FUNC_NONLINEAR[__C.LOSS_FUNC]
+                
+                # applying the same transformation on the all three
+                # althought for 'bce' loss the following does nothing
                 for item_ix, loss_nonlinear in enumerate(loss_nonlinear_list):
                     if loss_nonlinear in ['flat']:
-                        loss_item[item_ix] = loss_item[item_ix].view(-1)
+                        loss_item_img_ques[item_ix] = loss_item_img_ques[item_ix].view(-1)
                     elif loss_nonlinear:
-                        loss_item[item_ix] = eval('F.' + loss_nonlinear + '(loss_item[item_ix], dim=1)')
+                        loss_item_img_ques[item_ix] = eval('F.' + loss_nonlinear + '(loss_item_img_ques[item_ix], dim=1)')
 
-                loss = loss_fn(loss_item[0], loss_item[1])
+                for item_ix, loss_nonlinear in enumerate(loss_nonlinear_list):
+                    if loss_nonlinear in ['flat']:
+                        loss_item_ans[item_ix] = loss_item_ans[item_ix].view(-1)
+                    elif loss_nonlinear:
+                        loss_item_ans[item_ix] = eval('F.' + loss_nonlinear + '(loss_item_ans[item_ix], dim=1)')
+
+                for item_ix, loss_nonlinear in enumerate(loss_nonlinear_list):
+                    if loss_nonlinear in ['flat']:
+                        loss_item_interp[item_ix] = loss_item_interp[item_ix].view(-1)
+                    elif loss_nonlinear:
+                        loss_item_interp[item_ix] = eval('F.' + loss_nonlinear + '(loss_item_interp[item_ix], dim=1)')
+
+
+                # Now we create all the four losses and then add them
+                loss_img_ques = loss_fn(loss_item_img_ques[0], loss_item_img_ques[1])
+                
+                # loss for the prediction from the answer
+                loss_ans = loss_fn(loss_item_ans[0], loss_item_ans[1])
+                
+                # Loss for the prediction from the fused vector
+                # I am keeping the loss same as bce but we can change it later for more predictions
+                # loss_fused = interpolation loss
+                loss_interp = loss_fn(loss_item_interp[0], loss_item_interp[1])
+                
+                # we also need to multiply this fused loss by a hyperparameter alpha
+                # put the alpha in the config and uncomment the following line
+                loss_interp *= __C.ALPHA
+
+                # Now calculate the fusion loss
+                #1. Higher loss for higher distance between vectors predicted
+                # by different models for same example
+                loss_fusion = torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.sqrt((pred_img_ques - pred_ans).pow(2).sum(1)).mean())
+
+                #2. Lower loss for more distance between two pred vectors of same model
+                loss_fusion -= torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.pdist(pred_img_ques, 2).mean()) 
+                loss_fusion -= torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.pdist(pred_ans, 2).mean()) 
+
+                # Multiply the loss fusion with hyperparameter beta
+                loss_fusion *= __C.BETA
+
+                # combine all the losses
+                loss = loss_img_ques + loss_ans + loss_interp + loss_fusion
+                
                 loss /= __C.GRAD_ACCU_STEPS
                 loss.backward()
 
@@ -257,6 +347,13 @@ def train_engine(__C, dataset, dataset_eval=None):
             '.pkl'
         )
 
+        wandb.save(
+            __C.CKPTS_PATH +
+            '/ckpt_' + __C.VERSION +
+            '/epoch' + str(epoch_finish) +
+            '.h5'
+        )
+        
         # Logging
         logfile = open(
             __C.LOG_PATH +
@@ -273,6 +370,12 @@ def train_engine(__C, dataset, dataset_eval=None):
         )
         logfile.close()
 
+        wandb.log({
+            'Loss': float(loss_sum / data_size),
+            'Learning Rate': optim._rate,
+            'Elapsed time': int(elapse_time) 
+            })
+        
         # Eval after every epoch
         if dataset_eval is not None:
             test_engine(

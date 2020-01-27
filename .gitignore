@@ -154,3 +154,10 @@ dmypy.json
 .vscode/
 .vs
 .vs/
+
+# wandb
+wandb
+tags
+
+# zip files
+*.tar.gz
