@@ -1,4 +1,4 @@
-# OpenVQA
+# ProjectX
 
 <div>
 	<a href="https://openvqa.readthedocs.io/en/latest/?badge=latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/openvqa/badge/?version=latest"/></a>
@@ -24,9 +24,3 @@ Help -
 ```
 python3 vis.py -h
 ```
-
-
-
-
-
-
