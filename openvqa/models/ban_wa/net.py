@@ -24,8 +24,10 @@ class Net(nn.Module):
 
         if pretrain_emb_ans is None:
             self.eval_flag = True
+            print("\n----------------\nEval time, eval_flag = true\n----------------------\n")
         else:
             self.eval_flag = False
+            print("\n----------------\nTrain time, eval_flag = false\n----------------------\n")
         
         self.__C = __C
 
@@ -74,13 +76,13 @@ class Net(nn.Module):
             nn.Dropout(__C.CLASSIFER_DROPOUT_R, inplace=True),
             weight_norm(nn.Linear(__C.FLAT_OUT_SIZE, answer_size), dim=None)
         ]
-        self.classifer = nn.Sequential(*layers)
+        self.classifier = nn.Sequential(*layers)
         
         # create the noise vector std
         self.noise_sigma = noise_sigma
 
 
-    def forward(self, fcrn_feat, grid_feat, bbox_feat, ques_ix, ans_ix):
+    def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix):
 
         # Pre-process Language Feature
         # lang_feat_mask = make_mask(ques_ix.unsqueeze(2))
@@ -105,18 +107,20 @@ class Net(nn.Module):
         lang_feat += noise_vec
 
         # Classification layers
-        proj_feat = self.classifer(lang_feat)
+        proj_feat = self.classifier(lang_feat)
         
         # ans features
         ans_feat = self.ans_embedding(ans_ix)
         ans_feat, _ = self.ans_rnn(ans_feat)
+        ans_feat = ans_feat.sum(1)
 
         # add the same noise to ans_feat but only at training time
         if not self.eval_flag:
+            assert ans_feat.shape == lang_feat.shape, "ans_feat: {} and lang_feat: {} shapes do not match".format(ans_feat.shape, lang_feat.shape)
             ans_feat += noise_vec
         
         # classification layer
-        ans_proj_feat = self.Classifier(ans_feat)
+        ans_proj_feat = self.classifier(ans_feat)
 
         
         # randomly sample a number 'u' between zero and one
@@ -124,8 +128,10 @@ class Net(nn.Module):
 
         # now we can fuse the vector
         if not self.eval_flag:
-            fused_feat = torch.add(torch.mul(u, proj_feat), torch.mul(1-u, ans_feat))
+            fused_feat = torch.add(torch.mul(u, lang_feat), torch.mul(1-u, ans_feat))
+            fused_proj_feat = self.classifier(fused_feat)
         else:
             fused_feat = proj_feat
+            fused_proj_feat = self.classifier(fused_feat)
 
         return proj_feat, ans_proj_feat, fused_feat

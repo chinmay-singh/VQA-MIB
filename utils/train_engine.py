@@ -247,14 +247,17 @@ def train_engine(__C, dataset, dataset_eval=None):
 
 
                 # Now we create all the four losses and then add them
+                print("shape of loss_item_img_ques[0] is {} and of loss_item_img_ques[1] is {}".format(loss_item_img_ques[0],loss_item_img_ques[1]))
                 loss_img_ques = loss_fn(loss_item_img_ques[0], loss_item_img_ques[1])
                 
                 # loss for the prediction from the answer
+                print("shape of loss_item_ans[0] is {} and of loss_item_ans[1] is {}".format(loss_item_ans[0],loss_item_ans[1]))
                 loss_ans = loss_fn(loss_item_ans[0], loss_item_ans[1])
                 
                 # Loss for the prediction from the fused vector
                 # I am keeping the loss same as bce but we can change it later for more predictions
                 # loss_fused = interpolation loss
+                print("shape of loss_item_interp[0] is {} and of loss_item_interp[1] is {}".format(loss_item_interp[0],loss_item_interp[1]))
                 loss_interp = loss_fn(loss_item_interp[0], loss_item_interp[1])
                 
                 # we also need to multiply this fused loss by a hyperparameter alpha
