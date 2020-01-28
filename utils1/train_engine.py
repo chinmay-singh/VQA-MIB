@@ -11,7 +11,7 @@ import torch.utils.data as Data
 import wandb
 from openvqa.models.model_loader import ModelLoader
 from openvqa.utils.optim import get_optim, adjust_lr
-from utils.test_engine import test_engine, ckpt_proc
+from utils1.test_engine import test_engine, ckpt_proc
 
 
 def train_engine(__C, dataset, dataset_eval=None):
