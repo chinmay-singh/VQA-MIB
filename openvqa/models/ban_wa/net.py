@@ -6,8 +6,8 @@
 from openvqa.utils.make_mask import make_mask
 from openvqa.ops.fc import FC, MLP
 from openvqa.ops.layer_norm import LayerNorm
-from openvqa.models.ban.ban import BAN
-from openvqa.models.ban.adapter import Adapter
+from openvqa.models.ban_wa.ban_wa import BAN
+from openvqa.models.ban_wa.adapter import Adapter
 
 import torch.nn as nn
 import torch.nn.functional as F
@@ -21,6 +21,12 @@ import torch
 class Net(nn.Module):
     def __init__(self, __C, pretrained_emb, token_size, answer_size, pretrain_emb_ans, token_size_ans, noise_sigma = 0.1):
         super(Net, self).__init__()
+
+        if pretrain_emb_ans is None:
+            self.eval_flag = True
+        else:
+            self.eval_flag = False
+        
         self.__C = __C
 
         self.embedding = nn.Embedding(
@@ -34,20 +40,12 @@ class Net(nn.Module):
         )
 
 
-        #Edits
-        if pretrain_emb_ans != None:
-            self.ans_embedding = nn.Embedding(
-                num_embeddings=token_size_ans,
-                embedding_dim= __C.WORD_EMBED_SIZE
-            )
-        #End of Edits
-
         # Loading the GloVe embedding weights
         if __C.USE_GLOVE:
             self.embedding.weight.data.copy_(torch.from_numpy(pretrained_emb))
             
             #Edits
-            if pretrain_emb_ans != None:
+            if not self.eval_flag:
                 self.ans_embedding.weight.data.copy_(torch.from_numpy(pretrain_emb_ans))
             #End of Edits
 
@@ -57,9 +55,15 @@ class Net(nn.Module):
             num_layers=1,
             batch_first=True
         )
+        
+        self.ans_rnn = nn.GRU(
+            input_size=__C.WORD_EMBED_SIZE,
+            hidden_size=__C.HIDDEN_SIZE,
+            num_layers=1,
+            batch_first=True
+        )
 
         self.adapter = Adapter(__C)
-
         self.backbone = BAN(__C)
 
 
@@ -71,50 +75,17 @@ class Net(nn.Module):
             weight_norm(nn.Linear(__C.FLAT_OUT_SIZE, answer_size), dim=None)
         ]
         self.classifer = nn.Sequential(*layers)
+        
+        # create the noise vector std
+        self.noise_sigma = noise_sigma
 
 
+    def forward(self, fcrn_feat, grid_feat, bbox_feat, ques_ix, ans_ix):
 
         # Pre-process Language Feature
         # lang_feat_mask = make_mask(ques_ix.unsqueeze(2))
         lang_feat = self.embedding(ques_ix)
-
-        #Edits
-        if ans_ix != None:                          #Change this code? it has been crudely written assumig that None is being Passed
-            lang_feat_ans = self.ans_embedding(ans_ix)
-        #End of Edits
-
         lang_feat, _ = self.rnn(lang_feat)
-
-        #Edits
-        lang_feat_ans, _ = self.rnn(lang_feat_ans)
-        #End of Ends
-        '''
-        ques_ix contains the batch of natural language ques
-        pretrained_emb contains embeddings of all the words that appear in the questions
-        self.embedding is a container in which embeddings of all words are copied from pretrained_emb
-        self.embedding(ques_ix) becomes a layer which finds embeddings of all words and might be trainable 
-        so, we should rewrite this such that this function gets something like ans_to_ix and we can use self.embedding on it
-        what changes I need to do:
-        In vqa_loader.py:
-            make pretrain_emb_ans using answers vocab from answer_dict.json
-            preprocess an answer so as to return a dictionary containing the answer words as keys and their positions as indices call it ans_to_ix
-            return ans_to_ix from load_ques_ans fn
-        
-        In base_dataset.py
-            return ans_to_ix from getitem
-           
-        In train_engine.py:
-            when enumerating on a batch returned from dataloader, pass ans_to_ix (batch) to the net
-            also save dataset.pretrain_emb_ans as attribute and pass in net
-            Later: modify loss function
-
-        In net.py:
-            pretrain_emb_ans will come from dataset.pretrain_emb
-            now use nn.embedding initialized to pretrain_emb_ans and convert answer batch into embeddings using this nn.embedding
-            use self.rnn on the answer batch embedding
-            combine (image, ques) vector with (ans) vector using random sampling and whatever it is
-        '''
-
         
         img_feat, _ = self.adapter(frcn_feat, grid_feat, bbox_feat)
 
@@ -124,7 +95,37 @@ class Net(nn.Module):
             img_feat
         )
 
-        # Classification layers
-        proj_feat = self.classifer(lang_feat.sum(1))
+        # sum the lang+img features along dimesion 1
+        lang_feat = lang_feat.sum(1)
+        
+        # create a noise vector
+        noise_vec = self.noise_sigma*torch.randn(lang_feat.shape).cuda()
 
-        return proj_feat
+        # add the noise to lang+img features
+        lang_feat += noise_vec
+
+        # Classification layers
+        proj_feat = self.classifer(lang_feat)
+        
+        # ans features
+        ans_feat = self.ans_embedding(ans_ix)
+        ans_feat, _ = self.ans_rnn(ans_feat)
+
+        # add the same noise to ans_feat but only at training time
+        if not self.eval_flag:
+            ans_feat += noise_vec
+        
+        # classification layer
+        ans_proj_feat = self.Classifier(ans_feat)
+
+        
+        # randomly sample a number 'u' between zero and one
+        u = torch.rand(1).cuda() 
+
+        # now we can fuse the vector
+        if not self.eval_flag:
+            fused_feat = torch.add(torch.mul(u, proj_feat), torch.mul(1-u, ans_feat))
+        else:
+            fused_feat = proj_feat
+
+        return proj_feat, ans_proj_feat, fused_feat
