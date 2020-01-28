@@ -4,9 +4,7 @@
 	<a href="https://openvqa.readthedocs.io/en/latest/?badge=latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/openvqa/badge/?version=latest"/></a>
 </div>
 
-## How to use:
-
-### Visualisation:
+## Visualisation:
 
 Input -
 1. Two npy files, each containing a numpy vector X (num_samples, feature_vector_dimension).
