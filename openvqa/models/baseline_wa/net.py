@@ -59,6 +59,11 @@ class AttFlat(nn.Module):
 # ---- Main MCAN Model ----
 # -------------------------
 
+
+#Generator
+
+
+
     
 
 class Net(nn.Module):
@@ -104,6 +109,17 @@ class Net(nn.Module):
             num_layers=1,
             batch_first=True
         )
+
+        # Generator
+
+        self.gru_gen = nn.GRU(
+            input_size= self.answer_size,
+            hidden_size=2*self.answer_size,
+            num_layers=2,
+            batch_first=True
+        )
+
+        # End of Generator
 
         self.ans_lstm = nn.LSTM(
             input_size=__C.WORD_EMBED_SIZE,
@@ -201,6 +217,14 @@ class Net(nn.Module):
             fused_feat = torch.add(torch.mul(u, proj_feat), torch.mul(1-u, ans_feat))
         else:
             fused_feat = proj_feat
+
+        self.gru_gen.flatten_parameters()
+        proj_feat = self.gru_gen(proj_feat)
+        
+        ans_feat = self.gru_gen(ans_feat)
+        
+        fused_feat = self.gru_gen(fused_feat)
+        
 
 
         return proj_feat, ans_feat, fused_feat
