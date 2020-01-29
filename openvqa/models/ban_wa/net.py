@@ -94,14 +94,18 @@ class Net(nn.Module):
         self.noise_sigma = noise_sigma
         
         # parameters for saving numpy arrays
-        self.batch_size = int(__C.SUB_BATCH_SIZE/2)
+        self.batch_size = int(__C.SUB_BATCH_SIZE)
         self.num = math.ceil(10000/self.batch_size) #313
+
 
         # storing npy arrays
         self.shape = (self.num * self.batch_size, int(__C.HIDDEN_SIZE)) #(10016, 1024) changed flat out size to hidden size
         self.z_proj = np.zeros(shape=self.shape) #(10016, 1024)
         self.z_ans = np.zeros(shape=self.shape) #(10016, 1024)
         self.z_fused = np.zeros(shape=self.shape) #(10016, 1024)
+
+        # epoch count
+        self.epoch_count = 0
 
 
     def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step):
@@ -159,9 +163,11 @@ class Net(nn.Module):
             self.z_fused[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = fused_feat.clone().detach().cpu().numpy()
 
         elif (step == self.num and not self.eval_flag):
-            np.save('/mnt/sdb/yash/ProjectX/saved/ban_wa/z_proj_' + str(epoch) + '.npy', self.z_proj)
-            np.save('/mnt/sdb/yash/ProjectX/saved/ban_wa/z_ans_' + str(epoch) + '.npy', self.z_ans)
-            np.save('/mnt/sdb/yash/ProjectX/saved/ban_wa/z_fused_' + str(epoch) + '.npy', self.z_fused)
+            np.save('/mnt/sdb/yash/ProjectX/saved/ban_wa/z_proj_' + str(self.epoch_count) + '.npy', self.z_proj)
+            np.save('/mnt/sdb/yash/ProjectX/saved/ban_wa/z_ans_' + str(self.epoch_count) + '.npy', self.z_ans)
+            np.save('/mnt/sdb/yash/ProjectX/saved/ban_wa/z_fused_' + str(self.epoch_count) + '.npy', self.z_fused)
+
+            self.epoch_count += 1
 
             self.z_proj = np.zeros(shape=self.shape)
             self.z_ans = np.zeros(shape=self.shape)
