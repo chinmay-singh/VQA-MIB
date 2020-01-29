@@ -92,7 +92,7 @@ def test_engine(__C, dataset, state_dict=None, validation=False):
         bbox_feat_iter = bbox_feat_iter.cuda()
         ques_ix_iter = ques_ix_iter.cuda()
         # edits
-        ans_ix = torch.ones((__C.EVAL_BATCH_SIZE, 4, ), dtype=torch.int64)
+        ans_ix = torch.ones((__C.EVAL_BATCH_SIZE, 4, ), dtype=torch.int64).cuda()
         # edits end
 
         pred, random_tensor1, random_tensor2 = net(
