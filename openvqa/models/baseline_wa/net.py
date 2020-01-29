@@ -7,6 +7,8 @@ from openvqa.models.mcan.adapter import Adapter
 import torch.nn as nn
 import torch.nn.functional as F
 import torch
+import numpy as np
+import math
 
 
 # ------------------------------
@@ -84,6 +86,15 @@ class Net(nn.Module):
 
         self.__C = __C
 
+
+        self.decoder_mlp = MLP(
+            in_size=__C.HIDDEN_SIZE,
+            mid_size= 2*__C.HIDDEN_SIZE,
+            out_size=answer_size,
+            dropout_r=0,
+            use_relu=True
+        )
+
         self.embedding = nn.Embedding(
             num_embeddings=token_size,
             embedding_dim=__C.WORD_EMBED_SIZE
@@ -113,9 +124,9 @@ class Net(nn.Module):
         # Generator
 
         self.gru_gen = nn.GRU(
-            input_size= self.answer_size,
-            hidden_size=2*self.answer_size,
-            num_layers=2,
+            input_size= __C.FLAT_OUT_SIZE,
+            hidden_size=__C.HIDDEN_SIZE,
+            num_layers=1,
             batch_first=True
         )
 
@@ -146,8 +157,21 @@ class Net(nn.Module):
         # create the noise vector std
         self.noise_sigma = noise_sigma
 
+        self.batch_size = int(__C.SUB_BATCH_SIZE/2)
+        self.num = math.ceil(10000/self.batch_size) #313
 
-    def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix):
+        # storing npy arrays
+        self.shape = (self.num * self.batch_size, int(__C.FLAT_OUT_SIZE)) #(10016, 1024)
+        self.z_proj = np.zeros(shape=self.shape) #(10016, 1024)
+        self.z_ans = np.zeros(shape=self.shape) #(10016, 1024)
+        self.z_fused = np.zeros(shape=self.shape) #(10016, 1024)
+
+        self.calc_epoch = 0
+
+    def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step):
+
+        step = int(step)
+
 
         '''
         We need to implement this function differently for the train and tes
@@ -176,12 +200,15 @@ class Net(nn.Module):
         img_feat = self.attflat_img(
             img_feat,
             img_feat_mask
-            
+        )
+
+        proj_feat = lang_feat + img_feat # (batch, 1024)
 
         # Classification layers
-        proj_feat = lang_feat + img_feat # (batch, 1024)
+        '''
         proj_feat = self.proj_norm(proj_feat) # (batch, 1024)
         proj_feat = self.proj(proj_feat) #(batch, 3129)
+        '''
 
         # Pre-process answer Feature
         ans_feat = self.ans_embedding(ans_ix) # (batch, 4, 300)
@@ -197,34 +224,68 @@ class Net(nn.Module):
             ans_feat_mask
         )
 
-        # Answer Classification layers
-        ans_feat = self.ans_proj_norm(ans_feat) # (batch, 1024)
-        ans_feat = self.ans_proj(ans_feat) #(batch, 3129)
-
         # Add noise to both encoded representations
         # self.noise_sigma is to be passed
         noise_vec = self.noise_sigma*torch.randn(proj_feat.shape).cuda()
+        ans_noise_vec = self.noise_sigma*torch.randn(ans_feat.shape).cuda()
         proj_feat += noise_vec
         if not self.eval_flag:
-            ans_feat += noise_vec
+            ans_feat += ans_noise_vec
 
+
+        # Answer Classification layers
+        '''
+        ans_feat = self.ans_proj_norm(ans_feat) # (batch, 1024)
+        ans_feat = self.ans_proj(ans_feat) #(batch, 3129)
+        '''
 
         # randomly sample a number 'u' between zero and one
-        u = torch.rand(1).cuda() 
+        u = torch.rand(1).cuda()
 
         # now we can fuse the vector
         if not self.eval_flag:
+            # (batch_size, 1024)
             fused_feat = torch.add(torch.mul(u, proj_feat), torch.mul(1-u, ans_feat))
         else:
             fused_feat = proj_feat
 
-        self.gru_gen.flatten_parameters()
-        proj_feat = self.gru_gen(proj_feat)
-        
-        ans_feat = self.gru_gen(ans_feat)
-        
-        fused_feat = self.gru_gen(fused_feat)
-        
+        # Save the three features
+        if (step < self.num and not self.eval_flag):
+            self.z_proj[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = proj_feat.clone().detach().cpu().numpy()
+            self.z_ans[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = ans_feat.clone().detach().cpu().numpy()
+            self.z_fused[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = fused_feat.clone().detach().cpu().numpy()
 
+        elif (step == self.num and not self.eval_flag):
+            np.save('/mnt/sdb/yash/ProjectX/saved/z_proj_' + str(self.calc_epoch) + '.npy', self.z_proj)
+            np.save('/mnt/sdb/yash/ProjectX/saved/z_ans_' + str(self.calc_epoch) + '.npy', self.z_ans)
+            np.save('/mnt/sdb/yash/ProjectX/saved/z_fused_' + str(self.calc_epoch) + '.npy', self.z_fused)
+
+            self.z_proj = np.zeros(shape=self.shape)
+            self.z_ans = np.zeros(shape=self.shape)
+            self.z_fused = np.zeros(shape=self.shape)
+
+            self.calc_epoch += 1
+
+
+        # DECODER
+        self.gru_gen.flatten_parameters()
+
+        # (batch_size, 512)
+        proj_feat, _ = self.gru_gen(proj_feat.unsqueeze(1))
+        proj_feat = proj_feat.squeeze()
+        # (batch_size, answer_size)
+        proj_feat = self.decoder_mlp(proj_feat)
+        
+        # (batch_size, 512)
+        ans_feat, _ = self.gru_gen(ans_feat.unsqueeze(1))
+        ans_feat = ans_feat.squeeze()
+        # (batch_size, answer_size)
+        ans_feat = self.decoder_mlp(ans_feat)
+        
+        # (batch_size, 512)
+        fused_feat, _ = self.gru_gen(fused_feat.unsqueeze(1))
+        fused_feat = fused_feat.squeeze()
+        # (batch_size, answer_size)
+        fused_feat = self.decoder_mlp(fused_feat)
 
         return proj_feat, ans_feat, fused_feat
