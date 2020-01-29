@@ -64,12 +64,22 @@ class Net(nn.Module):
             num_layers=1,
             batch_first=True
         )
+        
+        # Generator
 
+        self.gru_gen = nn.GRU(
+            input_size= __C.HIDDEN_SIZE,
+            hidden_size=__C.HIDDEN_SIZE,
+            num_layers=1,
+            batch_first=True
+        )
+
+        # End of Generator
         self.adapter = Adapter(__C)
         self.backbone = BAN(__C)
 
 
-        # Classification layers
+        # Classification layers after generator
         layers = [
             weight_norm(nn.Linear(__C.HIDDEN_SIZE, __C.FLAT_OUT_SIZE), dim=None),
             nn.ReLU(),
@@ -80,9 +90,21 @@ class Net(nn.Module):
         
         # create the noise vector std
         self.noise_sigma = noise_sigma
+        
+        # parameters for saving numpy arrays
+        self.batch_size = int(__C.SUB_BATCH_SIZE/2)
+        self.num = math.ceil(10000/self.batch_size) #313
+
+        # storing npy arrays
+        self.shape = (self.num * self.batch_size, int(__C.FLAT_OUT_SIZE)) #(10016, 1024)
+        self.z_proj = np.zeros(shape=self.shape) #(10016, 1024)
+        self.z_ans = np.zeros(shape=self.shape) #(10016, 1024)
+        self.z_fused = np.zeros(shape=self.shape) #(10016, 1024)
 
 
-    def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix):
+    def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step):
+
+        step = int(step)
 
         # Pre-process Language Feature
         # lang_feat_mask = make_mask(ques_ix.unsqueeze(2))
@@ -102,36 +124,68 @@ class Net(nn.Module):
         
         # create a noise vector
         noise_vec = self.noise_sigma*torch.randn(lang_feat.shape).cuda()
+        ans_noise_vec = self.noise_sigma*torch.randn(ans_feat.shape).cuda()
 
         # add the noise to lang+img features
         lang_feat += noise_vec
 
-        # Classification layers
-        proj_feat = self.classifier(lang_feat)
-        
         # ans features
         ans_feat = self.ans_embedding(ans_ix)
         ans_feat, _ = self.ans_rnn(ans_feat)
         ans_feat = ans_feat.sum(1)
 
-        # add the same noise to ans_feat but only at training time
+        # add different noise to ans_feat but only at training time
         if not self.eval_flag:
             assert ans_feat.shape == lang_feat.shape, "ans_feat: {} and lang_feat: {} shapes do not match".format(ans_feat.shape, lang_feat.shape)
             ans_feat += noise_vec
-        
-        # classification layer
-        ans_proj_feat = self.classifier(ans_feat)
-
+      
         
         # randomly sample a number 'u' between zero and one
         u = torch.rand(1).cuda() 
-
+       
         # now we can fuse the vector
         if not self.eval_flag:
             fused_feat = torch.add(torch.mul(u, lang_feat), torch.mul(1-u, ans_feat))
-            fused_proj_feat = self.classifier(fused_feat)
         else:
-            fused_feat = proj_feat
-            fused_proj_feat = self.classifier(fused_feat)
+            fused_feat = lang_feat
+        
+        
+        # Save the three features
+        if (step < self.num and not self.eval_flag):
+            self.z_proj[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = lang_feat.clone().detach().cpu().numpy()
+            self.z_ans[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = ans_feat.clone().detach().cpu().numpy()
+            self.z_fused[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = fused_feat.clone().detach().cpu().numpy()
 
+        elif (step == self.num and not self.eval_flag):
+            np.save('/mnt/sdb/yash/ProjectX/saved/ban_wa/z_proj_' + str(epoch) + '.npy', self.z_proj)
+            np.save('/mnt/sdb/yash/ProjectX/saved/ban_wa/z_ans_' + str(epoch) + '.npy', self.z_ans)
+            np.save('/mnt/sdb/yash/ProjectX/saved/ban_wa/z_fused_' + str(epoch) + '.npy', self.z_fused)
+
+            self.z_proj = np.zeros(shape=self.shape)
+            self.z_ans = np.zeros(shape=self.shape)
+            self.z_fused = np.zeros(shape=self.shape)
+
+
+        # add the decoder
+        # DECODER
+        self.gru_gen.flatten_parameters()
+
+        # (batch_size, 512)
+        proj_feat, _ = self.gru_gen(lang_feat.unsqueeze(1))
+        proj_feat = lang_feat.squeeze()
+        # (batch_size, answer_size)
+        proj_feat = self.classifier(proj_feat)
+        
+        # (batch_size, 512)
+        ans_feat, _ = self.gru_gen(ans_feat.unsqueeze(1))
+        ans_feat = ans_feat.squeeze()
+        # (batch_size, answer_size)
+        ans_feat = self.classifier(ans_feat)
+        
+        # (batch_size, 512)
+        fused_feat, _ = self.gru_gen(fused_feat.unsqueeze(1))
+        fused_feat = fused_feat.squeeze()
+        # (batch_size, answer_size)
+        fused_feat = self.classifier(fused_feat)
+        
         return proj_feat, ans_proj_feat, fused_feat
