@@ -100,7 +100,8 @@ def test_engine(__C, dataset, state_dict=None, validation=False):
             grid_feat_iter,
             bbox_feat_iter,
             ques_ix_iter,
-            ans_ix #Where ans_ix_iter would have been
+            ans_ix, #Where ans_ix_iter would have been
+            step
         )
         pred_np = pred.cpu().data.numpy()
         pred_argmax = np.argmax(pred_np, axis=1)
