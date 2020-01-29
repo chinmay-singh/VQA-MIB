@@ -13,6 +13,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.utils.weight_norm import weight_norm
 import torch
+import math
+import numpy as np
 
 # -------------------------
 # ---- Main BAN Model With Answers----
@@ -96,7 +98,7 @@ class Net(nn.Module):
         self.num = math.ceil(10000/self.batch_size) #313
 
         # storing npy arrays
-        self.shape = (self.num * self.batch_size, int(__C.FLAT_OUT_SIZE)) #(10016, 1024)
+        self.shape = (self.num * self.batch_size, int(__C.HIDDEN_SIZE)) #(10016, 1024) changed flat out size to hidden size
         self.z_proj = np.zeros(shape=self.shape) #(10016, 1024)
         self.z_ans = np.zeros(shape=self.shape) #(10016, 1024)
         self.z_fused = np.zeros(shape=self.shape) #(10016, 1024)
@@ -124,7 +126,6 @@ class Net(nn.Module):
         
         # create a noise vector
         noise_vec = self.noise_sigma*torch.randn(lang_feat.shape).cuda()
-        ans_noise_vec = self.noise_sigma*torch.randn(ans_feat.shape).cuda()
 
         # add the noise to lang+img features
         lang_feat += noise_vec
@@ -133,7 +134,8 @@ class Net(nn.Module):
         ans_feat = self.ans_embedding(ans_ix)
         ans_feat, _ = self.ans_rnn(ans_feat)
         ans_feat = ans_feat.sum(1)
-
+        ans_noise_vec = self.noise_sigma*torch.randn(ans_feat.shape).cuda()
+        
         # add different noise to ans_feat but only at training time
         if not self.eval_flag:
             assert ans_feat.shape == lang_feat.shape, "ans_feat: {} and lang_feat: {} shapes do not match".format(ans_feat.shape, lang_feat.shape)
@@ -188,4 +190,4 @@ class Net(nn.Module):
         # (batch_size, answer_size)
         fused_feat = self.classifier(fused_feat)
         
-        return proj_feat, ans_proj_feat, fused_feat
+        return proj_feat, ans_feat, fused_feat
