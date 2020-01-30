@@ -212,7 +212,8 @@ def train_engine(__C, dataset, dataset_eval=None):
                     sub_bbox_feat_iter,
                     sub_ques_ix_iter,
                     sub_ans_ix_iter,
-                    step
+                    step,
+                    epoch
                 )
                 
                 # we need to change the loss terms accordingly
@@ -268,17 +269,17 @@ def train_engine(__C, dataset, dataset_eval=None):
                 # Now calculate the fusion loss
                 #1. Higher loss for higher distance between vectors predicted
                 # by different models for same example
-                loss_fusion = torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.sqrt((pred_img_ques - pred_ans).pow(2).sum(1)).mean())
+                #loss_fusion = torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.sqrt((pred_img_ques - pred_ans).pow(2).sum(1)).mean())
 
                 #2. Lower loss for more distance between two pred vectors of same model
-                loss_fusion -= torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.pdist(pred_img_ques, 2).mean()) 
-                loss_fusion -= torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.pdist(pred_ans, 2).mean()) 
+                #loss_fusion -= torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.pdist(pred_img_ques, 2).mean()) 
+                #loss_fusion -= torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.pdist(pred_ans, 2).mean()) 
 
                 # Multiply the loss fusion with hyperparameter beta
-                loss_fusion *= __C.BETA
+                #loss_fusion *= __C.BETA
 
                 # combine all the losses
-                loss = loss_img_ques + loss_ans + loss_interp + loss_fusion
+                loss = loss_img_ques + loss_ans + loss_interp# + loss_fusion
                 
                 loss /= __C.GRAD_ACCU_STEPS
                 loss.backward()
@@ -323,6 +324,7 @@ def train_engine(__C, dataset, dataset_eval=None):
 
             optim.step()
 
+        """
         time_end = time.time()
         elapse_time = time_end-time_start
         print('Finished in {}s'.format(int(elapse_time)))
@@ -379,14 +381,16 @@ def train_engine(__C, dataset, dataset_eval=None):
             'Learning Rate': optim._rate,
             'Elapsed time': int(elapse_time) 
             })
-        
+        """
+
         # Eval after every epoch
         if dataset_eval is not None:
             test_engine(
                 __C,
                 dataset_eval,
                 state_dict=net.state_dict(),
-                validation=True
+                validation=True,
+                epoch = 0
             )
 
         # if self.__C.VERBOSE:
