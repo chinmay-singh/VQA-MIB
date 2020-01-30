@@ -166,9 +166,8 @@ class Net(nn.Module):
         self.z_ans = np.zeros(shape=self.shape) #(10016, 1024)
         self.z_fused = np.zeros(shape=self.shape) #(10016, 1024)
 
-        self.calc_epoch = 0
 
-    def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step):
+    def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step, epoch):
 
         step = int(step)
 
@@ -228,9 +227,9 @@ class Net(nn.Module):
         # self.noise_sigma is to be passed
         noise_vec = self.noise_sigma*torch.randn(proj_feat.shape).cuda()
         ans_noise_vec = self.noise_sigma*torch.randn(ans_feat.shape).cuda()
-        proj_feat += noise_vec
         if not self.eval_flag:
             ans_feat += ans_noise_vec
+            proj_feat += noise_vec
 
 
         # Answer Classification layers
@@ -255,16 +254,16 @@ class Net(nn.Module):
             self.z_ans[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = ans_feat.clone().detach().cpu().numpy()
             self.z_fused[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = fused_feat.clone().detach().cpu().numpy()
 
-        elif (step == self.num and not self.eval_flag):
-            np.save('/mnt/sdb/yash/ProjectX/saved/z_proj_' + str(self.calc_epoch) + '.npy', self.z_proj)
-            np.save('/mnt/sdb/yash/ProjectX/saved/z_ans_' + str(self.calc_epoch) + '.npy', self.z_ans)
-            np.save('/mnt/sdb/yash/ProjectX/saved/z_fused_' + str(self.calc_epoch) + '.npy', self.z_fused)
 
+        elif (step == self.num and not self.eval_flag):
+            np.save('./saved/baseline_wa_with_fusion/z_proj_' + str(epoch) + '.npy', self.z_proj)
+            np.save('./saved/baseline_wa_with_fusion/z_ans_' + str(epoch) + '.npy', self.z_ans)
+            np.save('./saved/baseline_wa_with_fusion/z_fused_' + str(epoch) + '.npy', self.z_fused)
+
+        elif (step == (self.num + 1) and not self.eval_flag):
             self.z_proj = np.zeros(shape=self.shape)
             self.z_ans = np.zeros(shape=self.shape)
             self.z_fused = np.zeros(shape=self.shape)
-
-            self.calc_epoch += 1
 
 
         # DECODER
