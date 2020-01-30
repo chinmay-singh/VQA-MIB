@@ -13,7 +13,7 @@ from openvqa.datasets.dataset_loader import EvalLoader
 
 # Evaluation
 @torch.no_grad()
-def test_engine(__C, dataset, state_dict=None, validation=False):
+def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
 
     # Load parameters
     if __C.CKPT_PATH is not None:
@@ -101,7 +101,8 @@ def test_engine(__C, dataset, state_dict=None, validation=False):
             bbox_feat_iter,
             ques_ix_iter,
             ans_ix, #Where ans_ix_iter would have been
-            step
+            step,
+            epoch = 0
         )
         pred_np = pred.cpu().data.numpy()
         pred_argmax = np.argmax(pred_np, axis=1)
