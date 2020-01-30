@@ -111,49 +111,50 @@ class Net(nn.Module):
         # Pre-process Language Feature
         # lang_feat_mask = make_mask(ques_ix.unsqueeze(2))
         lang_feat = self.embedding(ques_ix)
+        self.rnn.flatten_parameters()
         lang_feat, _ = self.rnn(lang_feat)
         
         img_feat, _ = self.adapter(frcn_feat, grid_feat, bbox_feat)
 
         # Backbone Framework
-        lang_feat = self.backbone(
+        proj_feat = self.backbone(
             lang_feat,
             img_feat
         )
 
         # sum the lang+img features along dimesion 1
-        lang_feat = lang_feat.sum(1)
+        proj_feat = proj_feat.sum(1)
         
         # create a noise vector
-        noise_vec = self.noise_sigma*torch.randn(lang_feat.shape).cuda()
-
-        # add the noise to lang+img features
-        lang_feat += noise_vec
+        noise_vec = self.noise_sigma*torch.randn(proj_feat.shape).cuda()
 
         # ans features
         ans_feat = self.ans_embedding(ans_ix)
+        self.ans_rnn.flatten_parameters()
         ans_feat, _ = self.ans_rnn(ans_feat)
         ans_feat = ans_feat.sum(1)
         ans_noise_vec = self.noise_sigma*torch.randn(ans_feat.shape).cuda()
         
         # add different noise to ans_feat but only at training time
         if not self.eval_flag:
-            assert ans_feat.shape == lang_feat.shape, "ans_feat: {} and lang_feat: {} shapes do not match".format(ans_feat.shape, lang_feat.shape)
+            assert ans_feat.shape == proj_feat.shape, "ans_feat: {} and proj_feat: {} shapes do not match".format(ans_feat.shape, proj_feat.shape)
             ans_feat += noise_vec
       
-        
+            # add the noise to lang+img features
+            proj_feat += noise_vec
+           
         # randomly sample a number 'u' between zero and one
         u = torch.rand(1).cuda() 
        
         # now we can fuse the vector
         if not self.eval_flag:
-            fused_feat = torch.add(torch.mul(u, lang_feat), torch.mul(1-u, ans_feat))
+            fused_feat = torch.add(torch.mul(u, proj_feat), torch.mul(1-u, ans_feat))
         else:
-            fused_feat = lang_feat
+            fused_feat = proj_feat
         
         # Save the three features
         if (step < self.num and not self.eval_flag):
-            self.z_proj[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = lang_feat.clone().detach().cpu().numpy()
+            self.z_proj[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = proj_feat.clone().detach().cpu().numpy()
             self.z_ans[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = ans_feat.clone().detach().cpu().numpy()
             self.z_fused[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = fused_feat.clone().detach().cpu().numpy()
 
@@ -162,7 +163,7 @@ class Net(nn.Module):
             np.save('/mnt/sdb/yash/openvqa/saved/ban_wa/z_ans_' + str(epoch) + '.npy', self.z_ans)
             np.save('/mnt/sdb/yash/openvqa/saved/ban_wa/z_fused_' + str(epoch) + '.npy', self.z_fused)
 
-        elif (step > self.num and not self.eval_flag):
+        elif (step == (self.num + 1) and not self.eval_flag):
             self.z_proj = np.zeros(shape=self.shape)
             self.z_ans = np.zeros(shape=self.shape)
             self.z_fused = np.zeros(shape=self.shape)
@@ -173,8 +174,8 @@ class Net(nn.Module):
         self.gru_gen.flatten_parameters()
 
         # (batch_size, 512)
-        proj_feat, _ = self.gru_gen(lang_feat.unsqueeze(1))
-        proj_feat = lang_feat.squeeze()
+        proj_feat, _ = self.gru_gen(proj_feat.unsqueeze(1))
+        proj_feat = proj_feat.squeeze()
         # (batch_size, answer_size)
         proj_feat = self.classifier(proj_feat)
         
