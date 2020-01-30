@@ -23,8 +23,7 @@ def train_engine(__C, dataset, dataset_eval=None):
 
     #Edits
     pretrained_emb_ans = dataset.pretrained_emb_ans
-    token_size_ans = dataset.token_size_ans
-    #End of Edits
+    token_size_ans = dataset.token_size_ans #End of Edits
 
     print("Model being used is {}".format(__C.MODEL_USE))
 
@@ -40,6 +39,10 @@ def train_engine(__C, dataset, dataset_eval=None):
     net.cuda()
     net.train()
 
+    # creating a folder for saving the numpy visualization arrays
+    if (__C.VERSION) not in os.listdir(__C.SAVED_PATH)
+        os.mkdir(__C.SAVED_PATH + '/' + __C.VERSION)
+
     if __C.N_GPU > 1:
         net = nn.DataParallel(net, device_ids=__C.DEVICES)
 
@@ -53,8 +56,7 @@ def train_engine(__C, dataset, dataset_eval=None):
         if __C.CKPT_PATH is not None:
             print('Warning: Now using CKPT_PATH args, '
                   'CKPT_VERSION and CKPT_EPOCH will not work')
-
-            path = __C.CKPT_PATH
+path = __C.CKPT_PATH
         else:
             path = __C.CKPTS_PATH + \
                    '/ckpt_' + __C.CKPT_VERSION + \
@@ -269,17 +271,17 @@ def train_engine(__C, dataset, dataset_eval=None):
                 # Now calculate the fusion loss
                 #1. Higher loss for higher distance between vectors predicted
                 # by different models for same example
-                #loss_fusion = torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.sqrt((pred_img_ques - pred_ans).pow(2).sum(1)).mean())
+                loss_fusion = torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.sqrt((pred_img_ques - pred_ans).pow(2).sum(1)).mean())
 
                 #2. Lower loss for more distance between two pred vectors of same model
-                #loss_fusion -= torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.pdist(pred_img_ques, 2).mean()) 
-                #loss_fusion -= torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.pdist(pred_ans, 2).mean()) 
+                loss_fusion -= torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.pdist(pred_img_ques, 2).mean()) 
+                loss_fusion -= torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.pdist(pred_ans, 2).mean()) 
 
                 # Multiply the loss fusion with hyperparameter beta
-                #loss_fusion *= __C.BETA
+                loss_fusion *= __C.BETA
 
                 # combine all the losses
-                loss = loss_img_ques + loss_ans + loss_interp# + loss_fusion
+                loss = loss_img_ques + loss_ans + loss_interp + loss_fusion
                 
                 loss /= __C.GRAD_ACCU_STEPS
                 loss.backward()
