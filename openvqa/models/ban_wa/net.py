@@ -159,9 +159,9 @@ class Net(nn.Module):
             self.z_fused[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = fused_feat.clone().detach().cpu().numpy()
 
         elif (step == self.num and not self.eval_flag):
-            np.save('/mnt/sdb/yash/openvqa/saved/ban_wa/z_proj_' + str(epoch) + '.npy', self.z_proj)
-            np.save('/mnt/sdb/yash/openvqa/saved/ban_wa/z_ans_' + str(epoch) + '.npy', self.z_ans)
-            np.save('/mnt/sdb/yash/openvqa/saved/ban_wa/z_fused_' + str(epoch) + '.npy', self.z_fused)
+            np.save('./saved/' + str(__C.VERSION) + '/z_proj_' + str(epoch) + '.npy', self.z_proj)
+            np.save('./saved/' + str(__C.VERSION) + '/z_ans_' + str(epoch) + '.npy', self.z_proj)
+            np.save('./saved/' + str(__C.VERSION) + '/z_fused_' + str(epoch) + '.npy', self.z_proj)
 
         elif (step == (self.num + 1) and not self.eval_flag):
             self.z_proj = np.zeros(shape=self.shape)
