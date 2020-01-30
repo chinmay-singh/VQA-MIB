@@ -324,7 +324,6 @@ def train_engine(__C, dataset, dataset_eval=None):
 
             optim.step()
 
-        """
         time_end = time.time()
         elapse_time = time_end-time_start
         print('Finished in {}s'.format(int(elapse_time)))
@@ -381,7 +380,6 @@ def train_engine(__C, dataset, dataset_eval=None):
             'Learning Rate': optim._rate,
             'Elapsed time': int(elapse_time) 
             })
-        """
 
         # Eval after every epoch
         if dataset_eval is not None:
