@@ -96,6 +96,7 @@ class PATH:
         self.CACHE_PATH = './results/cache'
         self.LOG_PATH = './results/log'
         self.CKPTS_PATH = './ckpts'
+        self.SAVED_PATH = './saved'
 
         if 'result_test' not in os.listdir('./results'):
             os.mkdir('./results/result_test')
@@ -111,6 +112,9 @@ class PATH:
 
         if 'ckpts' not in os.listdir('./'):
             os.mkdir('./ckpts')
+
+        if 'saved' not in os.listdir('./'):
+            os.mkdir('./saved')
 
 
     def check_path(self, dataset=None):
