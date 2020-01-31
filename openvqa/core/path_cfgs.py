@@ -116,6 +116,11 @@ class PATH:
         if 'saved' not in os.listdir('./'):
             os.mkdir('./saved')
 
+        # creating a folder for saving the numpy visualization arrays
+        if (__C.VERSION) not in os.listdir(__C.SAVED_PATH):
+            os.mkdir(__C.SAVED_PATH + '/' + __C.VERSION)
+
+
 
     def check_path(self, dataset=None):
         print('Checking dataset ........')
