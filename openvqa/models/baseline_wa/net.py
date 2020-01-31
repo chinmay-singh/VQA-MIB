@@ -157,7 +157,7 @@ class Net(nn.Module):
         # create the noise vector std
         self.noise_sigma = noise_sigma
 
-        self.batch_size = int(__C.SUB_BATCH_SIZE/2)
+        self.batch_size = int(__C.SUB_BATCH_SIZE/__C.N_GPU)
         self.num = math.ceil(10000/self.batch_size) #313
 
         # storing npy arrays
@@ -203,12 +203,6 @@ class Net(nn.Module):
 
         proj_feat = lang_feat + img_feat # (batch, 1024)
 
-        # Classification layers
-        '''
-        proj_feat = self.proj_norm(proj_feat) # (batch, 1024)
-        proj_feat = self.proj(proj_feat) #(batch, 3129)
-        '''
-
         # Pre-process answer Feature
         ans_feat = self.ans_embedding(ans_ix) # (batch, 4, 300)
 
@@ -227,16 +221,11 @@ class Net(nn.Module):
         # self.noise_sigma is to be passed
         noise_vec = self.noise_sigma*torch.randn(proj_feat.shape).cuda()
         ans_noise_vec = self.noise_sigma*torch.randn(ans_feat.shape).cuda()
+
+
         if not self.eval_flag:
             ans_feat += ans_noise_vec
             proj_feat += noise_vec
-
-
-        # Answer Classification layers
-        '''
-        ans_feat = self.ans_proj_norm(ans_feat) # (batch, 1024)
-        ans_feat = self.ans_proj(ans_feat) #(batch, 3129)
-        '''
 
         # randomly sample a number 'u' between zero and one
         u = torch.rand(1).cuda()
@@ -247,6 +236,11 @@ class Net(nn.Module):
             fused_feat = torch.add(torch.mul(u, proj_feat), torch.mul(1-u, ans_feat))
         else:
             fused_feat = proj_feat
+
+        # For calculating Fusion Loss in train_engine
+        z_proj = prof_feat.clone().detach()
+        z_ans = ans_feat.clone().detach()
+        z_fused = fused_feat.clone().detach()
 
         # Save the three features
         if (step < self.num and not self.eval_flag):
@@ -264,7 +258,6 @@ class Net(nn.Module):
             self.z_proj = np.zeros(shape=self.shape)
             self.z_ans = np.zeros(shape=self.shape)
             self.z_fused = np.zeros(shape=self.shape)
-
 
         # DECODER
         self.gru_gen.flatten_parameters()
@@ -287,4 +280,4 @@ class Net(nn.Module):
         # (batch_size, answer_size)
         fused_feat = self.decoder_mlp(fused_feat)
 
-        return proj_feat, ans_feat, fused_feat
+        return proj_feat, ans_feat, fused_feat, z_proj, z_ans, z_fused
