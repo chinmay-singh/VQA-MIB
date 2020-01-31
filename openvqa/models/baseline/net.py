@@ -109,10 +109,15 @@ class Net(nn.Module):
 
         # End of Generator
 
+        self.decoder_mlp = MLP(
+            in_size=__C.HIDDEN_SIZE,
+            mid_size= 2*__C.HIDDEN_SIZE,
+            out_size=answer_size,
+            dropout_r=0,
+            use_relu=True
+        )
 
-
-
-    def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix):
+    def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step, epoch):
 
         # Pre-process Language Feature
         lang_feat_mask = make_mask(ques_ix.unsqueeze(2))
@@ -146,7 +151,6 @@ class Net(nn.Module):
         # (batch_size, 512)
         proj_feat, _ = self.gru_gen(proj_feat.unsqueeze(1))
         proj_feat = proj_feat.squeeze()
-        # (batch_size, answer_size)
-        proj_feat = self.decoder_mlp(proj_feat)
+        proj_feat = self.decoder_mlp(proj_feat) # (batch_size, answer_size)
  
         return proj_feat
