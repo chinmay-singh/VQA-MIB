@@ -98,12 +98,27 @@ class Net(nn.Module):
         self.proj_norm = LayerNorm(__C.FLAT_OUT_SIZE)
         self.proj = nn.Linear(__C.FLAT_OUT_SIZE, answer_size)
 
+        # Generator
+
+        self.gru_gen = nn.GRU(
+            input_size= __C.FLAT_OUT_SIZE,
+            hidden_size= __C.HIDDEN_SIZE,
+            num_layers=1,
+            batch_first=True
+        )
+
+        # End of Generator
+
+
+
 
     def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix):
 
         # Pre-process Language Feature
         lang_feat_mask = make_mask(ques_ix.unsqueeze(2))
         lang_feat = self.embedding(ques_ix) # (batch, 14, 300)
+
+        self.lstm.flatten_parameters()
         lang_feat, _ = self.lstm(lang_feat) # (batch, 14, 512)
 
         img_feat, img_feat_mask = self.adapter(frcn_feat, grid_feat, bbox_feat) # (batch, 100, 512), (batch, 1, 1, 100)
@@ -123,7 +138,15 @@ class Net(nn.Module):
 
         # Classification layers
         proj_feat = lang_feat + img_feat
-        proj_feat = self.proj_norm(proj_feat) # (batch, 1024)
-        proj_feat = self.proj(proj_feat) #(batch, 3129)
+        #proj_feat = self.proj_norm(proj_feat) # (batch, 1024)
 
+        # DECODER
+        self.gru_gen.flatten_parameters()
+
+        # (batch_size, 512)
+        proj_feat, _ = self.gru_gen(proj_feat.unsqueeze(1))
+        proj_feat = proj_feat.squeeze()
+        # (batch_size, answer_size)
+        proj_feat = self.decoder_mlp(proj_feat)
+ 
         return proj_feat
