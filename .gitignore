@@ -162,4 +162,5 @@ tags
 # zip files
 *.tar.gz
 
-saved
+*.npy
+
