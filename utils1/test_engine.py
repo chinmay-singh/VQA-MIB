@@ -95,15 +95,26 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
         ans_ix = torch.ones((__C.EVAL_BATCH_SIZE, 4, ), dtype=torch.int64).cuda()
         # edits end
 
-        pred = net(
-            frcn_feat_iter,
-            grid_feat_iter,
-            bbox_feat_iter,
-            ques_ix_iter,
-            ans_ix, #Where ans_ix_iter would have been
-            step,
-            epoch = 0
-        )[0]
+        if (__C.WITH_ANSWER):
+            pred = net(
+                frcn_feat_iter,
+                grid_feat_iter,
+                bbox_feat_iter,
+                ques_ix_iter,
+                ans_ix, #Where ans_ix_iter would have been
+                step,
+                epoch = 0
+            )[0]
+        else:
+            pred = net(
+                frcn_feat_iter,
+                grid_feat_iter,
+                bbox_feat_iter,
+                ques_ix_iter,
+                ans_ix, #Where ans_ix_iter would have been
+                step,
+                epoch = 0
+            )
         pred_np = pred.cpu().data.numpy()
         pred_argmax = np.argmax(pred_np, axis=1)
 
