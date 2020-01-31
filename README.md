@@ -29,8 +29,8 @@ python3 vis.py -h
 
 - Baseline + gru + fusion (11th epoch)
 
-![visualisation](saved/baseline_wa_gru/vis_baseline_wa_gru_11.png)
+![visualisation](images/11f.png)
 
 - Baseline + gru without fusion (11th epoch) 
 
-![visualisation](saved/baseline_wa_gru_no_fusion/vis_baseline_wa_gru_no_fusion_11.png)
+![visualisation](images/11wof.png)
