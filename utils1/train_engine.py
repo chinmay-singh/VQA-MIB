@@ -45,6 +45,12 @@ def train_engine(__C, dataset, dataset_eval=None):
     # Define Loss Function
     loss_fn = eval('torch.nn.' + __C.LOSS_FUNC_NAME_DICT[__C.LOSS_FUNC] + "(reduction='" + __C.LOSS_REDUCTION + "').cuda()")
 
+
+    # creating a folder for saving the numpy visualization arrays
+    if (__C.WITH_ANSWER and ((__C.VERSION) not in os.listdir(__C.SAVED_PATH))):
+        os.mkdir(__C.SAVED_PATH + '/' + __C.VERSION)
+
+
     # Load checkpoint if resume training
     if __C.RESUME:
         print(' ========== Resume training')
@@ -123,6 +129,8 @@ def train_engine(__C, dataset, dataset_eval=None):
 
     # obtain histogram of each gradients in network as it trains
     wandb.watch(net, log="all")
+
+
 
     # Training script
     for epoch in range(start_epoch, __C.MAX_EPOCH):
