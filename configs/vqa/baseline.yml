@@ -8,6 +8,8 @@ FLAT_GLIMPSES: 1
 FLAT_OUT_SIZE: 1024
 USE_BBOX_FEAT: False
 GPU: '0,1'
+WITH_ANSWER: False
+WITH_FUSION_LOSS: False
 # default values set, no need to change:
 # GPU: 0
 # WORD_EMBED_SIZE: 300
