@@ -13,6 +13,13 @@ class BaseCfgs(PATH):
     def __init__(self):
         super(BaseCfgs, self).__init__()
 
+        # ------------------------------------
+        # ---- Experimentation Parameters ----
+        # ------------------------------------
+
+        self.WITH_ANSWER = True
+        self.WITH_FUSION_LOSS = True
+
         # Set Devices
         # If use multi-gpu training, you can set e.g.'0, 1, 2' instead
         self.GPU = '0'
@@ -138,7 +145,6 @@ class BaseCfgs(PATH):
         '''
         self.LOSS_FUNC = ''
         self.LOSS_REDUCTION = ''
-
 
         # The base learning rate
         self.LR_BASE = 0.0001
