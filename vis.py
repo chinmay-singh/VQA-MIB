@@ -70,24 +70,24 @@ if (args['num_samples'] is not None):
 else:
     num_samples = None
 
-print("Loading file 1")
+#print("Loading file 1")
 z1_load = np.load(filename1)
 z1_load = torch.from_numpy(z1_load)
-print("z1 shape: ", z1_load.shape)
+#print("z1 shape: ", z1_load.shape)
 
-print("Loading file 2")
+#print("Loading file 2")
 z2_load = np.load(filename2)
 z2_load = torch.from_numpy(z2_load)
-print("z2 shape: ", z2_load.shape)
+#print("z2 shape: ", z2_load.shape)
 
-print("Loading file 3")
+#print("Loading file 3")
 z3_load = np.load(filename3)
 z3_load = torch.from_numpy(z3_load)
-print("z3 shape: ", z3_load.shape)
+#print("z3 shape: ", z3_load.shape)
 
 embedding = MDS(n_components=2)
 
-print("Transforming z1, z2 and z3")
+#print("Transforming z1, z2 and z3")
 if (num_samples is None):
     z1_transformed = embedding.fit_transform(z1_load)
     z2_transformed = embedding.fit_transform(z2_load)
@@ -122,9 +122,9 @@ def plotter(X1, X2, X3):
     plt.savefig('./saved/' + args['version'] + '/vis_' + args['version'] + '_' + args['epoch'] + '.png')
 
 
-print("Plotting and Saving Points")
+##print("Plotting and Saving Points")
 plotter(z1_transformed, z2_transformed, z3_transformed)
-print("Image save successful")
+print("Image save successful for: ", args['epoch'])
 
 # In[74]:
 
