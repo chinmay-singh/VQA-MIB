@@ -119,7 +119,7 @@ def train_engine(__C, dataset, dataset_eval=None):
 
     # initializing the wandb project
     # TODO to change the name of project later, once the proper coding starts
-    wandb.init("openvqa", name=__C.MODEL_USE, config=__C)
+    wandb.init(project="openvqa", name=__C.VERSION, config=__C)
 
     # obtain histogram of each gradients in network as it trains
     wandb.watch(net, log="all")
