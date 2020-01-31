@@ -39,10 +39,6 @@ def train_engine(__C, dataset, dataset_eval=None):
     net.cuda()
     net.train()
 
-    # creating a folder for saving the numpy visualization arrays
-    if (__C.VERSION) not in os.listdir(__C.SAVED_PATH)
-        os.mkdir(__C.SAVED_PATH + '/' + __C.VERSION)
-
     if __C.N_GPU > 1:
         net = nn.DataParallel(net, device_ids=__C.DEVICES)
 
@@ -56,7 +52,7 @@ def train_engine(__C, dataset, dataset_eval=None):
         if __C.CKPT_PATH is not None:
             print('Warning: Now using CKPT_PATH args, '
                   'CKPT_VERSION and CKPT_EPOCH will not work')
-path = __C.CKPT_PATH
+            path = __C.CKPT_PATH
         else:
             path = __C.CKPTS_PATH + \
                    '/ckpt_' + __C.CKPT_VERSION + \
@@ -208,23 +204,39 @@ path = __C.CKPT_PATH
                 
                 # when making predictions also pass the ans_iter which is a dictionary from which you
                 # can extract answers and pass them through decoders
-                pred_img_ques, pred_ans, pred_fused = net(
-                    sub_frcn_feat_iter,
-                    sub_grid_feat_iter,
-                    sub_bbox_feat_iter,
-                    sub_ques_ix_iter,
-                    sub_ans_ix_iter,
-                    step,
-                    epoch
-                )
-                
+
+                if (__C.WITH_ANSWER):
+                    pred_img_ques, pred_ans, pred_fused, z_img_ques, z_ans, z_fused = net(
+                        sub_frcn_feat_iter,
+                        sub_grid_feat_iter,
+                        sub_bbox_feat_iter,
+                        sub_ques_ix_iter,
+                        sub_ans_ix_iter,
+                        step,
+                        epoch
+                    )
+                else:
+                     pred_img_ques = net(
+                        sub_frcn_feat_iter,
+                        sub_grid_feat_iter,
+                        sub_bbox_feat_iter,
+                        sub_ques_ix_iter,
+                        sub_ans_ix_iter,
+                        step,
+                        epoch
+                    )
+                   
                 # we need to change the loss terms accordingly
                 # now we need to modify the loss terms for the same
                 
                 #Edits: creating the loss items for each of the prediction vector
+
                 loss_item_img_ques = [pred_img_ques, sub_ans_iter]
-                loss_item_ans = [pred_ans, sub_ans_iter]
-                loss_item_interp = [pred_fused, sub_ans_iter]
+
+                # only calculate the ans and interp loss in case of WITH_ANSWER
+                if (__C.WITH_ANSWER):
+                    loss_item_ans = [pred_ans, sub_ans_iter]
+                    loss_item_interp = [pred_fused, sub_ans_iter]
 
                 
                 loss_nonlinear_list = __C.LOSS_FUNC_NONLINEAR[__C.LOSS_FUNC]
@@ -253,35 +265,56 @@ path = __C.CKPT_PATH
                 # Now we create all the four losses and then add them
                 #print("shape of loss_item_img_ques[0] is {} and of loss_item_img_ques[1] is {}".format(loss_item_img_ques[0],loss_item_img_ques[1]))
                 loss_img_ques = loss_fn(loss_item_img_ques[0], loss_item_img_ques[1])
+
+                loss = loss_img_ques
                 
-                # loss for the prediction from the answer
-                #print("shape of loss_item_ans[0] is {} and of loss_item_ans[1] is {}".format(loss_item_ans[0],loss_item_ans[1]))
-                loss_ans = loss_fn(loss_item_ans[0], loss_item_ans[1])
+                if (__C.WITH_ANSWER):
+
+                    # loss for the prediction from the answer
+                    #print("shape of loss_item_ans[0] is {} and of loss_item_ans[1] is {}".format(loss_item_ans[0],loss_item_ans[1]))
+                    loss_ans = loss_fn(loss_item_ans[0], loss_item_ans[1])
                 
-                # Loss for the prediction from the fused vector
-                # I am keeping the loss same as bce but we can change it later for more predictions
-                # loss_fused = interpolation loss
-                #print("shape of loss_item_interp[0] is {} and of loss_item_interp[1] is {}".format(loss_item_interp[0],loss_item_interp[1]))
-                loss_interp = loss_fn(loss_item_interp[0], loss_item_interp[1])
-                
-                # we also need to multiply this fused loss by a hyperparameter alpha
-                # put the alpha in the config and uncomment the following line
-                loss_interp *= __C.ALPHA
+                    # Loss for the prediction from the fused vector
+                    # I am keeping the loss same as bce but we can change it later for more predictions
+                    # loss_fused = interpolation loss
+                    #print("shape of loss_item_interp[0] is {} and of loss_item_interp[1] is {}".format(loss_item_interp[0],loss_item_interp[1]))
+                    loss_interp = loss_fn(loss_item_interp[0], loss_item_interp[1])
+                    
+                    # we also need to multiply this fused loss by a hyperparameter alpha
+                    # put the alpha in the config and uncomment the following line
+                    loss_interp *= __C.ALPHA
+                    loss += loss_ans + loss_interp
 
-                # Now calculate the fusion loss
-                #1. Higher loss for higher distance between vectors predicted
-                # by different models for same example
-                loss_fusion = torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.sqrt((pred_img_ques - pred_ans).pow(2).sum(1)).mean())
+                    if (__C.WITH_FUSION_LOSS):
 
-                #2. Lower loss for more distance between two pred vectors of same model
-                loss_fusion -= torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.pdist(pred_img_ques, 2).mean()) 
-                loss_fusion -= torch.min(torch.tensor(__C.CAP_DIST).cuda(), torch.pdist(pred_ans, 2).mean()) 
+                        # Now calculate the fusion loss
+                        #1. Higher loss for higher distance between vectors predicted
+                        # by different models for same example
 
-                # Multiply the loss fusion with hyperparameter beta
-                loss_fusion *= __C.BETA
+                        dist_calc = (z_img_ques - z_ans).pow(2).sum(1).sqrt()
+                        print("Count of distances being clipped (true is clipped): ", np.unique((dist_cal > __C.CAP_DIST3).numpy(), return_counts=True))
 
-                # combine all the losses
-                loss = loss_img_ques + loss_ans + loss_interp + loss_fusion
+                        loss_fusion = torch.min(
+                                torch.tensor(__C.CAP_DIST).cuda(),
+                                dist_calc
+                                ).mean()
+
+                        #2. Lower loss for more distance between two pred vectors of same model
+                        loss_fusion -= torch.min(
+                                torch.tensor(__C.CAP_DIST).cuda(), 
+                                torch.pdist(z_img_ques, 2)
+                                ).mean() 
+
+                        loss_fusion -= torch.min(
+                                torch.tensor(__C.CAP_DIST).cuda(), 
+                                torch.pdist(z_ans, 2)
+                                ).mean() 
+
+                        # Multiply the loss fusion with hyperparameter beta
+                        loss_fusion *= __C.BETA
+
+                        loss +=  loss_fusion
+
                 
                 loss /= __C.GRAD_ACCU_STEPS
                 loss.backward()
