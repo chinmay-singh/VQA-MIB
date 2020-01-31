@@ -51,36 +51,24 @@ np.save(filename, z2)
 ap = argparse.ArgumentParser()
 
 # Add the arguments to the parser
-ap.add_argument("-f1", "--filename1", required=False, default='saved/z_proj_0.npy',
-   help="first npy filename")
-ap.add_argument("-f2", "--filename2", required=False, default='saved/z_ans_0.npy',
-   help="second npy filename")
-ap.add_argument("-f3", "--filename3", required=False, default='saved/z_fused_0.npy',
-   help="third npy filename")
+ap.add_argument("-v", "--version", required=True,
+        help="folder name in saved/")
+ap.add_argument("-e", "--epoch", required=True,
+        help="epoch number")
 ap.add_argument("-n", "--num_samples", required=False,
    help="number of samples to plot")
 
 args = vars(ap.parse_args())
 
-filename1 = args['filename1']
-filename2 = args['filename2']
-filename3 = args['filename3']
+filename1 = '.saved/' + args['version'] + '/z_proj_' + args['epoch'] + '.npy'
+filename2 = '.saved/' + args['version'] + '/z_ans_' + args['epoch'] + '.npy'
+filename3 = '.saved/' + args['version'] + '/z_fused_' + args['epoch'] + '.npy'
+
 if (args['num_samples'] is not None):
     num_samples = int(args['num_samples'])
 
 else:
     num_samples = None
-
-'''
-print(filename1, type(filename1))
-print(filename2, type(filename2))
-print(num_samples, type(num_samples))
-'''
-
-# # Load the NP array from disk, convert to torch tensor
-
-# In[25]:
-
 
 print("Loading file 1")
 z1_load = np.load(filename1)
@@ -97,16 +85,7 @@ z3_load = np.load(filename3)
 z3_load = torch.from_numpy(z3_load)
 print("z3 shape: ", z3_load.shape)
 
-# # MDS Visualisation
-
-# In[31]:
-
-
 embedding = MDS(n_components=2)
-
-
-# In[32]:
-
 
 print("Transforming z1, z2 and z3")
 if (num_samples is None):
@@ -140,13 +119,12 @@ def plotter(X1, X2, X3):
     plt.legend(handles=[red_patch, blue_patch, green_patch])
 
     # plt.show()
-    plt.savefig('vis.png')
+    plt.savefig('.saved/' + args['version'] + '/vis_' + args['version'] + '_' + args['epoch'] + '.png')
 
-
-# In[83]:
 
 print("Plotting and Saving Points")
 plotter(z1_transformed, z2_transformed, z3_transformed)
+print("Image save successful")
 
 # In[74]:
 
