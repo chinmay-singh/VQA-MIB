@@ -4,6 +4,8 @@ class Cfgs(BaseCfgs):
         super(Cfgs, self).__init__()
         # Your Implementation
 
+        self.ANS_STDDEV = 0.01
+        self.PROJ_STDDEV = 0.1
         self.HIDDEN_SIZE = 512
         self.BBOXFEAT_EMB_SIZE = 2048
         self.FF_SIZE = 2048
