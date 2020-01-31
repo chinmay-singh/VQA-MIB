@@ -86,7 +86,6 @@ class Net(nn.Module):
 
         self.__C = __C
 
-
         self.decoder_mlp = MLP(
             in_size=__C.HIDDEN_SIZE,
             mid_size= 2*__C.HIDDEN_SIZE,
@@ -219,8 +218,8 @@ class Net(nn.Module):
 
         # Add noise to both encoded representations
         # self.noise_sigma is to be passed
-        noise_vec = self.noise_sigma*torch.randn(proj_feat.shape).cuda()
-        ans_noise_vec = self.noise_sigma*torch.randn(ans_feat.shape).cuda()
+        noise_vec = self.__C.PROJ_STDDEV * torch.randn(proj_feat.shape).cuda()
+        ans_noise_vec = self.__C.ANS_STDDEV * torch.randn(ans_feat.shape).cuda()
 
 
         if not self.eval_flag:
