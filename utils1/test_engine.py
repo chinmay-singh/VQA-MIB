@@ -55,7 +55,7 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
         token_size,
         ans_size,
         None,                       #Pretrained Embeddings matrix of the answer has to be None if the testing  is running
-        13488                           #Size of these embeddings would be this
+        13488    #TODO replace with config variable                      #Size of these embeddings would be this
     )
     net.cuda()
     net.eval()
@@ -95,7 +95,7 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
         ans_ix = torch.ones((__C.EVAL_BATCH_SIZE, 4, ), dtype=torch.int64).cuda()
         # edits end
 
-        pred, random_tensor1, random_tensor2 = net(
+        pred = net(
             frcn_feat_iter,
             grid_feat_iter,
             bbox_feat_iter,
@@ -103,7 +103,7 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
             ans_ix, #Where ans_ix_iter would have been
             step,
             epoch = 0
-        )
+        )[0]
         pred_np = pred.cpu().data.numpy()
         pred_argmax = np.argmax(pred_np, axis=1)
 
