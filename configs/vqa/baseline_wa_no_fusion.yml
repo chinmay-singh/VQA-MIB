@@ -9,7 +9,7 @@ FLAT_OUT_SIZE: 1024
 USE_BBOX_FEAT: False
 GPU: '0,1'
 WITH_ANSWER: True
-WITH_FUSION_LOSS: True
+WITH_FUSION_LOSS: False
 CAP_DIST: 0.3
 # default values set, no need to change:
 # GPU: 0

@@ -60,9 +60,9 @@ ap.add_argument("-n", "--num_samples", required=False,
 
 args = vars(ap.parse_args())
 
-filename1 = '.saved/' + args['version'] + '/z_proj_' + args['epoch'] + '.npy'
-filename2 = '.saved/' + args['version'] + '/z_ans_' + args['epoch'] + '.npy'
-filename3 = '.saved/' + args['version'] + '/z_fused_' + args['epoch'] + '.npy'
+filename1 = './saved/' + args['version'] + '/z_proj_' + args['epoch'] + '.npy'
+filename2 = './saved/' + args['version'] + '/z_ans_' + args['epoch'] + '.npy'
+filename3 = './saved/' + args['version'] + '/z_fused_' + args['epoch'] + '.npy'
 
 if (args['num_samples'] is not None):
     num_samples = int(args['num_samples'])
@@ -119,7 +119,7 @@ def plotter(X1, X2, X3):
     plt.legend(handles=[red_patch, blue_patch, green_patch])
 
     # plt.show()
-    plt.savefig('.saved/' + args['version'] + '/vis_' + args['version'] + '_' + args['epoch'] + '.png')
+    plt.savefig('./saved/' + args['version'] + '/vis_' + args['version'] + '_' + args['epoch'] + '.png')
 
 
 print("Plotting and Saving Points")

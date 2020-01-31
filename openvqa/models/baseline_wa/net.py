@@ -158,7 +158,7 @@ class Net(nn.Module):
         self.noise_sigma = noise_sigma
 
         self.batch_size = int(__C.SUB_BATCH_SIZE/__C.N_GPU)
-        self.num = math.ceil(10000/self.batch_size) #313
+        self.num = math.ceil(1000/self.batch_size) #313
 
         # storing npy arrays
         self.shape = (self.num * self.batch_size, int(__C.FLAT_OUT_SIZE)) #(10016, 1024)
@@ -238,7 +238,7 @@ class Net(nn.Module):
             fused_feat = proj_feat
 
         # For calculating Fusion Loss in train_engine
-        z_proj = prof_feat.clone().detach()
+        z_proj = proj_feat.clone().detach()
         z_ans = ans_feat.clone().detach()
         z_fused = fused_feat.clone().detach()
 
@@ -250,9 +250,9 @@ class Net(nn.Module):
 
 
         elif (step == self.num and not self.eval_flag):
-            np.save(__C.SAVED_PATH + '/' + __C.VERSION + '/z_proj_' + str(epoch) + '.npy', self.z_proj)
-            np.save(__C.SAVED_PATH + '/' + __C.VERSION + '/z_ans_' + str(epoch) + '.npy', self.z_ans)
-            np.save(__C.SAVED_PATH + '/' + __C.VERSION + '/z_fused_' + str(epoch) + '.npy', self.z_fused)
+            np.save(self.__C.SAVED_PATH + '/' + self.__C.VERSION + '/z_proj_' + str(epoch) + '.npy', self.z_proj)
+            np.save(self.__C.SAVED_PATH + '/' + self.__C.VERSION + '/z_ans_' + str(epoch) + '.npy', self.z_ans)
+            np.save(self.__C.SAVED_PATH + '/' + self.__C.VERSION + '/z_fused_' + str(epoch) + '.npy', self.z_fused)
 
         elif (step == (self.num + 1) and not self.eval_flag):
             self.z_proj = np.zeros(shape=self.shape)

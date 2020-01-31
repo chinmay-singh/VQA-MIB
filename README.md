@@ -16,11 +16,19 @@ Output -
 
 Example use - 
 ```
-python3 vis.py -f1 z1.npy -f2 z2.npy -n 100
+python vis.py -v baseline -e 10 -n 1000
 ```
-This will use the files z1.npy and z2.npy and visualise the first 100 examples from each.
+This will use the files saved/baseline/z_proj_11.npy, saved/baseline/z_ans_11 and saved/baseline/z_fused_11 visualise the first 1000 examples from each.
 
 Help - 
 ```
 python3 vis.py -h
 ```
+
+## Visualisations
+
+- Baseline + gru + fusion
+![visualisation](images/baseline_wa_gru.png)
+
+- Baseline + gru without fusion
+![visualisation](images/baseline_wa_gru_no_fusion.png)

@@ -300,8 +300,9 @@ def train_engine(__C, dataset, dataset_eval=None):
                         # by different models for same example
 
                         dist_calc = (z_img_ques - z_ans).pow(2).sum(1).sqrt()
-                        print("Count of distances being clipped (true is clipped): ", np.unique((dist_cal > __C.CAP_DIST3).numpy(), return_counts=True))
+                        #print("Count of distances being clipped (true is clipped): ", np.unique((dist_calc > __C.CAP_DIST).cpu().numpy(), return_counts=True))
 
+                        '''
                         loss_fusion = torch.min(
                                 torch.tensor(__C.CAP_DIST).cuda(),
                                 dist_calc
@@ -317,6 +318,17 @@ def train_engine(__C, dataset, dataset_eval=None):
                                 torch.tensor(__C.CAP_DIST).cuda(), 
                                 torch.pdist(z_ans, 2)
                                 ).mean() 
+                        '''
+
+                        loss_fusion = dist_calc.mean()
+
+                        #2. Lower loss for more distance between two pred vectors of same model
+                        loss_fusion -= torch.pdist(z_img_ques, 2).mean() 
+
+                        loss_fusion -= torch.pdist(z_ans, 2).mean() 
+
+
+
 
                         # Multiply the loss fusion with hyperparameter beta
                         loss_fusion *= __C.BETA

@@ -33,7 +33,8 @@ def parse_args():
                            'mfh',
                            'mem',
                            'butd',
-                           'baseline'
+                           'baseline',
+                           'baseline_wa_no_fusion'
                            ]
                         ,
                       help='{'
@@ -49,6 +50,7 @@ def parse_args():
                            'mfh,'
                            'butd,'
                            'baseline,'
+                           'baseline_wa_no_fusion,'
                            '}'
                         ,
                       type=str, required=True)
