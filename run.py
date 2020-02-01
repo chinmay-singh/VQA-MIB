@@ -17,7 +17,8 @@ def parse_args():
     parser.add_argument('--RUN', dest='RUN_MODE',
                       choices=['train', 'val', 'test'],
                       help='{train, val, test}',
-                      type=str, required=True)
+                      default='train',
+                      type=str, required=False)
 
     parser.add_argument('--MODEL', dest='MODEL',
                       choices=[
@@ -53,7 +54,8 @@ def parse_args():
                            'baseline_wa_no_fusion,'
                            '}'
                         ,
-                      type=str, required=True)
+                      default='baseline_wa',
+                      type=str, required=False)
 
     parser.add_argument('--DATASET', dest='DATASET',
                       choices=['vqa', 'gqa', 'clevr'],
@@ -63,7 +65,8 @@ def parse_args():
                            'clevr,'
                            '}'
                         ,
-                      type=str, required=True)
+                      default='vqa',  
+                      type=str, required=False)
 
     parser.add_argument('--SPLIT', dest='TRAIN_SPLIT',
                       choices=['train', 'train+val', 'train+val+vg'],
@@ -92,6 +95,7 @@ def parse_args():
 
     parser.add_argument('--GPU', dest='GPU',
                       help="gpu choose, eg.'0, 1, 2, ...'",
+                      default='0, 1',
                       type=str)
 
     parser.add_argument('--SEED', dest='SEED',
@@ -100,6 +104,7 @@ def parse_args():
 
     parser.add_argument('--VERSION', dest='VERSION',
                       help='version control',
+                      default='baseline_wa_sweep',
                       type=str)
 
     parser.add_argument('--RESUME', dest='RESUME',
@@ -137,7 +142,7 @@ def parse_args():
                       default=0.3,
                       type=float)
 
-    parser.add_argument('--APLHA', dest='LOSS_INTERP',
+    parser.add_argument('--ALPHA', dest='LOSS_INTERP',
                       help='ALPHA: Combining parameter for interpolation Loss',
                       default=1.0,
                       type=float)
@@ -146,7 +151,6 @@ def parse_args():
                       help='BETA: Combining parameter for interpolation Loss',
                       default=30.0,
                       type=float)
-
 
     parser.add_argument('--PINM', dest='PIN_MEM',
                       choices=['True', 'False'],
@@ -158,6 +162,51 @@ def parse_args():
                       help='True: verbose print, False: simple print',
                       type=str)
 
+    parser.add_argument('--OPT', dest='OPT',
+                      help='ALPHA: Combining parameter for interpolation Loss',
+                      choices=['Adam','Adamax'],
+                      type=str)
+
+    parser.add_argument('--LR_BASE', dest='LOSS_INTERP',
+                      help='ALPHA: Combining parameter for interpolation Loss',
+                      default=1.0,
+                      type=float)
+
+    parser.add_argument('--DROPOUT_R', dest='LOSS_INTERP',
+                      help='ALPHA: Combining parameter for interpolation Loss',
+                      default=1.0,
+                      type=float)
+
+    parser.add_argument('--LR_DECAY_R', dest='LOSS_INTERP',
+                      help='ALPHA: Combining parameter for interpolation Loss',
+                      default=1.0,
+                      type=float)
+
+    parser.add_argument('--OPT_PARAMS.eps', dest='LOSS_INTERP',
+                      help='ALPHA: Combining parameter for interpolation Loss',
+                      default=1.0,
+                      type=float)
+
+    parser.add_argument('--GRAD_NORM_CLIP', dest='LOSS_INTERP',
+                      help='ALPHA: Combining parameter for interpolation Loss',
+                      default=1.0,
+                      type=float)
+
+
+    parser.add_argument('--CLASSIFER_DROPOUT_R', dest='LOSS_INTERP',
+                      help='ALPHA: Combining parameter for interpolation Loss',
+                      default=1.0,
+                      type=float)
+
+    parser.add_argument('--PROJ_STDDEV', dest='LOSS_INTERP',
+                      help='ALPHA: Combining parameter for interpolation Loss',
+                      default=1.0,
+                      type=float)
+
+    parser.add_argument('--ANS_STDDEV', dest='LOSS_INTERP',
+                      help='ALPHA: Combining parameter for interpolation Loss',
+                      default=1.0,
+                      type=float)
 
     args = parser.parse_args()
     return args

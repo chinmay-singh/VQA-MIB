@@ -20,7 +20,7 @@ class Adapter(BaseAdapter):
         if __C.USE_BBOX_FEAT:
             self.bbox_linear = nn.Linear(5, __C.BBOXFEAT_EMB_SIZE)
             imgfeat_linear_size += __C.BBOXFEAT_EMB_SIZE
-        self.frcn_linear = nn.Linear(imgfeat_linear_size, __C.HIDDEN_SIZE)
+        self.frcn_linear = nn.Linear(imgfeat_linear_size, __C.LSTM_NUM_DIRECTIONS * __C.HIDDEN_SIZE)
 
 
     def gqa_init(self, __C):
@@ -49,6 +49,8 @@ class Adapter(BaseAdapter):
             frcn_feat = torch.cat((frcn_feat, bbox_feat), dim=-1)
         img_feat = self.frcn_linear(frcn_feat)
 
+        # shape (batch, 100, __C.LSTM_NUM_DIRECTIONS * __C.HIDDEN_SIZE)
+        # shape (batch, 1, 1, 100)
         return img_feat, img_feat_mask
 
 

@@ -12,6 +12,7 @@ from openvqa.models.mcan.adapter import Adapter
 import torch.nn as nn
 import torch.nn.functional as F
 import torch
+import sys
 
 
 # ------------------------------
@@ -24,7 +25,7 @@ class AttFlat(nn.Module):
         self.__C = __C
 
         self.mlp = MLP(
-            in_size=__C.HIDDEN_SIZE,
+            in_size=__C.LSTM_NUM_DIRECTIONS * __C.HIDDEN_SIZE,
             mid_size=__C.FLAT_MLP_SIZE,
             out_size=__C.FLAT_GLIMPSES,
             dropout_r=__C.DROPOUT_R,
@@ -32,29 +33,42 @@ class AttFlat(nn.Module):
         )
 
         self.linear_merge = nn.Linear(
-            __C.HIDDEN_SIZE * __C.FLAT_GLIMPSES,
+            __C.LSTM_NUM_DIRECTIONS * __C.HIDDEN_SIZE * __C.FLAT_GLIMPSES,
             __C.FLAT_OUT_SIZE
         )
 
+        # x_shape: (batch, 14, NUM_DIRECTIONS * HIDDEN_SIZE) 
+        # x_mask_shape: (batch, 1, 1, 14)
     def forward(self, x, x_mask):
-        att = self.mlp(x) # (64, 100, 1)
 
-        # x_mask shape: (batch, 1, 1, 100)
+        # att_shape: (batch, 14, FLAT_GLIMPSES) 
+        att = self.mlp(x) 
 
+        # x_mask shape: (batch, 1, 1, 14)
+        # x_mask shape after 2 squeeze and unsqueeze: (batch, 14, 1)
+
+        
         att = att.masked_fill(
             x_mask.squeeze(1).squeeze(1).unsqueeze(2),
             -1e9
         )
 
+        # softmax over all the words
+        # att_shape: (batch, 14, FLAT_GLIMPSES) 
         att = F.softmax(att, dim=1)
 
         att_list = []
         for i in range(self.__C.FLAT_GLIMPSES):
             att_list.append(
+                # ith glimpse of every word * x
+                # (batch, 14, 1) * (batch, 14, NUM_DIRECTIONS*HIDDEN_SIZE) = (batch, 14, NUM_DIRECTIONS*HIDDEN_SIZE)
+                # shape of sum: (batch, NUM_DIRECTIONS*HIDDEN_SIZE)
                 torch.sum(att[:, :, i: i + 1] * x, dim=1)
             )
 
+        # shape: (batch, NUM_DIRECTIONS*HIDDEN_SIZE*FLAT_GLIMPSES)
         x_atted = torch.cat(att_list, dim=1)
+        # shape: (batch, FLAT_OUT_SIZE)
         x_atted = self.linear_merge(x_atted)
 
         return x_atted
@@ -65,9 +79,14 @@ class AttFlat(nn.Module):
 # -------------------------
 
 class Net(nn.Module):
-    def __init__(self, __C, pretrained_emb, token_size, answer_size):
+    def __init__(self, __C, pretrained_emb, token_size, answer_size, pretrain_emb_ans, token_size_ans):
         super(Net, self).__init__()
         self.__C = __C
+
+        if pretrain_emb_ans is None:
+            self.eval_flag = True
+        else:
+            self.eval_flag = False
 
         self.embedding = nn.Embedding(
             num_embeddings=token_size,
@@ -78,12 +97,25 @@ class Net(nn.Module):
         if __C.USE_GLOVE:
             self.embedding.weight.data.copy_(torch.from_numpy(pretrained_emb))
 
-        self.lstm = nn.LSTM(
-            input_size=__C.WORD_EMBED_SIZE,
-            hidden_size=__C.HIDDEN_SIZE,
-            num_layers=1,
-            batch_first=True
-        )
+        self.lstm = None
+        if (__C.LSTM_NUM_DIRECTIONS is 1):
+            self.lstm = nn.LSTM(
+                input_size=__C.WORD_EMBED_SIZE,
+                hidden_size=__C.HIDDEN_SIZE,
+                num_layers=__C.LSTM_LAYERS,
+                batch_first=True,
+                bidirectional=False
+            )
+        elif (__C.LSTM_NUM_DIRECTIONS is 2):
+            self.lstm = nn.LSTM(
+                input_size=__C.WORD_EMBED_SIZE,
+                hidden_size=__C.HIDDEN_SIZE,
+                num_layers=__C.LSTM_LAYERS,
+                batch_first=True,
+                bidirectional=True
+            )
+        else:
+            sys.exit("LSTM_NUM_DIRECTIONS should be either 1 or 2, current value is: %d" % __C.LSTM_NUM_DIRECTIONS)
 
         self.adapter = Adapter(__C)
 
@@ -98,17 +130,28 @@ class Net(nn.Module):
         self.proj = nn.Linear(__C.FLAT_OUT_SIZE, answer_size)
 
 
-    def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix):
+    def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step, epoch):
 
         # Pre-process Language Feature
+        # Returns (batch, 1, 1, 14)
         lang_feat_mask = make_mask(ques_ix.unsqueeze(2))
-        lang_feat = self.embedding(ques_ix) # (batch, 14, 300)
-        lang_feat, _ = self.lstm(lang_feat) # (batch, 14, 512)
 
-        img_feat, img_feat_mask = self.adapter(frcn_feat, grid_feat, bbox_feat) # (batch, 100, 512), (batch, 1, 1, 100)
+        # Returns (batch, 14, WORD_EMBED_SIZE)
+        lang_feat = self.embedding(ques_ix)
+
+        # h_n and c_n are returned as a tuple, ignored in _
+        # h_n (batch, NUM_DIRECTIONS * NUM_LAYERS, HIDDEN_SIZE)
+        # c_n (batch, NUM_DIRECTIONS * NUM_LAYERS, HIDDEN_SIZE)
+        # Input (batch, 14, input_size_of_lstm = WORD_EMBED_SIZE)
+        # output (batch, 14, NUM_DIRECTIONS * HIDDEN_SIZE)
+        self.lstm.flatten_parameters()
+        lang_feat, _ = self.lstm(lang_feat)
+
+        # Returns (batch, 100, NUM_DIRECTIONS * HIDDEN_SIZE), (batch, 1, 1, 100)
+        img_feat, img_feat_mask = self.adapter(frcn_feat, grid_feat, bbox_feat) 
 
         # Backbone Framework 
-        # (batch, 14, 512) (batch, 100, 512)
+        # (batch, 14, NUM_DIRECTIONS * HIDDEN_SIZE) (batch, 100, NUM_DIRECTIONS * HIDDEN_SIZE)
         lang_feat, img_feat = self.backbone(
             lang_feat,
             img_feat,
@@ -117,19 +160,21 @@ class Net(nn.Module):
         )
 
         # Flatten to vector
-        # (batch, 1024)
+        # shape: (batch, FLAT_OUT_SIZE)
         lang_feat = self.attflat_lang(
             lang_feat,
             lang_feat_mask
         )
 
-        # (batch, 1024)
+        # shape: (batch, FLAT_OUT_SIZE)
         img_feat = self.attflat_img(
             img_feat,
             img_feat_mask
         )
 
         # Classification layers
+        # Here, lang_feat and img_feat have been multiplied by matrices in the last step to bring them to a common space so that they can be added
+        # shape: (batch, FLAT_OUT_SIZE)
         proj_feat = lang_feat + img_feat
         proj_feat = self.proj_norm(proj_feat) # (batch, 1024)
         proj_feat = self.proj(proj_feat) #(batch, 3129)

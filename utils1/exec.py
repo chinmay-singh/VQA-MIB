@@ -4,6 +4,7 @@
 # --------------------------------------------------------
 
 import os, copy
+import sys
 from openvqa.datasets.dataset_loader import DatasetLoader
 from utils1.train_engine import train_engine
 from utils1.test_engine import test_engine

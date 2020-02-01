@@ -43,7 +43,7 @@ class Adapter(BaseAdapter):
         img_feat_mask = make_mask(frcn_feat)
         # img_feat = self.frcn_linear(frcn_feat)
 
-        return frcn_feat, img_feat_mask
+        return frcn_feat, img_feat_mask, bbox_feat
 
 
     def gqa_forward(self, feat_dict):

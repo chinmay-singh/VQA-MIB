@@ -4,6 +4,7 @@
 # --------------------------------------------------------
 
 import numpy as np
+import sys
 import glob, json, re, en_vectors_web_lg
 from openvqa.core.base_dataset import BaseDataSet
 from openvqa.utils.ans_punct import prep_ans
@@ -45,6 +46,7 @@ class DataSet(BaseDataSet):
             if __C.RUN_MODE in ['train']:
                 self.ans_list += json.load(open(__C.RAW_PATH[__C.DATASET][split + '-anno'], 'r'))['annotations']
 
+
         # Define run data size
         if __C.RUN_MODE in ['train']:
             self.data_size = self.ans_list.__len__()
@@ -63,6 +65,14 @@ class DataSet(BaseDataSet):
 
         # {question id} -> {question}
         self.qid_to_ques = self.ques_load(self.ques_list)
+
+
+        '''
+        To print 10 iterms from each dictionary
+        from itertools import islice
+        print( list(islice(self.qid_to_ques.items(), 10)))
+        print( list(islice(self.iid_to_frcn_feat_path.items(), 10)))
+        '''
 
         # Tokenize
         # For tokenizing we need a spacy tool, declaring here
@@ -254,6 +264,12 @@ class DataSet(BaseDataSet):
         frcn_feat = np.load(self.iid_to_frcn_feat_path[iid])
         frcn_feat_x = frcn_feat['x'].transpose((1, 0))
         frcn_feat_iter = self.proc_img_feat(frcn_feat_x, img_feat_pad_size=self.__C.FEAT_SIZE['vqa']['FRCN_FEAT_SIZE'][0])
+
+        '''
+        For the case of positional we should not pad the bbox features
+        to make hundred objects, but rather take as many objects as only
+        there already
+        '''        
 
         bbox_feat_iter = self.proc_img_feat(
             self.proc_bbox_feat(
