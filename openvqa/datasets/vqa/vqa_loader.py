@@ -18,18 +18,27 @@ class DataSet(BaseDataSet):
         # ---- Raw data loading ----
         # --------------------------
 
+        print("Loading all image features")
         # Loading all image paths
         frcn_feat_path_list = \
             glob.glob(__C.FEATS_PATH[__C.DATASET]['train'] + '/*.npz') + \
             glob.glob(__C.FEATS_PATH[__C.DATASET]['val'] + '/*.npz') + \
             glob.glob(__C.FEATS_PATH[__C.DATASET]['test'] + '/*.npz')
 
+        print("Loading all questions (for statistics)")
         # Loading question word list
         stat_ques_list = \
             json.load(open(__C.RAW_PATH[__C.DATASET]['train'], 'r'))['questions'] + \
             json.load(open(__C.RAW_PATH[__C.DATASET]['val'], 'r'))['questions'] + \
             json.load(open(__C.RAW_PATH[__C.DATASET]['test'], 'r'))['questions'] + \
             json.load(open(__C.RAW_PATH[__C.DATASET]['vg'], 'r'))['questions']
+
+        '''
+        stat_ques_list = [
+            {'image_id': 458752, 'question': 'What is this photo taken looking through?', 'question_id': 458752000},
+            {'image_id': 458752, 'question': 'What position is this man playing?', 'question_id': 458752001}
+        ]
+        '''
 
         # Loading answer word list
         # stat_ans_list = \
@@ -40,12 +49,12 @@ class DataSet(BaseDataSet):
         self.ques_list = []
         self.ans_list = []
 
+        print("Loading split questions and answers")
         split_list = __C.SPLIT[__C.RUN_MODE].split('+')
         for split in split_list:
             self.ques_list += json.load(open(__C.RAW_PATH[__C.DATASET][split], 'r'))['questions']
             if __C.RUN_MODE in ['train']:
                 self.ans_list += json.load(open(__C.RAW_PATH[__C.DATASET][split + '-anno'], 'r'))['annotations']
-
 
         # Define run data size
         if __C.RUN_MODE in ['train']:
@@ -66,12 +75,20 @@ class DataSet(BaseDataSet):
         # {question id} -> {question}
         self.qid_to_ques = self.ques_load(self.ques_list)
 
-
         '''
-        To print 10 iterms from each dictionary
+        To print 2 iterms from each dictionary
         from itertools import islice
-        print( list(islice(self.qid_to_ques.items(), 10)))
-        print( list(islice(self.iid_to_frcn_feat_path.items(), 10)))
+        print( list(islice(self.qid_to_ques.items(), 2)))
+        print( list(islice(self.iid_to_frcn_feat_path.items(), 2)))
+
+        qid_to_ques = {
+            '458752000': {'image_id': 458752, 'question': 'What is this photo taken looking through?', 'question_id': 458752000},
+            '458752001': {'image_id': 458752, 'question': 'What position is this man playing?', 'question_id': 458752001}
+        }
+        iid_to_frcn_feat_path = {
+            '187465': './data/vqa/feats/train2014/COCO_train2014_000000187465.jpg.npz', 
+            '78909': './data/vqa/feats/train2014/COCO_train2014_000000078909.jpg.npz'
+        }
         '''
 
         # Tokenize
@@ -82,6 +99,7 @@ class DataSet(BaseDataSet):
         self.token_to_ix, self.pretrained_emb = self.tokenize(stat_ques_list, __C.USE_GLOVE)
         self.token_size = self.token_to_ix.__len__()
         print(' ========== Question token vocab size:', self.token_size)
+
 
         # Answers statistic
         # Tokenize and make a vocabulary of each word in the answer as seperate tokens
@@ -126,6 +144,7 @@ class DataSet(BaseDataSet):
         return qid_to_ques
 
 
+    # all question words are added to token_to_ix and their glove word vectors are added to pretrained_emb
     def tokenize(self, stat_ques_list, use_glove):
         token_to_ix = {
             'PAD': 0,
@@ -147,6 +166,10 @@ class DataSet(BaseDataSet):
                 '',
                 ques['question'].lower()
             ).replace('-', ' ').replace('/', ' ').split()
+
+            '''
+            words = ['what', 'is', 'this', 'photo', 'taken', 'looking', 'through']
+            '''
 
             for word in words:
                 if word not in token_to_ix:
