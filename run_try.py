@@ -35,8 +35,7 @@ def parse_args():
                            'mem',
                            'butd',
                            'baseline',
-                           'baseline_wa_no_fusion',
-                           'positional'
+                           'baseline_wa_no_fusion'
                            ]
                         ,
                       help='{'
@@ -53,7 +52,6 @@ def parse_args():
                            'butd,'
                            'baseline,'
                            'baseline_wa_no_fusion,'
-                           'positional,'
                            '}'
                         ,
                       default='baseline_wa',
@@ -234,7 +232,7 @@ if __name__ == '__main__':
     print(__C)
 
     execution = Execution(__C)
-    execution.run(__C.RUN_MODE)
+    #execution.run(__C.RUN_MODE)
 
 
 

@@ -1,8 +1,7 @@
 from openvqa.utils.make_mask import make_mask
 from openvqa.ops.fc import FC, MLP
 from openvqa.ops.layer_norm import LayerNorm
-#TODO:: Change the class to be imported after implementing backbone
-from openvqa.models.positional.positional import MCA_ED
+from openvqa.models.positional.positional import AW
 from openvqa.models.positional.positional import Adapter
 
 import torch.nn as nn
@@ -46,6 +45,8 @@ Description of the model:
 
 '''
 
+
+
 class Net(nn.Module):
     def __init__(self, __C, pretrained_emb, token_size, answer_size, pretrain_emb_ans, token_size_ans, noise_sigma = 0.1):
 
@@ -73,8 +74,16 @@ class Net(nn.Module):
 
         self.adapter = Adapter(__C)
         
-        #TODO:: Change the backbone class after implementing backbone
-        self.backbone = MCA_ED(__C)
+        self.backbone = AW(__C)
+
+        self.mlp = MLP(
+            in_size =__C.LSTM_NUM_DIRECTIONS * __C.HIDDEN_SIZE,
+            mid_size=__C.FLAT_MLP_SIZE,
+            out_size=answer_size,
+            dropout_r=__C.DROPOUT_R,
+            use_relu=True
+        )
+
 
     def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix ):
 
@@ -106,7 +115,14 @@ class Net(nn.Module):
 
         # Now we can do the required processing
         # for now we can keep a simple fusion
+        # for now we keep a concatenation
 
+        proj_feat = torch.cat((lang_feat, img_feat), dim=1)
+
+        # Now use an MLP to obtain the classifying vector
+        proj_feat = self.mlp(torch.sum(proj_feat, 1))
+
+        return proj_feat
 
 
 

@@ -19,9 +19,11 @@ class Adapter(BaseAdapter):
 
     def gqa_init(self, __C):
         # Your Implementation
+        pass
 
     def clevr_init(self, __C):
         # Your Implementation
+        pass
 
     def vqa_forward(self, feat_dict):
         # Your Implementation
@@ -42,6 +44,8 @@ class Adapter(BaseAdapter):
        
     def gqa_forward(self, feat_dict):
         # Your Implementation
+        pass
         
     def clevr_forward(self, feat_dict):
         # Your Implementation
+        pass

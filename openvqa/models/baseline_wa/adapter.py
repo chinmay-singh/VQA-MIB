@@ -16,15 +16,7 @@ class Adapter(BaseAdapter):
             imgfeat_linear_size += __C.BBOXFEAT_EMB_SIZE
         self.frcn_linear = nn.Linear(imgfeat_linear_size, __C.HIDDEN_SIZE)
 
-'''
-	def gqa_init(self, __C):
-		# Your Implementation
-
-	def clevr_init(self, __C):
-		# Your Implementation
-'''
-	
-	def vqa_forward(self, feat_dict):
+    def vqa_forward(self, feat_dict):
 		# Your Implementation
 
 		frcn_feat = feat_dict['FRCN_FEAT'] #(batchsize, num_bbox, 2048)
@@ -47,3 +39,12 @@ class Adapter(BaseAdapter):
 	def clevr_forward(self, feat_dict):
 		# Your Implementation
 '''
+
+'''
+	def gqa_init(self, __C):
+		# Your Implementation
+
+	def clevr_init(self, __C):
+		# Your Implementation
+'''
+	

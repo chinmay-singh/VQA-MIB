@@ -104,13 +104,18 @@ class DataSet(BaseDataSet):
         # Answers statistic
         # Tokenize and make a vocabulary of each word in the answer as seperate tokens
 
-
         #Edits
         #Added the initialization of these two only when mode is train
         if __C.RUN_MODE in ['train']:
             print("hello! its training dataset loading time")
             self.token_to_ix_ans , self.pretrained_emb_ans = self.tokenize_ans(self.ans_list,__C.USE_GLOVE)
             self.token_size_ans = self.token_to_ix_ans.__len__()
+            '''
+            print("#############EXPERIMENTAL CHANGES IN VQA LOADER -APOORVE ########################")
+            from itertools import islice
+            print( list(islice(self.token_to_ix_ans.items(), 50)))
+            sys.exit(0)
+            '''
             
         #ENd of our edit
 

@@ -1,46 +1,17 @@
 program: run.py
-method: random
+method: bayes
 metric:
   name: Loss
   goal: minimize
 parameters:
-  OPT:
-    distribution: categorical
-    values:
-      - Adam
-      - Adamax
-  LR_BASE:
-    distribution: uniform
-    min: 0.00005
-    max: 0.0005
-  DROPOUT_R:
-    distribution: uniform
-    min: 0.0
-    max: 0.5
-  LR_DECAY_R:
-    distribution: uniform
-    min: 0.1
-    max: 0.5
-  OPT_PARAMS.eps:
-    distribution: uniform
-    min: 5e-10
-    max: 2e-9
-  GRAD_NORM_CLIP:
-    distribution: uniform
-    min: -2
-    max: 0.5
   BETA:
     distribution: int_uniform
-    min: 1
+    min: 0
     max: 60
   ALPHA:
     distribution: int_uniform
-    min: 1
+    min: 0
     max: 10
-  CLASSIFER_DROPOUT_R:
-    distribution: uniform
-    min: 0.0
-    max: 0.5
   PROJ_STDDEV:
     distribution: uniform
     min: 0.01

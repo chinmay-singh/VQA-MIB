@@ -1,7 +1,7 @@
 from openvqa.utils.make_mask import make_mask
 from openvqa.ops.fc import FC, MLP
 from openvqa.ops.layer_norm import LayerNorm
-from openvqa.models.baseline_wa.adapter import Adapter
+from openvqa.models.baseline.adapter import Adapter
 
 import torch.nn as nn
 import torch.nn.functional as F
