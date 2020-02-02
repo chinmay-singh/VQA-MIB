@@ -1,8 +1,8 @@
 program: run.py
 method: bayes
 metric:
-  name: Loss
-  goal: minimize
+  name: Overall Accuracy 
+  goal: maximize
 parameters:
   BETA:
     distribution: int_uniform
