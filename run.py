@@ -210,6 +210,12 @@ def parse_args():
                       default=1.0,
                       type=float)
 
+    parser.add_argument('--MAX_EPOCH', dest='LOSS_INTERP',
+                          help='ALPHA: Combining parameter for interpolation Loss',
+                          default=3.0,
+                          type=float)
+
+
     args = parser.parse_args()
     return args
 
