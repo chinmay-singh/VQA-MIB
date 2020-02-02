@@ -193,12 +193,16 @@ class PT(nn.Module):
 
         # initialize the MLP for expanding the 
         self.mlp = MLP(
-            in_size= 13,
-            mid_size=169,
+            in_size= 5,
+            mid_size=200,
             out_size=512,
             dropout_r=__C.DROPOUT_R,
             use_relu=True
         )
+
+        # initialize a transformer
+
+        self.trans = nn.transformer()
 
 
     def calculate_relative_postitions(self,z1, z2):
@@ -214,43 +218,67 @@ class PT(nn.Module):
 
         dist = torch.dist(torch.tensor([x_center_1,y_center_2]),torch.tensor([x_center_2,y_center_2]))
 
-        return(torch.Tensor([l_r ,u_d , dist , z1[4] ,z2[4] , z1[0] , z1[1] ,z1[2] , z1[3] ,  z2[0] , z2[1] ,z2[2] , z2[3] ]))
+        return(torch.Tensor([l_r ,u_d , dist , z1[4] ,z2[4]])) # rather than passing all the things, it will be better if we pass relevant things only
 
-    def make_src_trgt(self,x, z):
+    def make_src_trgt(self, x, z):
+
+        '''
+        input :
+            x: input attended object features (batch, 100, 512)
+            z: input bbox features (batch, 100, 13)
+        '''
         
         pairwise_pos_vectors = []
         pairwise_feature_vectors = []
 
-        for i in range(0,x.shape[0]):
+        for i in range(0,x.shape[0]): # for every example in the batch
             temp_pos = []
             temp_feat = []
-            for j in range(0,x.shape[1]):
-                for k in range(j+1, x.shape[1]):
+            for j in range(0,x.shape[1]): # for every object in each example
+                for k in range(j+1, x.shape[1]): # for every other object in the example
                     temp_pos.append(self.calculate_relative_postitions(z[j],z[k]))  # SELF.CALCULATE_RELATIVE_POSITOIN GIVES 1*13
                     temp_feat.append((x[i][j]+x[i][k])/2) #APPENDED 1*512
 
+            # after these nested loops, for each example in batch, temp_pos is a list containing 100C2 5 dimensional vectors
 
-            pairwise_pos_vectors.append(torch.stack(temp_pos))              #BATCH HENCE TEMP_POS IS 100C2 *13
-            pairwise_feature_vectors.append(torch.stack(temp_feat))         #BATCH HENCE TEMP_feat IS 100C2 *512
+
+            pairwise_pos_vectors.append(torch.stack(temp_pos))              #BATCH HENCE TEMP_POS IS 100C2 *5, here it is a list
+            pairwise_feature_vectors.append(torch.stack(temp_feat))         #BATCH HENCE TEMP_feat IS 100C2 *512, here it is a list
         
-        pairwise_pos_vectors = torch.stack(pairwise_pos_vectors)            #bATCH SIZE* 100c2 *13    
-        pairwise_feature_vectors = torch.stack(pairwise_feature_vectors)    #BATCH SIZE * 100C2 *512
+        pairwise_pos_vectors = torch.stack(pairwise_pos_vectors)            #bATCH SIZE* 100c2 *5, here it is a tensor    
+        pairwise_feature_vectors = torch.stack(pairwise_feature_vectors)    #BATCH SIZE * 100C2 *512, here it is a tensor
         
-        return pairwise_feature_vectors , pairwise_pos_vectors
+        return pairwise_feature_vectors , pairwise_pos_vector               # (batch, 100C2, 512), (batch, 100C2, 5)
+
+        
 
     def forward(self, x, z):
+        
         
         # take a pairwise combination of each image_feat vector
         # and do the corresponding calculations for it
 
         assert x.shape[0] == z.shape[0] && x.shape[1] == z.shape[1], "Shapes of object features and bbox featuers do not match"
 
-        src , trgt = self.make_src_trgt(x,z)
+        trgt, src = self.make_src_trgt(x,z) # the positional vectors are treated as source for the transformer
 
         #change dimension of source with mlp
-
+        
+        src = self.mlp(src) # now src is (batch, 100C2, 512) [pytorch takes the last dimension itself]
 
         #apply transformer
+
+        temp_batch = []
+        for i in range(0, src.shape[0]): # for every example in the batch
+            temp_example = []
+            for j in range(0,src.shape[1]): # for every pair of objects
+                temp_example.append(self.trans(src[i][j], trgt[i][j]).squeeze(0).squeeze(0))
+
+            temp_batch.append(torch.stack(temp_example))
+
+        return torch.stack(temp_batch)                                      # (batch, 100C2, 512)
+        
+
 
 # ------------------------------------------------
 # ---- Attention Whore ----
@@ -290,6 +318,8 @@ class AW(nn.Module):
 
         # Now use the positional transformer to find whatever is needed 
         
-        pairwise_objects = self.pt(x , z)
+        p = self.pt(x , z)       # (batch, 100C2, 512)
+
+        return y, p
     
 

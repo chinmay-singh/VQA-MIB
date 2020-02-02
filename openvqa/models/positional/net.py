@@ -95,7 +95,7 @@ class Net(nn.Module):
         img_feat, img_feat_mask, bbox_feat = self.adapter(frcn_feat, grid_feat, bbox_feat) # (batch, 100, 512), (batch, 1, 1, 100) (batch, 100, 5)
 
         # Backbone Framework 
-        # (batch, 14, 512) (batch, 100, 512)
+        # (batch, 14, 512) (batch, 100C2, 512)
         lang_feat, img_feat = self.backbone(
             lang_feat,
             img_feat,
@@ -104,7 +104,9 @@ class Net(nn.Module):
             bbox_feat
         )
 
-        # Implement the corresponding backbone in positional.py and come back
+        # Now we can do the required processing
+        # for now we can keep a simple fusion
+
 
 
 
