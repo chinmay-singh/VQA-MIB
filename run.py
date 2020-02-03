@@ -139,17 +139,17 @@ def parse_args():
                       help='multithreaded loading to accelerate IO',
                       type=int)
 
-    parser.add_argument('--CAP_DIST', dest='LOSS_FUNCTION',
+    parser.add_argument('--CAP_DIST', dest='CAP_DIST',
                       help='Capping the Euclidean distance for the Fusion',
                       default=0.3,
                       type=float)
 
-    parser.add_argument('--ALPHA', dest='LOSS_INTERP',
+    parser.add_argument('--ALPHA', dest='ALPHA',
                       help='ALPHA: Combining parameter for interpolation Loss',
                       default=1.0,
                       type=float)
 
-    parser.add_argument('--BETA', dest='LOSS_INTERP',
+    parser.add_argument('--BETA', dest='BETA',
                       help='BETA: Combining parameter for interpolation Loss',
                       default=30.0,
                       type=float)
@@ -164,53 +164,17 @@ def parse_args():
                       help='True: verbose print, False: simple print',
                       type=str)
 
-    parser.add_argument('--OPT', dest='OPT',
-                      help='ALPHA: Combining parameter for interpolation Loss',
-                      choices=['Adam','Adamax'],
-                      type=str)
-
-    parser.add_argument('--LR_BASE', dest='LOSS_INTERP',
+    parser.add_argument('--PROJ_STDDEV', dest='PROJ_STDDEV',
                       help='ALPHA: Combining parameter for interpolation Loss',
                       default=1.0,
                       type=float)
 
-    parser.add_argument('--DROPOUT_R', dest='LOSS_INTERP',
+    parser.add_argument('--ANS_STDDEV', dest='ANS_STDDEV',
                       help='ALPHA: Combining parameter for interpolation Loss',
                       default=1.0,
                       type=float)
 
-    parser.add_argument('--LR_DECAY_R', dest='LOSS_INTERP',
-                      help='ALPHA: Combining parameter for interpolation Loss',
-                      default=1.0,
-                      type=float)
-
-    parser.add_argument('--OPT_PARAMS.eps', dest='LOSS_INTERP',
-                      help='ALPHA: Combining parameter for interpolation Loss',
-                      default=1.0,
-                      type=float)
-
-    parser.add_argument('--GRAD_NORM_CLIP', dest='LOSS_INTERP',
-                      help='ALPHA: Combining parameter for interpolation Loss',
-                      default=1.0,
-                      type=float)
-
-
-    parser.add_argument('--CLASSIFER_DROPOUT_R', dest='LOSS_INTERP',
-                      help='ALPHA: Combining parameter for interpolation Loss',
-                      default=1.0,
-                      type=float)
-
-    parser.add_argument('--PROJ_STDDEV', dest='LOSS_INTERP',
-                      help='ALPHA: Combining parameter for interpolation Loss',
-                      default=1.0,
-                      type=float)
-
-    parser.add_argument('--ANS_STDDEV', dest='LOSS_INTERP',
-                      help='ALPHA: Combining parameter for interpolation Loss',
-                      default=1.0,
-                      type=float)
-
-    parser.add_argument('--MAX_EPOCH', dest='LOSS_INTERP',
+    parser.add_argument('--MAX_EPOCH', dest='MAX_EPOCH',
                           help='ALPHA: Combining parameter for interpolation Loss',
                           default=3.0,
                           type=float)
