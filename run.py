@@ -84,7 +84,7 @@ def parse_args():
                       choices=['True', 'False'],
                       help='True: evaluate the val split when an epoch finished,'
                            'False: do not evaluate on local',
-                           default=True,
+                           default='True',
                            required=False,
                       type=str)
 
@@ -92,7 +92,7 @@ def parse_args():
                       choices=['True', 'False'],
                       help='True: save the prediction vectors,'
                            'False: do not save the prediction vectors',
-                      default=True,
+                      default='True',
                       required=False,
                       type=str)
 
