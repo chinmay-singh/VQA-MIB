@@ -57,8 +57,7 @@ def parse_args():
                            'positional,'
                            '}'
                         ,
-                      default='baseline_wa',
-                      type=str, required=False)
+                      type=str, required=True)
 
     parser.add_argument('--DATASET', dest='DATASET',
                       choices=['vqa', 'gqa', 'clevr'],
@@ -78,18 +77,23 @@ def parse_args():
                            "gqa: {'train', 'train+val'}"
                            "clevr: {'train', 'train+val'}"
                         ,
+                        default='train', required=False,
                       type=str)
 
     parser.add_argument('--EVAL_EE', dest='EVAL_EVERY_EPOCH',
                       choices=['True', 'False'],
                       help='True: evaluate the val split when an epoch finished,'
                            'False: do not evaluate on local',
+                           default=True,
+                           required=False,
                       type=str)
 
     parser.add_argument('--SAVE_PRED', dest='TEST_SAVE_PRED',
                       choices=['True', 'False'],
                       help='True: save the prediction vectors,'
                            'False: do not save the prediction vectors',
+                      default=True,
+                      required=False,
                       type=str)
 
     parser.add_argument('--BS', dest='BATCH_SIZE',
@@ -106,8 +110,8 @@ def parse_args():
                       type=int)
 
     parser.add_argument('--VERSION', dest='VERSION',
-                      help='version control',
-                      default='baseline_wa_sweep',
+                      help='Enter descriptive name here (eg baseline_wa_gru), will be used for WANDB and for version',
+                      required=True,
                       type=str)
 
     parser.add_argument('--RESUME', dest='RESUME',
@@ -140,21 +144,6 @@ def parse_args():
                       help='multithreaded loading to accelerate IO',
                       type=int)
 
-    parser.add_argument('--CAP_DIST', dest='CAP_DIST',
-                      help='Capping the Euclidean distance for the Fusion',
-                      default=0.3,
-                      type=float)
-
-    parser.add_argument('--ALPHA', dest='ALPHA',
-                      help='ALPHA: Combining parameter for interpolation Loss',
-                      default=1.0,
-                      type=float)
-
-    parser.add_argument('--BETA', dest='BETA',
-                      help='BETA: Combining parameter for interpolation Loss',
-                      default=30.0,
-                      type=float)
-
     parser.add_argument('--PINM', dest='PIN_MEM',
                       choices=['True', 'False'],
                       help='True: use pin memory, False: not use pin memory',
@@ -164,22 +153,6 @@ def parse_args():
                       choices=['True', 'False'],
                       help='True: verbose print, False: simple print',
                       type=str)
-
-    parser.add_argument('--PROJ_STDDEV', dest='PROJ_STDDEV',
-                      help='ALPHA: Combining parameter for interpolation Loss',
-                      default=1.0,
-                      type=float)
-
-    parser.add_argument('--ANS_STDDEV', dest='ANS_STDDEV',
-                      help='ALPHA: Combining parameter for interpolation Loss',
-                      default=1.0,
-                      type=float)
-
-    parser.add_argument('--MAX_EPOCH', dest='MAX_EPOCH',
-                          help='ALPHA: Combining parameter for interpolation Loss',
-                          default=13,
-                          type=int)
-
 
     args = parser.parse_args()
     return args
