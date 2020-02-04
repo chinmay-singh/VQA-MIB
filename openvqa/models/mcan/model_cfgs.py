@@ -10,6 +10,13 @@ class Cfgs(BaseCfgs):
     def __init__(self):
         super(Cfgs, self).__init__()
 
+        # --------------- #
+        # ---- NOISE ---- #
+        # --------------- #
+
+        self.PROJ_STDDEV = 0.1
+        self.ANS_STDDEV = 0.01
+
         # --------------
         # ---- LSTM ----
         # --------------
