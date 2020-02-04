@@ -36,7 +36,8 @@ def parse_args():
                            'butd',
                            'baseline',
                            'baseline_wa_no_fusion',
-                           'positional'
+                           'positional',
+                           'mcan_large_wa'
                            ]
                         ,
                       help='{'
