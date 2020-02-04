@@ -191,15 +191,24 @@ if __name__ == '__main__':
 
     cfg_file = "configs/{}/{}.yml".format(args.DATASET, args.MODEL)
     with open(cfg_file, 'r') as f:
+
+        # Loads the yaml file
         yaml_dict = yaml.load(f)
 
+    # Loads the model_cfgs + base_cfgs
     __C = CfgLoader(yaml_dict['MODEL_USE']).load()
+
+    # Loads the command line cfgs
     args = __C.str_to_bool(args)
     args_dict = __C.parse_to_dict(args)
 
+    # {**dict1, **dict2} creates a new dictionary by merging dict1 and dict2, using dict2 for key clashes
     args_dict = {**yaml_dict, **args_dict}
     __C.add_args(args_dict)
     __C.proc()
+
+    # FINAL PREFERENCE OF CFGS:
+    # COMMAND LINE > YAML FILE > MODEL CFGS > BASE CFGS
 
     print('Hyper Parameters:')
     print(__C)
