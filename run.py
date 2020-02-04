@@ -176,8 +176,8 @@ def parse_args():
 
     parser.add_argument('--MAX_EPOCH', dest='MAX_EPOCH',
                           help='ALPHA: Combining parameter for interpolation Loss',
-                          default=3.0,
-                          type=float)
+                          default=13,
+                          type=int)
 
 
     args = parser.parse_args()
