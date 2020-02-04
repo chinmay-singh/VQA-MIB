@@ -41,9 +41,11 @@ class DataSet(BaseDataSet):
         '''
 
         # Loading answer word list
-        # stat_ans_list = \
-        #     json.load(open(__C.RAW_PATH[__C.DATASET]['train-anno'], 'r'))['annotations'] + \
-        #     json.load(open(__C.RAW_PATH[__C.DATASET]['val-anno'], 'r'))['annotations']
+        '''
+        stat_ans_list = \
+            json.load(open(__C.RAW_PATH[__C.DATASET]['train-anno'], 'r'))['annotations'] + \
+            json.load(open(__C.RAW_PATH[__C.DATASET]['val-anno'], 'r'))['annotations']
+        '''
 
         # Loading question and answer list
         self.ques_list = []
@@ -62,6 +64,7 @@ class DataSet(BaseDataSet):
         else:
             self.data_size = self.ques_list.__len__()
 
+        # assert len(self.ques_list) == len(self.ans_list), "Size of question list and answer list does not match"
         print(' ========== Dataset size:', self.data_size)
 
 
@@ -94,12 +97,12 @@ class DataSet(BaseDataSet):
         # Tokenize
         # For tokenizing we need a spacy tool, declaring here
         self.spacy_tool = en_vectors_web_lg.load()
-        print('spacy_tool is loaded but will be used when getitem is called')
         print('')
+        # No of different words in all questions combined
+        print("Tokenising questions")
         self.token_to_ix, self.pretrained_emb = self.tokenize(stat_ques_list, __C.USE_GLOVE)
         self.token_size = self.token_to_ix.__len__()
         print(' ========== Question token vocab size:', self.token_size)
-
 
         # Answers statistic
         # Tokenize and make a vocabulary of each word in the answer as seperate tokens
@@ -107,11 +110,29 @@ class DataSet(BaseDataSet):
         #Edits
         #Added the initialization of these two only when mode is train
         if __C.RUN_MODE in ['train']:
-            print("hello! its training dataset loading time")
-            self.token_to_ix_ans , self.pretrained_emb_ans = self.tokenize_ans(self.ans_list,__C.USE_GLOVE)
+            print("Tokenising answers")
+            # No of different words in all answers combined
+            self.token_to_ix_ans , self.pretrained_emb_ans = self.tokenize_ans(self.ans_list, __C.USE_GLOVE)
             self.token_size_ans = self.token_to_ix_ans.__len__()
+            print(" ========== Answer token vocab size: ", self.token_size_ans)
             '''
-            print("#############EXPERIMENTAL CHANGES IN VQA LOADER -APOORVE ########################")
+            token_to_ix_ans = {
+                'PAD': 0, 
+                'UNK': 1,
+                'CLS': 2, 
+                'net': 3,
+                'pitcher': 4,
+                'orange': 5,
+                'yes': 6,
+                'white': 7,
+                'skiing': 8,
+                'red': 9,
+                'frisbee': 10,
+                .
+                .
+                .
+            }
+            # To print first 50 items
             from itertools import islice
             print( list(islice(self.token_to_ix_ans.items(), 50)))
             sys.exit(0)
@@ -119,13 +140,13 @@ class DataSet(BaseDataSet):
             
         #ENd of our edit
 
-        self.ans_to_ix, self.ix_to_ans = self.ans_stat('openvqa/datasets/vqa/answer_dict.json')
-        # self.ans_to_ix, self.ix_to_ans = self.ans_stat(stat_ans_list, ans_freq=8)
+        ans_freq = 8
+        self.ans_to_ix, self.ix_to_ans = self.ans_stat_from_file('openvqa/datasets/vqa/answer_dict.json')
+        # self.ans_to_ix, self.ix_to_ans = self.ans_stat(stat_ans_list, ans_freq=ans_freq)
         self.ans_size = self.ans_to_ix.__len__()
-        print(' ========== Answer token vocab size (occur more than {} times):'.format(8), self.ans_size)
+        print(' ========== Answer token vocab size (occur more than {} times):'.format(ans_freq), self.ans_size)
         print('Finished!')
         print('')
-
 
 
     def img_feat_path_load(self, path_list):
@@ -137,7 +158,6 @@ class DataSet(BaseDataSet):
             iid_to_path[iid] = path
 
         return iid_to_path
-
 
     def ques_load(self, ques_list):
         qid_to_ques = {}
@@ -190,7 +210,6 @@ class DataSet(BaseDataSet):
     Added the function tokenize_ans, which creates the embeddings of all the
     words in the answers. The answers are taken from the answer_dict
     '''
-    
     def tokenize_ans(self, ans_list, use_glove):
 
 
@@ -227,30 +246,59 @@ class DataSet(BaseDataSet):
     
 
 
-    # def ans_stat(self, stat_ans_list, ans_freq):
-    #     ans_to_ix = {}
-    #     ix_to_ans = {}
-    #     ans_freq_dict = {}
-    #
-    #     for ans in stat_ans_list:
-    #         ans_proc = prep_ans(ans['multiple_choice_answer'])
-    #         if ans_proc not in ans_freq_dict:
-    #             ans_freq_dict[ans_proc] = 1
-    #         else:
-    #             ans_freq_dict[ans_proc] += 1
-    #
-    #     ans_freq_filter = ans_freq_dict.copy()
-    #     for ans in ans_freq_dict:
-    #         if ans_freq_dict[ans] <= ans_freq:
-    #             ans_freq_filter.pop(ans)
-    #
-    #     for ans in ans_freq_filter:
-    #         ix_to_ans[ans_to_ix.__len__()] = ans
-    #         ans_to_ix[ans] = ans_to_ix.__len__()
-    #
-    #     return ans_to_ix, ix_to_ans
+    def ans_stat(self, stat_ans_list, ans_freq):
+        ans_to_ix = {}
+        ix_to_ans = {}
+        ans_freq_dict = {}
 
-    def ans_stat(self, json_file):
+        '''
+        ans = {
+        "image_id": 393714, 
+        "question_id": 393714000,
+        "question_type": "what color are the",
+        "answer_type": "other", 
+        "multiple_choice_answer": "white", 
+        "answers": [
+            {"answer": "light blue", "answer_confidence": "yes", "answer_id": 1}, 
+            {"answer": "white", "answer_confidence": "yes", "answer_id": 2}, 
+            {"answer": "white", "answer_confidence": "yes", "answer_id": 3}, 
+            {"answer": "white", "answer_confidence": "yes", "answer_id": 4}, 
+            {"answer": "white", "answer_confidence": "yes", "answer_id": 5}, 
+            {"answer": "white", "answer_confidence": "maybe", "answer_id": 6}, 
+            {"answer": "white", "answer_confidence": "yes", "answer_id": 7}, 
+            {"answer": "white", "answer_confidence": "yes", "answer_id": 8}, 
+            {"answer": "white", "answer_confidence": "yes", "answer_id": 9}, 
+            {"answer": "white", "answer_confidence": "yes", "answer_id": 10}
+            ]
+        }
+        '''
+
+        for ans in stat_ans_list:
+
+            '''
+            To get all unique answer for each question
+            '''
+            ans_proc = prep_ans(ans['multiple_choice_answer'])
+            '''
+            ans_proc is a string and may have multiple words
+            '''
+            if ans_proc not in ans_freq_dict:
+                ans_freq_dict[ans_proc] = 1
+            else:
+                ans_freq_dict[ans_proc] += 1
+    
+        ans_freq_filter = ans_freq_dict.copy()
+        for ans in ans_freq_dict:
+            if ans_freq_dict[ans] <= ans_freq:
+                ans_freq_filter.pop(ans)
+    
+        for ans in ans_freq_filter:
+            ix_to_ans[ans_to_ix.__len__()] = ans
+            ans_to_ix[ans] = ans_to_ix.__len__()
+    
+        return ans_to_ix, ix_to_ans
+
+    def ans_stat_from_file(self, json_file):
         ans_to_ix, ix_to_ans = json.load(open(json_file, 'r'))
 
         return ans_to_ix, ix_to_ans
