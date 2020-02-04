@@ -5,6 +5,7 @@
 # --------------------------------------------------------
 
 import re
+import sys
 
 contractions = {
     "aint": "ain't", "arent": "aren't", "cant": "can't", "couldve":
@@ -64,6 +65,7 @@ manual_map = { 'none': '0',
               'eight': '8',
                'nine': '9',
               'ten': '10'}
+
 articles = ['a', 'an', 'the']
 period_strip = re.compile("(?!<=\d)(\.)(?!\d)")
 comma_strip = re.compile("(\d)(\,)(\d)")

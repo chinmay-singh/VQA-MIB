@@ -2,7 +2,7 @@ from openvqa.utils.make_mask import make_mask
 from openvqa.ops.fc import FC, MLP
 from openvqa.ops.layer_norm import LayerNorm
 from openvqa.models.positional.positional import AW
-from openvqa.models.positional.positional import Adapter
+from openvqa.models.positional.adapter import Adapter
 
 import torch.nn as nn
 import torch.nn.functional as F
@@ -41,10 +41,7 @@ Description of the model:
                     Think of how humans process a question over an image: First find the relavant objects 
                     and their relavant information, then find the relations between the objects and then 
                     answer the question
-
-
 '''
-
 
 
 class Net(nn.Module):
@@ -85,7 +82,7 @@ class Net(nn.Module):
         )
 
 
-    def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix ):
+    def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step, epoch):
 
         # Pre-process the language features
         lang_feat_mask = make_mask(ques_ix.unsqueeze(2))
@@ -123,6 +120,3 @@ class Net(nn.Module):
         proj_feat = self.mlp(torch.sum(proj_feat, 1))
 
         return proj_feat
-
-
-

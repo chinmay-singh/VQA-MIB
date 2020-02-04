@@ -9,7 +9,9 @@ from openvqa.core.base_cfgs import BaseCfgs
 class Cfgs(BaseCfgs):
     def __init__(self):
         super(Cfgs, self).__init__()
-
+        
+        self.ANS_STDDEV = 0.01
+        self.PROJ_STDDEV = 0.1
         self.IMG_FEAT_SIZE = 2048
         self.GLIMPSE = 8
         self.HIDDEN_SIZE = 1024

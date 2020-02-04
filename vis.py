@@ -113,9 +113,9 @@ def plotter(X1, X2, X3):
     x3_min, x3_max = np.min(X3, 0), np.max(X3, 0)
     X3 = (X3 - x3_min) / (x3_max - x3_min)
 
-    plt.scatter(X1[:,0], X1[:,1], c='red')
-    plt.scatter(X2[:,0], X2[:,1], c='blue')
-    plt.scatter(X3[:,0], X3[:,1], c='green')
+    plt.scatter(X1[:,0], X1[:,1], c='red', s=3, alpha=0.5)
+    plt.scatter(X2[:,0], X2[:,1], c='blue', s=3, alpha=0.5)
+    plt.scatter(X3[:,0], X3[:,1], c='green', s=3, alpha=0.5)
     plt.legend(handles=[red_patch, blue_patch, green_patch])
 
     # plt.show()

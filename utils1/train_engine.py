@@ -328,10 +328,10 @@ def train_engine(__C, dataset, dataset_eval=None):
                         loss_fusion -= torch.pdist(z_ans, 2).mean() 
 
 
-
-
                         # Multiply the loss fusion with hyperparameter beta
                         loss_fusion *= __C.BETA
+
+                        #print('fusion loss is : {}'.format(loss_fusion))
 
                         loss +=  loss_fusion
 

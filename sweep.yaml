@@ -1,4 +1,4 @@
-program: run.py
+program: run_sweep.py
 method: bayes
 metric:
   name: Overall Accuracy 

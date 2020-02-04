@@ -19,7 +19,7 @@ import torch
 # -------------------------
 
 class Net(nn.Module):
-    def __init__(self, __C, pretrained_emb, token_size, answer_size):
+    def __init__(self, __C, pretrained_emb, token_size, answer_size, pretrain_emb_ans, token_size_ans):
         super(Net, self).__init__()
         self.__C = __C
 
@@ -53,7 +53,7 @@ class Net(nn.Module):
         ]
         self.classifer = nn.Sequential(*layers)
 
-    def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix):
+    def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step, epoch):
 
         # Pre-process Language Feature
         # lang_feat_mask = make_mask(ques_ix.unsqueeze(2))

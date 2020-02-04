@@ -154,6 +154,16 @@ def parse_args():
                       help='True: verbose print, False: simple print',
                       type=str)
 
+    parser.add_argument('--USE_NEW_QUESTION', dest='USE_NEW_QUESTION',
+                      choices=['True', 'False'],
+                      help='whether to use new question while testing',
+                      type=str)
+
+    parser.add_argument('--NEW_QUESTION', dest='NEW_QUESTION',
+                      help='the new question to be asked while testing',
+                      type=str)
+
+   
     args = parser.parse_args()
     return args
 

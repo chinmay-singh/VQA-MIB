@@ -125,20 +125,22 @@ class Net(nn.Module):
         # sum the lang+img features along dimesion 1
         proj_feat = proj_feat.sum(1)
         
-        # create a noise vector
-        noise_vec = self.noise_sigma*torch.randn(proj_feat.shape).cuda()
-
         # ans features
         ans_feat = self.ans_embedding(ans_ix)
         self.ans_rnn.flatten_parameters()
         ans_feat, _ = self.ans_rnn(ans_feat)
         ans_feat = ans_feat.sum(1)
-        ans_noise_vec = self.noise_sigma*torch.randn(ans_feat.shape).cuda()
         
+        # Add noise to both encoded representations
+        # self.noise_sigma is to be passed
+        noise_vec = self.__C.PROJ_STDDEV * torch.randn(proj_feat.shape).cuda()
+        ans_noise_vec = self.__C.ANS_STDDEV * torch.randn(ans_feat.shape).cuda()
+
+
         # add different noise to ans_feat but only at training time
         if not self.eval_flag:
             assert ans_feat.shape == proj_feat.shape, "ans_feat: {} and proj_feat: {} shapes do not match".format(ans_feat.shape, proj_feat.shape)
-            ans_feat += noise_vec
+            ans_feat += ans_noise_vec
       
             # add the noise to lang+img features
             proj_feat += noise_vec
@@ -151,6 +153,12 @@ class Net(nn.Module):
             fused_feat = torch.add(torch.mul(u, proj_feat), torch.mul(1-u, ans_feat))
         else:
             fused_feat = proj_feat
+
+        
+        # For calculating Fusion Loss in train_engine
+        z_proj = proj_feat.clone().detach()
+        z_ans = ans_feat.clone().detach()
+        z_fused = fused_feat.clone().detach()
         
         # Save the three features
         if (step < self.num and not self.eval_flag):
@@ -159,9 +167,9 @@ class Net(nn.Module):
             self.z_fused[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = fused_feat.clone().detach().cpu().numpy()
 
         elif (step == self.num and not self.eval_flag):
-            np.save('./saved/' + str(__C.VERSION) + '/z_proj_' + str(epoch) + '.npy', self.z_proj)
-            np.save('./saved/' + str(__C.VERSION) + '/z_ans_' + str(epoch) + '.npy', self.z_proj)
-            np.save('./saved/' + str(__C.VERSION) + '/z_fused_' + str(epoch) + '.npy', self.z_proj)
+            np.save(self.__C.SAVED_PATH + '/' + self.__C.VERSION + '/z_proj_' + str(epoch) + '.npy', self.z_proj)
+            np.save(self.__C.SAVED_PATH + '/' + self.__C.VERSION + '/z_ans_' + str(epoch) + '.npy', self.z_ans)
+            np.save(self.__C.SAVED_PATH + '/' + self.__C.VERSION + '/z_fused_' + str(epoch) + '.npy', self.z_fused)
 
         elif (step == (self.num + 1) and not self.eval_flag):
             self.z_proj = np.zeros(shape=self.shape)
@@ -191,4 +199,4 @@ class Net(nn.Module):
         # (batch_size, answer_size)
         fused_feat = self.classifier(fused_feat)
         
-        return proj_feat, ans_feat, fused_feat
+        return proj_feat, ans_feat, fused_feat, z_proj, z_ans, z_fused

@@ -18,3 +18,5 @@ class Cfgs(BaseCfgs):
         self.DROPOUT_R = 0.2
         self.CLASSIFER_DROPOUT_R = 0.5
         self.FLAT_OUT_SIZE = 2048
+        self.WITH_ANSWER = False
+        self.WITH_FUSION_LOSS = False
