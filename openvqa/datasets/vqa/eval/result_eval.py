@@ -16,9 +16,13 @@ def eval(__C, dataset, ans_ix_list, pred_list, result_eval_file, ensemble_file, 
         'question_id': int(qid_list[qix])
     } for qix in range(qid_list.__len__())]
 
+    if __C.USE_NEW_QUESTION == "True":
+        print("")
+        print("Answer for the asked question is: ", result)
+        print("")
+
     print('Save the result to file: {}'.format(result_eval_file))
     json.dump(result, open(result_eval_file, 'w'))
-
 
     if __C.TEST_SAVE_PRED:
         print('Save the prediction vector to file: {}'.format(ensemble_file))
