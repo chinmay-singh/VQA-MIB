@@ -241,7 +241,8 @@ class BaseCfgs(PATH):
 
         # ------------ Seed setup
         # fix pytorch seed
-        torch.manual_seed(self.SEED)
+        # torch.manual_seed(self.SEED)
+        torch.manual_seed(7452602)
         if self.N_GPU < 2:
             torch.cuda.manual_seed(self.SEED)
         else:
