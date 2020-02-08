@@ -27,7 +27,6 @@ class BaseDataSet(Data.Dataset):
         self.token_size = None
         self.ans_size = None
 
-
     def load_ques_ans(self, idx):
         raise NotImplementedError()
 
@@ -48,8 +47,6 @@ class BaseDataSet(Data.Dataset):
             torch.from_numpy(ques_ix_iter),\
             torch.from_numpy(ans_ix_iter),\
             torch.from_numpy(ans_iter)
-            
-
 
     def __len__(self):
         return self.data_size
