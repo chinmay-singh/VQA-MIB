@@ -159,7 +159,7 @@ class BaseCfgs(PATH):
         self.WARMUP_EPOCH = 3
 
         # Max training epoch
-        self.MAX_EPOCH = 13
+        self.MAX_EPOCH = 15
 
         # Gradient clip
         # (default: -1 means not using)
