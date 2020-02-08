@@ -166,7 +166,10 @@ def parse_args():
                       help='the new question to be asked while testing',
                       type=str)
 
-   
+    parser.add_argument('--IMAGE_ID', dest='IMAGE_ID',
+                      help='image id on which the questions to be asked',
+                      type=str)
+
     args = parser.parse_args()
     return args
 
@@ -201,7 +204,3 @@ if __name__ == '__main__':
 
     execution = Execution(__C)
     execution.run(__C.RUN_MODE)
-
-
-
-
