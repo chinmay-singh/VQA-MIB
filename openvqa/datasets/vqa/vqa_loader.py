@@ -18,20 +18,13 @@ class DataSet(BaseDataSet):
         # ---- Raw data loading ----
         # --------------------------
 
-        print("Loading all image features")
-        # Loading all image paths
-        frcn_feat_path_list = \
-            glob.glob(__C.FEATS_PATH[__C.DATASET]['train'] + '/*.npz') + \
-            glob.glob(__C.FEATS_PATH[__C.DATASET]['val'] + '/*.npz') + \
-            glob.glob(__C.FEATS_PATH[__C.DATASET]['test'] + '/*.npz')
-
         print("Loading all questions (for statistics)")
         # Loading question word list
         stat_ques_list = \
-            json.load(open(__C.RAW_PATH[__C.DATASET]['train'], 'r'))['questions'] + \
-            json.load(open(__C.RAW_PATH[__C.DATASET]['val'], 'r'))['questions'] + \
-            json.load(open(__C.RAW_PATH[__C.DATASET]['test'], 'r'))['questions'] + \
-            json.load(open(__C.RAW_PATH[__C.DATASET]['vg'], 'r'))['questions']
+                json.load(open(__C.RAW_PATH[__C.DATASET]['train'], 'r'))['questions'] + \
+                json.load(open(__C.RAW_PATH[__C.DATASET]['val'], 'r'))['questions'] + \
+                json.load(open(__C.RAW_PATH[__C.DATASET]['test'], 'r'))['questions'] + \
+                json.load(open(__C.RAW_PATH[__C.DATASET]['vg'], 'r'))['questions']
 
         '''
         stat_ques_list = [
@@ -43,29 +36,55 @@ class DataSet(BaseDataSet):
         # Loading answer word list
         '''
         stat_ans_list = \
-            json.load(open(__C.RAW_PATH[__C.DATASET]['train-anno'], 'r'))['annotations'] + \
-            json.load(open(__C.RAW_PATH[__C.DATASET]['val-anno'], 'r'))['annotations']
+                json.load(open(__C.RAW_PATH[__C.DATASET]['train-anno'], 'r'))['annotations'] + \
+                json.load(open(__C.RAW_PATH[__C.DATASET]['val-anno'], 'r'))['annotations']
         '''
 
-        # Loading question and answer list
-        self.ques_list = []
-        self.ans_list = []
+        if self.__C.USE_NEW_QUESTION == "False":
 
-        print("Loading split questions and answers")
-        split_list = __C.SPLIT[__C.RUN_MODE].split('+')
-        for split in split_list:
-            self.ques_list += json.load(open(__C.RAW_PATH[__C.DATASET][split], 'r'))['questions']
+            print("Loading all image features")
+            # Loading all image paths
+            frcn_feat_path_list = \
+                glob.glob(__C.FEATS_PATH[__C.DATASET]['train'] + '/*.npz') + \
+                glob.glob(__C.FEATS_PATH[__C.DATASET]['val'] + '/*.npz') + \
+                glob.glob(__C.FEATS_PATH[__C.DATASET]['test'] + '/*.npz')
+
+            # Loading question and answer list
+            self.ques_list = []
+            self.ans_list = []
+
+            print("Loading split questions and answers")
+            split_list = __C.SPLIT[__C.RUN_MODE].split('+')
+            for split in split_list:
+                self.ques_list += json.load(open(__C.RAW_PATH[__C.DATASET][split], 'r'))['questions']
+                if __C.RUN_MODE in ['train']:
+                    self.ans_list += json.load(open(__C.RAW_PATH[__C.DATASET][split + '-anno'], 'r'))['annotations']
+
+            # Define run data size
             if __C.RUN_MODE in ['train']:
-                self.ans_list += json.load(open(__C.RAW_PATH[__C.DATASET][split + '-anno'], 'r'))['annotations']
+                self.data_size = self.ans_list.__len__()
+            else:
+                self.data_size = self.ques_list.__len__()
 
-        # Define run data size
-        if __C.RUN_MODE in ['train']:
-            self.data_size = self.ans_list.__len__()
-        else:
+            # assert len(self.ques_list) == len(self.ans_list), "Size of question list and answer list does not match"
+            print(' ========== Dataset size:', self.data_size)
+
+        if self.__C.USE_NEW_QUESTION == "True" and self.__C.RUN_MODE == "test":
+
+            print("Loading image features of image_id: {}".format(self.__C.IMAGE_ID))
+            # Loading all image paths
+            frcn_feat_path_list = glob.glob(__C.FEATS_PATH[__C.DATASET]['test'] + '/COCO_test2015_' + str(self.__C.IMAGE_ID).zfill(12) + '.jpg.npz')
+
+            print("Loading the specified question")
+            # Loading question word list
+            temp_json = {}
+            temp_json['image_id'] = self.__C.IMAGE_ID 
+            temp_json['question'] = self.__C.NEW_QUESTION
+            temp_json['question_id'] = 100000001
+
+            self.ques_list = [temp_json]
             self.data_size = self.ques_list.__len__()
-
-        # assert len(self.ques_list) == len(self.ans_list), "Size of question list and answer list does not match"
-        print(' ========== Dataset size:', self.data_size)
+            print(' ========== Dataset size:', self.data_size)
 
 
         # ------------------------
@@ -137,7 +156,7 @@ class DataSet(BaseDataSet):
             print( list(islice(self.token_to_ix_ans.items(), 50)))
             sys.exit(0)
             '''
-            
+
         #ENd of our edit
 
         ans_freq = 8
@@ -148,13 +167,11 @@ class DataSet(BaseDataSet):
         print('Finished!')
         print('')
 
-
     def img_feat_path_load(self, path_list):
         iid_to_path = {}
 
         for ix, path in enumerate(path_list):
             iid = str(int(path.split('/')[-1].split('_')[-1].split('.')[0]))
-            # print(iid)
             iid_to_path[iid] = path
 
         return iid_to_path
@@ -211,7 +228,6 @@ class DataSet(BaseDataSet):
     words in the answers. The answers are taken from the answer_dict
     '''
     def tokenize_ans(self, ans_list, use_glove):
-
 
         token_to_ix_ans = {
             'PAD': 0,
@@ -330,11 +346,9 @@ class DataSet(BaseDataSet):
         else:
             ques = self.ques_list[idx]
             iid = str(ques['image_id'])
-
             ques_ix_iter = self.proc_ques(ques, self.token_to_ix, max_token=14)
 
             return ques_ix_iter, np.zeros(1), np.zeros(1), iid # will have to check, at the time of eval how is processing done
-
 
     def load_img_feats(self, idx, iid):
         frcn_feat = np.load(self.iid_to_frcn_feat_path[iid])
@@ -412,7 +426,6 @@ class DataSet(BaseDataSet):
     #Edits
 
     def proc_ans_tokens(self, ans, token_to_ix_ans, max_token):
-        
         ans_ix = np.zeros(max_token, np.int64)
 
         words = prep_ans(ans['multiple_choice_answer']).split()
