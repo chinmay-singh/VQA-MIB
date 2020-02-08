@@ -34,3 +34,13 @@ python3 vis.py -h
 - Baseline + gru without fusion (11th epoch) 
 
 ![visualisation](images/11wof.png)
+
+## Asking a new question while testing
+
+Make --USE_NEW_QUESTION='True'
+Give the question as string to --NEW_QUESTION='<Question>'
+Give the image id on which the question to be asked --IMAGE_ID=<int>
+Provide the model and its checkpoint version and checkpoint epoch
+
+Sample command -> 
+python run.py --MODEL='baseline_wa' --DATASET='vqa' --RUN='test' --GPU='0' --VERSION='testing with one question' --CKPT_V='baseline_wa_gru' --CKPT_E=13 --USE_NEW_QUESTION='True' --NEW_QUESTION='What are you doing' --IMAGE_ID=1
