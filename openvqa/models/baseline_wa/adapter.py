@@ -17,34 +17,33 @@ class Adapter(BaseAdapter):
         self.frcn_linear = nn.Linear(imgfeat_linear_size, __C.HIDDEN_SIZE)
 
     def vqa_forward(self, feat_dict):
-		# Your Implementation
+        # Your Implementation
 
-		frcn_feat = feat_dict['FRCN_FEAT'] #(batchsize, num_bbox, 2048)
-		bbox_feat = feat_dict['BBOX_FEAT'] #(batchsize, num_bbox, 5)
+        #(batchsize, num_bbox, 2048)
+        frcn_feat = feat_dict['FRCN_FEAT'] 
+        #(batchsize, num_bbox, 5)
+        bbox_feat = feat_dict['BBOX_FEAT'] 
 
-		# sums over abs of all 2048 features for every object, thus reducing each object to a scalar
-		img_feat_mask = make_mask(frcn_feat) #(batchsize, 1, 1, num_bbox)
+        # sums over abs of all 2048 features for every object, thus reducing each object to a scalar
+        #(batchsize, 1, 1, num_bbox)
+        img_feat_mask = make_mask(frcn_feat) 
 
-		if self.__C.USE_BBOX_FEAT:
+        if self.__C.USE_BBOX_FEAT:
             bbox_feat = self.bbox_linear(bbox_feat)
             frcn_feat = torch.cat((frcn_feat, bbox_feat), dim=-1)
-		img_feat = self.frcn_linear(frcn_feat)
+        img_feat = self.frcn_linear(frcn_feat)
 
         return img_feat, img_feat_mask
-	   
-'''
-	def gqa_forward(self, feat_dict):
-		# Your Implementation
-		
-	def clevr_forward(self, feat_dict):
-		# Your Implementation
-'''
 
-'''
-	def gqa_init(self, __C):
-		# Your Implementation
+    def gqa_forward(self, feat_dict):
+        # Your Implementation
 
-	def clevr_init(self, __C):
-		# Your Implementation
-'''
-	
+    def clevr_forward(self, feat_dict):
+        # Your Implementation
+
+    def gqa_init(self, __C):
+        # Your Implementation
+
+    def clevr_init(self, __C):
+        # Your Implementation
+
