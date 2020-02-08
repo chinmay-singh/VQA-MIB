@@ -39,7 +39,6 @@ class BaseDataSet(Data.Dataset):
     def __getitem__(self, idx):
 
         ques_ix_iter, ans_ix_iter, ans_iter, iid = self.load_ques_ans(idx)
-
         frcn_feat_iter, grid_feat_iter, bbox_feat_iter = self.load_img_feats(idx, iid)
 
         return \
