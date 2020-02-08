@@ -48,3 +48,4 @@ class Adapter(BaseAdapter):
         
     def clevr_forward(self, feat_dict):
         # Your Implementation
+        pass
