@@ -76,7 +76,7 @@ class Net(nn.Module):
     token_size: corresponds to the number of all dataset words
     answer_size: corresponds to the number of classes for prediction
     '''
-    def __init__(self, __C, pretrained_emb, token_size, answer_size, pretrain_emb_ans, token_size_ans, noise_sigma = 0.1):
+    def __init__(self, __C, pretrained_emb, token_size, answer_size, pretrain_emb_ans, token_size_ans):
         super(Net, self).__init__()
         if pretrain_emb_ans is None:
             self.eval_flag = True
@@ -152,9 +152,6 @@ class Net(nn.Module):
         self.ans_proj_norm = LayerNorm(__C.FLAT_OUT_SIZE)
         self.ans_proj = nn.Linear(__C.FLAT_OUT_SIZE, answer_size)
         
-        # create the noise vector std
-        self.noise_sigma = noise_sigma
-
         self.batch_size = int(__C.SUB_BATCH_SIZE/__C.N_GPU)
         self.num = math.ceil(1000/self.batch_size) #313
 
