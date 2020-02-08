@@ -47,8 +47,6 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
     pretrained_emb = dataset.pretrained_emb
 
     #Make changes to this Net implementation
-
-
     net = ModelLoader(__C).Net(
         __C,
         pretrained_emb,
@@ -103,7 +101,7 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
                 ques_ix_iter,
                 ans_ix, #Where ans_ix_iter would have been
                 step,
-                epoch = 0
+                0
             )[0]
         else:
             pred = net(
@@ -113,9 +111,14 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
                 ques_ix_iter,
                 ans_ix, #Where ans_ix_iter would have been
                 step,
-                epoch = 0
+                0
             )
+
         pred_np = pred.cpu().data.numpy()
+
+        if __C.USE_NEW_QUESTION == 'True':
+            pred_np = np.reshape(pred_np, (1, pred_np.shape[0]))
+
         pred_argmax = np.argmax(pred_np, axis=1)
 
         # Save the answer index
