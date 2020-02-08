@@ -159,7 +159,7 @@ def parse_args():
     parser.add_argument('--USE_NEW_QUESTION', dest='USE_NEW_QUESTION',
                       choices=['True', 'False'],
                       help='whether to use new question while testing',
-                      default='True',
+                      default='False',
                       type=str)
 
     parser.add_argument('--NEW_QUESTION', dest='NEW_QUESTION',
