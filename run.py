@@ -23,7 +23,7 @@ def parse_args():
     parser.add_argument('--MODEL', dest='MODEL',
                       choices=[
                            'mcan_small',
-                           'mcan_small_wa'
+                           'mcan_small_wa',
                            'mcan_large',
                            'ban_4',
                            #Edits
