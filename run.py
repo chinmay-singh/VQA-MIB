@@ -4,7 +4,7 @@
 # --------------------------------------------------------
 
 from openvqa.models.model_loader import CfgLoader
-from utils1.exec import Execution 
+from utils1.exec_new import Execution 
 import argparse, yaml
 
 
@@ -23,6 +23,7 @@ def parse_args():
     parser.add_argument('--MODEL', dest='MODEL',
                       choices=[
                            'mcan_small',
+                           'mcan_small_wa'
                            'mcan_large',
                            'ban_4',
                            #Edits
@@ -42,6 +43,7 @@ def parse_args():
                         ,
                       help='{'
                            'mcan_small,'
+                           'mcan_small_wa,'
                            'mcan_large,'
                             #Edits
                            'ban_wa,'
@@ -157,6 +159,7 @@ def parse_args():
     parser.add_argument('--USE_NEW_QUESTION', dest='USE_NEW_QUESTION',
                       choices=['True', 'False'],
                       help='whether to use new question while testing',
+                      default='True',
                       type=str)
 
     parser.add_argument('--NEW_QUESTION', dest='NEW_QUESTION',
