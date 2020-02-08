@@ -16,17 +16,23 @@ class Adapter(BaseAdapter):
             imgfeat_linear_size += __C.BBOXFEAT_EMB_SIZE
         self.frcn_linear = nn.Linear(imgfeat_linear_size, __C.HIDDEN_SIZE)
 
+
+    def gqa_init(self, __C):
+        # Your Implementation
+        pass
+
+    def clevr_init(self, __C):
+        # Your Implementation
+        pass
+
     def vqa_forward(self, feat_dict):
         # Your Implementation
 
-        #(batchsize, num_bbox, 2048)
-        frcn_feat = feat_dict['FRCN_FEAT'] 
-        #(batchsize, num_bbox, 5)
-        bbox_feat = feat_dict['BBOX_FEAT'] 
+        frcn_feat = feat_dict['FRCN_FEAT'] #(batchsize, num_bbox, 2048)
+        bbox_feat = feat_dict['BBOX_FEAT'] #(batchsize, num_bbox, 5)
 
         # sums over abs of all 2048 features for every object, thus reducing each object to a scalar
-        #(batchsize, 1, 1, num_bbox)
-        img_feat_mask = make_mask(frcn_feat) 
+        img_feat_mask = make_mask(frcn_feat) #(batchsize, 1, 1, num_bbox)
 
         if self.__C.USE_BBOX_FEAT:
             bbox_feat = self.bbox_linear(bbox_feat)
@@ -35,15 +41,10 @@ class Adapter(BaseAdapter):
 
         return img_feat, img_feat_mask
 
+       
     def gqa_forward(self, feat_dict):
         # Your Implementation
-
+        pass
+        
     def clevr_forward(self, feat_dict):
         # Your Implementation
-
-    def gqa_init(self, __C):
-        # Your Implementation
-
-    def clevr_init(self, __C):
-        # Your Implementation
-
