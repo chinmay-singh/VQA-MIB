@@ -21,7 +21,7 @@ import numpy as np
 # -------------------------
 
 class Net(nn.Module):
-    def __init__(self, __C, pretrained_emb, token_size, answer_size, pretrain_emb_ans, token_size_ans, noise_sigma = 0.1):
+    def __init__(self, __C, pretrained_emb, token_size, answer_size, pretrain_emb_ans, token_size_ans):
         super(Net, self).__init__()
 
         if pretrain_emb_ans is None:
@@ -90,12 +90,9 @@ class Net(nn.Module):
         ]
         self.classifier = nn.Sequential(*layers)
         
-        # create the noise vector std
-        self.noise_sigma = noise_sigma
-        
         # parameters for saving numpy arrays
-        self.batch_size = int(__C.SUB_BATCH_SIZE)
-        self.num = math.ceil(10000/self.batch_size) #313
+        self.batch_size = int(__C.SUB_BATCH_SIZE/__C.N_GPU)
+        self.num = math.ceil(1000/self.batch_size) #313
 
         # storing npy arrays
         self.shape = (self.num * self.batch_size, int(__C.HIDDEN_SIZE)) #(10016, 1024) changed flat out size to hidden size
@@ -156,9 +153,9 @@ class Net(nn.Module):
 
         
         # For calculating Fusion Loss in train_engine
-        z_proj = proj_feat.clone().detach()
-        z_ans = ans_feat.clone().detach()
-        z_fused = fused_feat.clone().detach()
+        z_proj = F.normalize(proj_feat.clone().detach(), dim=0, p=2)
+        z_ans = F.normalize(ans_feat.clone().detach(), dim=0, p=2)
+        z_fused = F.normalize(fused_feat.clone().detach(), dim=0, p=2)
         
         # Save the three features
         if (step < self.num and not self.eval_flag):
