@@ -69,7 +69,7 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
         shuffle=False,
         num_workers=__C.NUM_WORKERS,
         pin_memory=__C.PIN_MEM,
-        drop_last=True
+        drop_last=False
     )
 
     for step, (
@@ -114,7 +114,11 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
                 step,
                 0
             )
-
+        
+        # reshape for last batch in val
+        if (len(pred.shape) != len(frcn_feat_iter.shape)):
+            pred = pred.reshape(frcn_feat_iter.shape[0], -1)
+            
         pred_np = pred.cpu().data.numpy()
 
         if __C.USE_NEW_QUESTION == 'True':
