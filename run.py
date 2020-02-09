@@ -32,9 +32,12 @@ def parse_args():
                            #End of Edits
                            'ban_8',
                            'mfb',
+                           'mfb_wa',
                            'mfh',
+                           'mfh_wa',
                            'mem',
                            'butd',
+                           'butd_wa',
                            'baseline',
                            'baseline_wa_no_fusion',
                            'positional',
@@ -52,8 +55,11 @@ def parse_args():
                            'ban_4,'
                            'ban_8,'
                            'mfb,'
+                           'mfb_wa,'
                            'mfh,'
+                           'mfh_wa,'
                            'butd,'
+                           'butd_wa,'
                            'baseline,'
                            'baseline_wa_no_fusion,'
                            'positional,'
