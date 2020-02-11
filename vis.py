@@ -7,6 +7,7 @@
 import numpy as np
 import torch
 from sklearn.manifold import MDS
+from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 import matplotlib
 import matplotlib.patches as mpatches
@@ -56,7 +57,10 @@ ap.add_argument("-v", "--version", required=True,
 ap.add_argument("-e", "--epoch", required=True,
         help="epoch number")
 ap.add_argument("-n", "--num_samples", required=False,
-   help="number of samples to plot")
+        help="number of samples to plot")
+ap.add_argument("-t", "--tsne", required=False,
+        help="bool: to plot tsne or not")
+
 
 args = vars(ap.parse_args())
 
@@ -86,19 +90,30 @@ z3_load = torch.from_numpy(z3_load)
 #print("z3 shape: ", z3_load.shape)
 
 embedding = MDS(n_components=2)
+if tsne:
+    tsne_embedding = TSNE()
 
 #print("Transforming z1, z2 and z3")
 if (num_samples is None):
     z1_transformed = embedding.fit_transform(z1_load)
     z2_transformed = embedding.fit_transform(z2_load)
     z3_transformed = embedding.fit_transform(z3_load)
+    
+    if tsne:
+        z1_transformed_tsne = embedding.fit_transform(z1_load)
+        z2_transformed_tsne = embedding.fit_transform(z2_load)
+        z3_transformed_tsne = embedding.fit_transform(z3_load)
 else:
     z1_transformed = embedding.fit_transform(z1_load[:num_samples])
     z2_transformed = embedding.fit_transform(z2_load[:num_samples])
     z3_transformed = embedding.fit_transform(z3_load[:num_samples])
+    
+    if tsne:
+        z1_transformed_tsne = embedding.fit_transform(z1_load[:num_samples])
+        z2_transformed_tsne = embedding.fit_transform(z2_load[:num_samples])
+        z3_transformed_tsne = embedding.fit_transform(z3_load[:num_samples])
 
-
-def plotter(X1, X2, X3):
+def plotter(X1, X2, X3, tsne=False):
 
     red_patch = mpatches.Patch(color='red', label=filename1)
     blue_patch = mpatches.Patch(color='blue', label=filename2)
@@ -121,10 +136,16 @@ def plotter(X1, X2, X3):
     # plt.show()
     plt.savefig('./saved/' + args['version'] + '/vis_' + args['version'] + '_' + args['epoch'] + '.png')
 
+    if tsne:
+        plt.savefig('./saved/' + args['version'] + '/vis_' + args['version'] + '_' + args['epoch'] + '_tsne' + '.png')
+
 
 ##print("Plotting and Saving Points")
 plotter(z1_transformed, z2_transformed, z3_transformed)
-print("Image save successful for: ", args['epoch'])
+print("Mds Image save successful for: ", args['epoch'])
+if tsne:
+    plotter(z1_transformed_tsne, z2_transformed_tsne, z3_transformed_tsne, tsne=True)
+    print("Tsne Image save successful for: ", args['epoch'])
 
 # In[74]:
 
