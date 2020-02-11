@@ -20,6 +20,8 @@ class BaseCfgs(PATH):
         self.WITH_ANSWER = True
         self.WITH_FUSION_LOSS = True
 
+        self.AUGMENTED_ANSWER = True
+
         # Set Devices
         # If use multi-gpu training, you can set e.g.'0, 1, 2' instead
         self.GPU = '0'

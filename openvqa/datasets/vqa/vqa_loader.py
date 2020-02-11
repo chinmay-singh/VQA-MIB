@@ -327,8 +327,14 @@ class DataSet(BaseDataSet):
 
     def load_ques_ans(self, idx):
         if self.__C.RUN_MODE in ['train']:
+
             ans = self.ans_list[idx]
             ques = self.qid_to_ques[str(ans['question_id'])]
+
+            # Begin of edit
+            ans['question'] = ques['question']
+            # End of edit
+
             iid = str(ans['image_id'])
 
             # Process question
@@ -338,7 +344,10 @@ class DataSet(BaseDataSet):
             ans_iter = self.proc_ans(ans, self.ans_to_ix)
             
             #Edits
-            ans_ix_iter = self.proc_ans_tokens(ans, self.token_to_ix_ans, max_token = 4)
+            if (self.__C.AUGMENTED_ANSWER):
+                ans_ix_iter = self.proc_ans_tokens(ans, self.token_to_ix_ans, max_token = 14)
+            else:
+                ans_ix_iter = self.proc_ans_tokens(ans, self.token_to_ix_ans, max_token = 4)
             #End of Edits
 
             return ques_ix_iter, ans_ix_iter, ans_iter, iid
@@ -428,7 +437,17 @@ class DataSet(BaseDataSet):
     def proc_ans_tokens(self, ans, token_to_ix_ans, max_token):
         ans_ix = np.zeros(max_token, np.int64)
 
-        words = prep_ans(ans['multiple_choice_answer']).split()
+        if (self.__C.AUGMENTED_ANSWER):
+            question = ans['question']
+            augmented_ans = re.sub(
+                    r"([.,'!?\"()*#:;])",
+                    '',
+                    question.lower()
+                ).replace('-', ' ').replace('/', ' ').replace(ans['question_type'], ans['multiple_choice_answer'])
+            words = prep_ans(augmented_ans).split()
+
+        else :
+            words = prep_ans(ans['multiple_choice_answer']).split()
 
         for ix, word in enumerate(words):
             if word in token_to_ix_ans:
