@@ -8,7 +8,9 @@ from openvqa.ops.fc import FC, MLP
 from openvqa.ops.layer_norm import LayerNorm
 from openvqa.models.ban.ban import BAN
 from openvqa.models.ban.adapter import Adapter
+import math
 
+import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.utils.weight_norm import weight_norm
@@ -22,6 +24,11 @@ class Net(nn.Module):
     def __init__(self, __C, pretrained_emb, token_size, answer_size, pretrain_emb_ans, token_size_ans):
         super(Net, self).__init__()
         self.__C = __C
+        if pretrain_emb_ans is None:
+            self.eval_flag = True
+        else:
+            self.eval_flag = False
+
 
         self.embedding = nn.Embedding(
             num_embeddings=token_size,
@@ -56,7 +63,7 @@ class Net(nn.Module):
             weight_norm(nn.Linear(__C.HIDDEN_SIZE, __C.FLAT_OUT_SIZE), dim=None),
             nn.ReLU(),
             nn.Dropout(__C.CLASSIFER_DROPOUT_R, inplace=True),
-            weight_norm(nn.Linear(__C.FLAT_OUT_SIZE, HIDDEN_SIZE), dim=None)
+            weight_norm(nn.Linear(__C.FLAT_OUT_SIZE, __C.HIDDEN_SIZE), dim=None)
         ]
         self.classifier = nn.Sequential(*layers)
 
@@ -70,7 +77,7 @@ class Net(nn.Module):
 
         ####### With Answer ###############
         if (self.__C.WITH_ANSWER):
-self.ans_embedding = nn.Embedding(
+            self.ans_embedding = nn.Embedding(
                 num_embeddings=token_size_ans,
                 embedding_dim=__C.WORD_EMBED_SIZE
             )
@@ -102,6 +109,7 @@ self.ans_embedding = nn.Embedding(
 
         # Pre-process Language Feature
         # lang_feat_mask = make_mask(ques_ix.unsqueeze(2))
+        self.rnn.flatten_parameters()
         lang_feat = self.embedding(ques_ix)
         lang_feat, _ = self.rnn(lang_feat)
 
@@ -114,6 +122,7 @@ self.ans_embedding = nn.Embedding(
         )
     
         proj_feat = self.classifier(lang_feat.sum(1))
+        #print("proj feat shape is ", proj_feat.shape)
 
         self.decoder_gru.flatten_parameters()
         
@@ -144,6 +153,7 @@ self.ans_embedding = nn.Embedding(
 
             # output (batch, 4, NUM_DIRECTIONS * HIDDEN_SIZE)
             ans_feat, _ = self.ans_rnn(ans_feat)
+            ans_feat = ans_feat.sum(1)
 
             # ---------------------- #
             # ---- Adding noise ---- #
@@ -167,9 +177,10 @@ self.ans_embedding = nn.Embedding(
             # --------------------------- #
 
             # For calculating Fusion Loss in train_engine
-            z_proj = proj_feat.clone().detach()
-            z_ans = ans_feat.clone().detach()
-            z_fused = fused_feat.clone().detach()
+            # also normalize the vectors before calculating loss
+            z_proj = F.normalize(proj_feat.clone(), p=2, dim=1).detach()
+            z_ans = F.normalize(ans_feat.clone(), p=2, dim=1).detach()
+            z_fused = F.normalize(fused_feat.clone(), p=2, dim=1).detach()
 
             if (step < self.num):
                 self.z_proj[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = proj_feat.clone().detach().cpu().numpy()
