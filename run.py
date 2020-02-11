@@ -27,7 +27,7 @@ def parse_args():
                            'mcan_large',
                            'ban_4',
                            #Edits
-                           'ban_wa',
+                           'ban_8_wa',
                            'baseline_wa',
                            #End of Edits
                            'ban_8',
