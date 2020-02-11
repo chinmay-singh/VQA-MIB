@@ -121,7 +121,7 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
             
         pred_np = pred.cpu().data.numpy()
 
-        if __C.USE_NEW_QUESTION == 'True':
+        if __C.USE_NEW_QUESTION == 'True' and pred_np.shape == (3129,):
             pred_np = np.reshape(pred_np, (1, pred_np.shape[0]))
 
         pred_argmax = np.argmax(pred_np, axis=1)
