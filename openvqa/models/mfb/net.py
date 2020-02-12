@@ -8,7 +8,10 @@ from openvqa.models.mfb.mfb import CoAtt
 from openvqa.models.mfb.adapter import Adapter
 import torch
 import torch.nn as nn
-
+import numpy as np
+import torch.nn.functional as F
+from torch.nn.utils.weight_norm import weight_norm
+import math
 
 # -------------------------------------------------------
 # ---- Main MFB/MFH model with Co-Attention Learning ----
@@ -50,15 +53,15 @@ class Net(nn.Module):
         # Decoder GRU
         if __C.HIGH_ORDER:      # MFH
             self.decoder_gru = nn.GRU(
-                input_size= ___C.2*__C.MFB_O,
-                hidden_size=__C.2*__C.MFB_O,
+                input_size=2*__C.MFB_O,
+                hidden_size=2*__C.MFB_O,
                 num_layers=1,
                 batch_first=True
             )
         else:
             self.decoder_gru = nn.GRU(
-                input_size= __C.__C.MFB_O,
-                hidden_size=__C.__C.MFB_O,
+                input_size= __C.MFB_O,
+                hidden_size=__C.MFB_O,
                 num_layers=1,
                 batch_first=True
             )
@@ -119,6 +122,7 @@ class Net(nn.Module):
         img_feat, _ = self.adapter(frcn_feat, grid_feat, bbox_feat)  # (N, C, FRCN_FEAT_SIZE)
 
         # Pre-process Language Feature
+        self.lstm.flatten_parameters()
         lang_feat = self.embedding(ques_ix)     # (N, T, WORD_EMBED_SIZE)
         lang_feat = self.dropout(lang_feat)
         lang_feat, _ = self.lstm(lang_feat)     # (N, T, LSTM_OUT_SIZE)
@@ -127,13 +131,19 @@ class Net(nn.Module):
         proj_feat = self.backbone(img_feat, lang_feat)  # MFH:(N, 2*O) / MFB:(N, O)
         self.decoder_gru.flatten_parameters()
 
-        if (self.__C.WITH_ANSWER == False and self.eval_flag = True):
+        if (self.__C.WITH_ANSWER == False or self.eval_flag == True):
             # use the decoder
             proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
             proj_feat = proj_feat.squeeze()
 
             # Classification/projection layers
             proj_feat = self.proj(proj_feat)                # (N, answer_size)
+            
+            if (self.eval_flag == True and self.__C.WITH_ANSWER == True):
+                #hack because test_engine expects multiple returns from net but only uses the first
+                return proj_feat, None 
+
+
             return proj_feat
         
         ############ WITH ANSWER ##############
@@ -171,9 +181,10 @@ class Net(nn.Module):
             # --------------------------- #
 
             # For calculating Fusion Loss in train_engine
-            z_proj = proj_feat.clone().detach()
-            z_ans = ans_feat.clone().detach()
-            z_fused = fused_feat.clone().detach()
+            # also normalize the vectors before calculating loss
+            z_proj = F.normalize(proj_feat.clone(), p=2, dim=1).detach()
+            z_ans = F.normalize(ans_feat.clone(), p=2, dim=1).detach()
+            z_fused = F.normalize(fused_feat.clone(), p=2, dim=1).detach()
 
             if (step < self.num):
                 self.z_proj[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = proj_feat.clone().detach().cpu().numpy()
