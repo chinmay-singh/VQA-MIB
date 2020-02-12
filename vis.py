@@ -14,19 +14,6 @@ import multiprocessing
 import os
 import time
 
-torch.manual_seed(0)
-
-ap = argparse.ArgumentParser()
-
-# Add the arguments to the parser
-ap.add_argument("-v", "--version", required=True, type=str, help="folder name in saved/")
-ap.add_argument("-e", "--epoch", required=True, type=int, help="epoch number")
-ap.add_argument("-n", "--num_samples", required=False, type=int, default=1000, help="number of samples to plot")
-ap.add_argument("-t", "--till", required=False, type=bool, default=False, 
-    help="Set true to make plots from epoch 0 to --epoch [both included], False to make plots only for epoch number --epoch")
-
-args_parsed = vars(ap.parse_args())
-
 def plotter(X1, X2, args, tsne=False):
 
     plt.clf()
@@ -127,18 +114,43 @@ def poolcontext(*args, **kwargs):
     yield pool
     pool.terminate()
 
+    '''
+    args_parsed = {
+        'version': 'baseline_wa',
+        'epoch': 5, #will be replaced by k (if passed)
+        'num_samples': 1000,
+        'till': True
+    }
+    '''
 
-if __name__ == '__main__':
+def visualize(args_parsed):
     start = time.time()
     if (args_parsed['till'] is True):
 
         dic = copy.deepcopy(args_parsed)
         n = int(dic['epoch'])
 
-        with poolcontext(processes= n+1 ) as p:
+        with poolcontext(processes= 4) as p:
             p.map(vis_func_unpacker, [(dic, i) for i in range(n+1)])
 
     else:
         vis_func(args_parsed)
     end = time.time()
-    print("Time taken (in s): ", end-start)
+    print("Time taken to vis (in s): ", end-start)
+
+if __name__ == '__main__':
+
+    torch.manual_seed(0)
+
+    ap = argparse.ArgumentParser()
+
+    # Add the arguments to the parser
+    ap.add_argument("-v", "--version", required=True, type=str, help="folder name in saved/")
+    ap.add_argument("-e", "--epoch", required=True, type=int, help="epoch number")
+    ap.add_argument("-n", "--num_samples", required=False, type=int, default=1000, help="number of samples to plot")
+    ap.add_argument("-t", "--till", required=False, type=bool, default=False, 
+            help="Set true to make plots from epoch 0 to --epoch [both included], False to make plots only for epoch number --epoch")
+
+    args_parsed = vars(ap.parse_args())
+
+    visualize(args_parsed)
