@@ -4,7 +4,7 @@
 # --------------------------------------------------------
 
 from openvqa.models.model_loader import CfgLoader
-from utils1.exec import Execution 
+from utils1.exec1 import Execution 
 import argparse, yaml
 
 
