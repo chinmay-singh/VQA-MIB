@@ -13,7 +13,8 @@ from openvqa.models.model_loader import ModelLoader
 from openvqa.utils.optim import get_optim, adjust_lr
 from utils1.test_engine import test_engine, ckpt_proc
 from vis import plotter, vis_func
-
+from multiprocessing import Pool
+import multiprocessing
 
 def train_engine(__C, dataset, dataset_eval=None):
 
@@ -173,10 +174,6 @@ def train_engine(__C, dataset, dataset_eval=None):
                 ans_iter
 
         ) in enumerate(dataloader):
-
-            print("step: ", step)
-            if (step > 17):
-                continue
 
             optim.zero_grad()
 
@@ -445,6 +442,7 @@ def train_engine(__C, dataset, dataset_eval=None):
         # ---------------------------------------------- #
         # ---- Create visualizations in new processes----#
         # ---------------------------------------------- #
+        dic = {}
         dic['version'] = __C.VERSION
         dic['epoch'] = epoch 
         dic['num_samples'] = 1000
