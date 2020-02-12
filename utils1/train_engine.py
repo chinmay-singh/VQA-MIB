@@ -125,7 +125,9 @@ def train_engine(__C, dataset, dataset_eval=None):
     logfile.write(str(__C))
     logfile.close()
 
-    os.environ['WANDB_MODE'] = 'dryrun'
+    # For dry runs
+    # os.environ['WANDB_MODE'] = 'dryrun' 
+
     # initializing the wandb project
     # TODO to change the name of project later, once the proper coding starts
     wandb.init(project="openvqa", name=__C.VERSION, config=__C)
