@@ -12,6 +12,7 @@ import wandb
 from openvqa.models.model_loader import ModelLoader
 from openvqa.utils.optim import get_optim, adjust_lr
 from utils1.test_engine import test_engine, ckpt_proc
+from vis import plotter, vis_func
 
 
 def train_engine(__C, dataset, dataset_eval=None):
@@ -123,6 +124,7 @@ def train_engine(__C, dataset, dataset_eval=None):
     logfile.write(str(__C))
     logfile.close()
 
+    os.environ['WANDB_MODE'] = 'dryrun'
     # initializing the wandb project
     # TODO to change the name of project later, once the proper coding starts
     wandb.init(project="openvqa", name=__C.VERSION, config=__C)
@@ -171,6 +173,10 @@ def train_engine(__C, dataset, dataset_eval=None):
                 ans_iter
 
         ) in enumerate(dataloader):
+
+            print("step: ", step)
+            if (step > 17):
+                continue
 
             optim.zero_grad()
 
@@ -436,6 +442,17 @@ def train_engine(__C, dataset, dataset_eval=None):
             'Elapsed time': int(elapse_time) 
             })
 
+        # ---------------------------------------------- #
+        # ---- Create visualizations in new processes----#
+        # ---------------------------------------------- #
+        dic['version'] = __C.VERSION
+        dic['epoch'] = epoch 
+        dic['num_samples'] = 1000
+
+        p = Pool(processes= 1)
+        p.map_async(vis_func, (dic, ))
+        p.close()
+
         # Eval after every epoch
         if dataset_eval is not None:
             test_engine(
@@ -445,6 +462,7 @@ def train_engine(__C, dataset, dataset_eval=None):
                 validation=True,
                 epoch = 0
             )
+        p.join()
 
         # if self.__C.VERBOSE:
         #     logfile = open(
