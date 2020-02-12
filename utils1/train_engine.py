@@ -258,15 +258,15 @@ def train_engine(__C, dataset, dataset_eval=None):
                         loss_item_img_ques[item_ix] = eval('F.' + loss_nonlinear + '(loss_item_img_ques[item_ix], dim=1)')
 
                 for item_ix, loss_nonlinear in enumerate(loss_nonlinear_list):
-                    if loss_nonlinear in ['flat']:
+                    if loss_nonlinear in ['flat'] and __C.WITH_ANSWER:
                         loss_item_ans[item_ix] = loss_item_ans[item_ix].view(-1)
-                    elif loss_nonlinear:
+                    elif loss_nonlinear and __C.WITH_ANSWER:
                         loss_item_ans[item_ix] = eval('F.' + loss_nonlinear + '(loss_item_ans[item_ix], dim=1)')
 
                 for item_ix, loss_nonlinear in enumerate(loss_nonlinear_list):
-                    if loss_nonlinear in ['flat']:
+                    if loss_nonlinear in ['flat'] and __C.WITH_ANSWER:
                         loss_item_interp[item_ix] = loss_item_interp[item_ix].view(-1)
-                    elif loss_nonlinear:
+                    elif loss_nonlinear and __C.WITH_ANSWER:
                         loss_item_interp[item_ix] = eval('F.' + loss_nonlinear + '(loss_item_interp[item_ix], dim=1)')
 
 
