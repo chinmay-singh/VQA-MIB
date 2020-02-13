@@ -137,7 +137,7 @@ class Net(nn.Module):
             proj_feat = proj_feat.squeeze()
 
             # Classification/projection layers
-            proj_feat = self.proj(proj_feat)                # (N, answer_size)
+            proj_feat = self.classifier(proj_feat)                # (N, answer_size)
             
             if (self.eval_flag == True and self.__C.WITH_ANSWER == True):
                 #hack because test_engine expects multiple returns from net but only uses the first
