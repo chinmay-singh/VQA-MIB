@@ -3,6 +3,22 @@ from openvqa.datasets.vqa.eval.vqaEval import VQAEval
 import json, pickle
 import numpy as np
 import wandb
+from urllib import request, parse
+import json
+
+def send_message_to_slack(text):
+
+    post = {"text": "{0}".format(text)}
+
+    try:
+        json_data = json.dumps(post)
+
+        req = request.Request("https://hooks.slack.com/services/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",
+                              data=json_data.encode('ascii'),
+                              headers={'Content-Type': 'application/json'})
+        resp = request.urlopen(req)
+    except Exception as em:
+        print("EXCEPTION: " + str(em))
 
 def eval(__C, dataset, ans_ix_list, pred_list, result_eval_file, ensemble_file, log_file, valid=False):
     result_eval_file = result_eval_file + '.json'
@@ -57,6 +73,8 @@ def eval(__C, dataset, ans_ix_list, pred_list, result_eval_file, ensemble_file, 
         # print accuracies
         print("\n")
         print("Overall Accuracy is: %.02f\n" % (vqaEval.accuracy['overall']))
+        slack_message = "Model: %s Epoch: %d\n" % (__C.VERSION, int(__C['current_epoch']))
+ 
         # print("Per Question Type Accuracy is the following:")
         # for quesType in vqaEval.accuracy['perQuestionType']:
         #     print("%s : %.02f" % (quesType, vqaEval.accuracy['perQuestionType'][quesType]))
@@ -64,8 +82,10 @@ def eval(__C, dataset, ans_ix_list, pred_list, result_eval_file, ensemble_file, 
         print("Per Answer Type Accuracy is the following:")
         for ansType in vqaEval.accuracy['perAnswerType']:
             print("%s : %.02f" % (ansType, vqaEval.accuracy['perAnswerType'][ansType]))
+            slack_message += "%s : %.02f\n" % (ansType, vqaEval.accuracy['perAnswerType'][ansType])
         print("\n")
 
+        send_message_to_slack(slack_message)
         print('Write to log file: {}'.format(log_file))
         logfile = open(log_file, 'a+')
 

@@ -437,6 +437,7 @@ def train_engine(__C, dataset, dataset_eval=None):
             })
 
         # Eval after every epoch
+        __C['current_epoch'] = epoch
         if dataset_eval is not None:
             test_engine(
                 __C,
