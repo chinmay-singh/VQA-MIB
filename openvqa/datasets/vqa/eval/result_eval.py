@@ -73,7 +73,7 @@ def eval(__C, dataset, ans_ix_list, pred_list, result_eval_file, ensemble_file, 
         # print accuracies
         print("\n")
         print("Overall Accuracy is: %.02f\n" % (vqaEval.accuracy['overall']))
-        slack_message = "Model: %s Epoch: %d\n" % (__C.VERSION, int(__C.current_epoch))
+        slack_message = "Model: %s\nEpoch: %d\n" % (__C.VERSION, int(__C.current_epoch))
         slack_message += "Overall Accuracy is: %.02f\n" % (vqaEval.accuracy['overall'])
  
         # print("Per Question Type Accuracy is the following:")
