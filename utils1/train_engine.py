@@ -15,7 +15,11 @@ from utils1.test_engine import test_engine, ckpt_proc
 from vis import plotter, vis_func
 from multiprocessing import Pool
 import multiprocessing
+from knockknock import slack_sender
 
+webhook_url = "https://hooks.slack.com/services/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"
+
+@slack_sender(webhook_url=webhook_url, channel="terminator")
 def train_engine(__C, dataset, dataset_eval=None):
 
     data_size = dataset.data_size
