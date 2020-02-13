@@ -42,7 +42,8 @@ def parse_args():
                            'baseline_wa_no_fusion',
                            'positional',
                            'mcan_large_wa',
-                           'mcan_small_augmented'
+                           'mcan_small_augmented',
+                           'mcan_small_without_a'
                            ]
                         ,
                       help='{'
