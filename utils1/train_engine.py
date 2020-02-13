@@ -454,7 +454,10 @@ def train_engine(__C, dataset, dataset_eval=None):
         p.close()
 
         # Eval after every epoch
-        __C['current_epoch'] = epoch
+        epoch_dict = {
+                'current_epoch': epoch
+                }
+        __C.add_args(epoch_dict)
         if dataset_eval is not None:
             test_engine(
                 __C,
