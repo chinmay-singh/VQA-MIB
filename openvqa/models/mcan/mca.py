@@ -12,6 +12,9 @@ import torch
 import math
 import torchvision
 import torchvision.transforms as transforms
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
 
 # ------------------------------
 # ---- Multi-Head Attention ----
@@ -106,17 +109,20 @@ class MHAtt(nn.Module):
             print(att_map.shape)
             temp = att_map.reshape((att_map.shape[1], att_map.shape[0], att_map.shape[2], att_map.shape[3]))
             temp = temp.cpu()
-            transform = transforms.Compose([
-                transforms.ToPILImage(),
-                transforms.Resize(size = 2224),
-                transforms.ToTensor()
-                ])
-#            x = [transform(x_) for x_ in temp] 
+
             i = 0
             for x_ in temp:
-                x_ = transform(x_)
-                torchvision.utils.save_image(x_, self.__C.RESULT_PATH + "testing" + str(i) + ".jpg")
+                x_ = np.array(x_)
+                fig, ax = plt.subplots()
+                im = ax.imshow(x_[0])
+                for p in range(x_[0].shape[0]):
+                    for q in range(x_[0].shape[1]):
+                        text = ax.text(q, p, round(x_[0][p, q], 2), ha = "center", va = "center", color = "w")
+
+                fig.tight_layout()
+                plt.savefig(self.__C.RESULT_PATH + "testing" + str(i) + ".jpg")
                 i += 1
+                plt.close()
 
         # shape of att_map : (batch, MULTI_HEAD, 14, 14) 
         # shape of v : (batch, MULTI_HEAD, 14, NUM_DIRECTIONS*HIDDEN_SIZE/ MULTI_HEAD) 
