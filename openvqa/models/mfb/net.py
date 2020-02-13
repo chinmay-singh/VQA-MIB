@@ -68,9 +68,9 @@ class Net(nn.Module):
         
         # classification/projection layers
         if __C.HIGH_ORDER:      # MFH
-            self.proj = nn.Linear(2*__C.MFB_O, answer_size)
+            self.classifier = nn.Linear(2*__C.MFB_O, answer_size)
         else:                   # MFB
-            self.proj = nn.Linear(__C.MFB_O, answer_size)
+            self.classifier = nn.Linear(__C.MFB_O, answer_size)
         
         # With Answer
         if(self.__C.WITH_ANSWER):
@@ -158,6 +158,12 @@ class Net(nn.Module):
 
             # output (batch, (1 or 2) * __C.MFB_O)
             ans_feat, _ = self.ans_lstm(ans_feat)
+            
+            ans_feat = ans_feat.sum(1)
+            ######### or do
+            #_, ans_feat = self.ans_rnn(ans_feat) 
+            ######## but summing makes more sense when using one word answers only
+
 
             # ---------------------- #
             # ---- Adding noise ---- #
@@ -210,19 +216,19 @@ class Net(nn.Module):
             proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
             proj_feat = proj_feat.squeeze()
             # (batch_size, answer_size)
-            proj_feat = self.classifer(proj_feat)
+            proj_feat = self.classifier(proj_feat)
             
             # (batch_size, HIDDEN_SIZE)
             ans_feat, _ = self.decoder_gru(ans_feat.unsqueeze(1))
             ans_feat = ans_feat.squeeze()
             # (batch_size, answer_size)
-            ans_feat = self.classifer(ans_feat)
+            ans_feat = self.classifier(ans_feat)
             
             # (batch_size, HIDDEN_SIZE)
             fused_feat, _ = self.decoder_gru(fused_feat.unsqueeze(1))
             fused_feat = fused_feat.squeeze()
             # (batch_size, answer_size)
-            fused_feat = self.classifer(fused_feat)
+            fused_feat = self.classifier(fused_feat)
 
             return proj_feat, ans_feat, fused_feat, z_proj, z_ans, z_fused
 
