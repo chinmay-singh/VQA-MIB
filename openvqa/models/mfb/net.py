@@ -129,12 +129,13 @@ class Net(nn.Module):
         lang_feat = self.dropout_lstm(lang_feat)
 
         proj_feat = self.backbone(img_feat, lang_feat)  # MFH:(N, 2*O) / MFB:(N, O)
-        self.decoder_gru.flatten_parameters()
+        #self.decoder_gru.flatten_parameters()
 
         if (self.__C.WITH_ANSWER == False or self.eval_flag == True):
             # use the decoder
-            proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
-            proj_feat = proj_feat.squeeze()
+            # change: do not use the decoder gru
+            #proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
+            #proj_feat = proj_feat.squeeze()
 
             # Classification/projection layers
             proj_feat = self.classifier(proj_feat)                # (N, answer_size)
@@ -209,24 +210,24 @@ class Net(nn.Module):
                 self.z_fused = np.zeros(shape=self.shape)
 
             # ----------------- #
-            # ---- DECODER ---- #
+            # ---- DECODER no gru ---- #
             # ----------------- #
 
             # (batch_size, HIDDEN_SIZE)
-            proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
-            proj_feat = proj_feat.squeeze()
+            #proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
+            #proj_feat = proj_feat.squeeze()
             # (batch_size, answer_size)
             proj_feat = self.classifier(proj_feat)
             
             # (batch_size, HIDDEN_SIZE)
-            ans_feat, _ = self.decoder_gru(ans_feat.unsqueeze(1))
-            ans_feat = ans_feat.squeeze()
+            #ans_feat, _ = self.decoder_gru(ans_feat.unsqueeze(1))
+            #ans_feat = ans_feat.squeeze()
             # (batch_size, answer_size)
             ans_feat = self.classifier(ans_feat)
             
             # (batch_size, HIDDEN_SIZE)
-            fused_feat, _ = self.decoder_gru(fused_feat.unsqueeze(1))
-            fused_feat = fused_feat.squeeze()
+            #fused_feat, _ = self.decoder_gru(fused_feat.unsqueeze(1))
+            #fused_feat = fused_feat.squeeze()
             # (batch_size, answer_size)
             fused_feat = self.classifier(fused_feat)
 
