@@ -189,6 +189,11 @@ def train_engine(__C, dataset, dataset_eval=None):
             ans_iter = ans_iter.cuda()
 
             loss_tmp = 0
+            loss_img_ques_tmp = 0
+            loss_ans_tmp = 0
+            loss_interp_tmp = 0
+            loss_fusion_tmp = 0
+
             for accu_step in range(__C.GRAD_ACCU_STEPS):
                 loss_tmp = 0
 
@@ -241,6 +246,8 @@ def train_engine(__C, dataset, dataset_eval=None):
                    
                 # we need to change the loss terms accordingly
                 # now we need to modify the loss terms for the same
+                # initialize loss to zero
+                loss = 0
                 
                 #Edits: creating the loss items for each of the prediction vector
 
@@ -279,7 +286,7 @@ def train_engine(__C, dataset, dataset_eval=None):
                 #print("shape of loss_item_img_ques[0] is {} and of loss_item_img_ques[1] is {}".format(loss_item_img_ques[0],loss_item_img_ques[1]))
                 loss_img_ques = loss_fn(loss_item_img_ques[0], loss_item_img_ques[1])
 
-                loss = loss_img_ques
+                loss += loss_img_ques
                 
                 if (__C.WITH_ANSWER):
 
@@ -304,7 +311,19 @@ def train_engine(__C, dataset, dataset_eval=None):
                         #1. Higher loss for higher distance between vectors predicted
                         # by different models for same example
 
+
+                        # THe original distance measure
+
                         dist_calc = (z_img_ques - z_ans).pow(2).sum(1).sqrt()
+
+
+                        # #EDIT_Chinmay
+                        # cos = nn.CosineSimilarity(dim=1)
+                        # dist_calc = cos(z_img_ques,z_ans)
+                        # loss_fusion = dist_calc.mean()
+                        # #EDIT END
+
+
                         #print("Count of distances being clipped (true is clipped): ", np.unique((dist_calc > __C.CAP_DIST).cpu().numpy(), return_counts=True))
 
                         '''
@@ -325,6 +344,8 @@ def train_engine(__C, dataset, dataset_eval=None):
                                 ).mean() 
                         '''
 
+                        #EDITS CHINMAY COMMENTED THE BELOW PART WHICH WAS Being Used in the euclidean loss
+
                         loss_fusion = dist_calc.mean()
 
                         #2. Lower loss for more distance between two pred vectors of same model
@@ -336,16 +357,28 @@ def train_engine(__C, dataset, dataset_eval=None):
                         # Multiply the loss fusion with hyperparameter beta
                         loss_fusion *= __C.BETA
 
-                        #print('fusion loss is : {}'.format(loss_fusion))
+                        #END OF EDITS
 
                         loss +=  loss_fusion
 
                 
                 loss /= __C.GRAD_ACCU_STEPS
                 loss.backward()
+                
+                # to print each type of loss
+                loss_img_ques /= __C.GRAD_ACCU_STEPS
+                loss_ans /= __C.GRAD_ACCU_STEPS
+                loss_interp /= __C.GRAD_ACCU_STEPS
+                loss_fusion /= __C.GRAD_ACCU_STEPS
 
                 loss_tmp += loss.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
                 loss_sum += loss.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
+
+                # calculating temp loss of each type
+                loss_img_ques_tmp += loss_img_ques.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
+                loss_ans_tmp += loss_ans.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
+                loss_interp_tmp += loss_interp.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
+                loss_fusion_tmp += loss_fusion.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
 
             if __C.VERBOSE:
                 if dataset_eval is not None:
@@ -353,17 +386,17 @@ def train_engine(__C, dataset, dataset_eval=None):
                 else:
                     mode_str = __C.SPLIT['train'] + '->' + __C.SPLIT['test']
 
-                print("\r[Version %s][Model %s][Dataset %s][Epoch %2d][Step %4d/%4d][%s] Loss: %.4f, Lr: %.2e" % (
+                print("\r[Version %s][Epoch %2d][Step %4d/%4d] Loss: %.4f [iq: %.4f,ans: %.4f,interp: %.4f,fusion: %.4f]" % (
                     __C.VERSION,
-                    __C.MODEL_USE,
-                    __C.DATASET,
                     epoch + 1,
                     step,
                     int(data_size / __C.BATCH_SIZE),
-                    mode_str,
                     loss_tmp / __C.SUB_BATCH_SIZE,
-                    optim._rate
-                ), end='          ')
+                    loss_img_ques_tmp / __C.SUB_BATCH_SIZE,
+                    loss_ans_tmp / __C.SUB_BATCH_SIZE,
+                    loss_interp_tmp / __C.SUB_BATCH_SIZE,
+                    loss_fusion_tmp / __C.SUB_BATCH_SIZE
+                ), end = '          ')
 
             # Gradient norm clipping
             if __C.GRAD_NORM_CLIP > 0:
