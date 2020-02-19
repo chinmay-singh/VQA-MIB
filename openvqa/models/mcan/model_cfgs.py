@@ -14,8 +14,16 @@ class Cfgs(BaseCfgs):
         # ---- NOISE ---- #
         # --------------- #
 
-        self.PROJ_STDDEV = 0.1
+        # since I have kept the ans encoder same as
+        # question encoder, it  makes sense to keep the
+        # noise same as well
+        self.PROJ_STDDEV = 0.01
         self.ANS_STDDEV = 0.01
+
+        #-----------------------#
+        #--- AUGMENTED_ANSWER---#
+        #-----------------------#
+        self.AUGMENTED_ANSWER = True
 
         # --------------
         # ---- LSTM ----
