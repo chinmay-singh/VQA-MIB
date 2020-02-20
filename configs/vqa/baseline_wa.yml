@@ -11,9 +11,9 @@ GPU: '0,1'
 WITH_ANSWER: True
 WITH_FUSION_LOSS: True
 CAP_DIST: 0.3
-BETA: 100
-ANS_STDDEV: 0.5
-PROJ_STDDEV: 0.5
+BETA: 30
+ANS_STDDEV: 0.01
+PROJ_STDDEV: 0.1
 # default values set, no need to change:
 # GPU: 0
 # WORD_EMBED_SIZE: 300
