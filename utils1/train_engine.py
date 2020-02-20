@@ -353,8 +353,10 @@ def train_engine(__C, dataset, dataset_eval=None):
                             if ((indices_i != []) and (indices_j != [])):
                                 loss_fusion -= torch.cdist(z_img_ques[indices_i], z_img_ques[indices_j]).mean()
                                 loss_fusion -= torch.cdist(z_ans[indices_i], z_ans[indices_j]).mean()
+                            if (indices_i != []):
+                                loss_fusion += torch.pdist(z_img_ques[indices_i], 2).mean()
+                                loss_fusion += torch.pdist(z_ans[indices_i], 2).mean()
                         '''
-
                         loss_fusion -= torch.pdist(z_img_ques, 2).mean() 
 
                         loss_fusion -= torch.pdist(z_ans, 2).mean() 
