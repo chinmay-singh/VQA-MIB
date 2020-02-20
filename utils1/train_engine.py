@@ -347,11 +347,12 @@ def train_engine(__C, dataset, dataset_eval=None):
                         '''
                         types = ['other', 'yes/no', 'number']
                         for i in range(3):
-                            indices = [j for j, val in enumerate(ques_type) if val == types[i]]
-                            print(len(arr))
-                            loss_fusion += torch.pdist(a[arr])
-                            print(b.shape)
-                            print(b.mean())
+                            j = (i+1)%3
+                            indices_i = [k for k, val in enumerate(ques_type) if val == types[i]]
+                            indices_j = [k for k, val in enumerate(ques_type) if val == types[j]]
+                            if ((indices_i != []) and (indices_j != [])):
+                                loss_fusion -= torch.cdist(z_img_ques[indices_i], z_img_ques[indices_j]).mean()
+                                loss_fusion -= torch.cdist(z_ans[indices_i], z_ans[indices_j]).mean()
                         '''
 
                         loss_fusion -= torch.pdist(z_img_ques, 2).mean() 
