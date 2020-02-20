@@ -136,7 +136,6 @@ def train_engine(__C, dataset, dataset_eval=None):
     wandb.watch(net, log="all")
 
 
-
     # Training script
     for epoch in range(start_epoch, __C.MAX_EPOCH):
 
@@ -189,8 +188,18 @@ def train_engine(__C, dataset, dataset_eval=None):
             ans_iter = ans_iter.cuda()
 
             loss_tmp = 0
+
+            loss_img_ques_tmp = 0
+            loss_ans_tmp = 0
+            loss_interp_tmp = 0
+            loss_fusion_tmp = 0
+
             for accu_step in range(__C.GRAD_ACCU_STEPS):
                 loss_tmp = 0
+                loss_img_ques_tmp = 0
+                loss_ans_tmp = 0
+                loss_interp_tmp = 0
+                loss_fusion_tmp = 0
 
                 sub_frcn_feat_iter = \
                     frcn_feat_iter[accu_step * __C.SUB_BATCH_SIZE:
@@ -338,7 +347,7 @@ def train_engine(__C, dataset, dataset_eval=None):
 
                         #print('fusion loss is : {}'.format(loss_fusion))
 
-                        loss +=  loss_fusion
+                        loss += loss_fusion
 
                 
                 loss /= __C.GRAD_ACCU_STEPS
@@ -347,23 +356,30 @@ def train_engine(__C, dataset, dataset_eval=None):
                 loss_tmp += loss.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
                 loss_sum += loss.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
 
+                # calculating temp loss of each type
+                loss_img_ques_tmp += loss_img_ques.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
+                loss_ans_tmp += loss_ans.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
+                loss_interp_tmp += loss_interp.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
+                loss_fusion_tmp += loss_fusion.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
+
+
             if __C.VERBOSE:
                 if dataset_eval is not None:
                     mode_str = __C.SPLIT['train'] + '->' + __C.SPLIT['val']
                 else:
                     mode_str = __C.SPLIT['train'] + '->' + __C.SPLIT['test']
 
-                print("\r[Version %s][Model %s][Dataset %s][Epoch %2d][Step %4d/%4d][%s] Loss: %.4f, Lr: %.2e" % (
+                print("\r[Version %s][Epoch %2d][Step %4d/%4d] Loss: %.4f [iq: %.4f,ans: %.4f,interp: %.4f,fusion: %.4f]" % (
                     __C.VERSION,
-                    __C.MODEL_USE,
-                    __C.DATASET,
                     epoch + 1,
                     step,
                     int(data_size / __C.BATCH_SIZE),
-                    mode_str,
                     loss_tmp / __C.SUB_BATCH_SIZE,
-                    optim._rate
-                ), end='          ')
+                    loss_img_ques_tmp / __C.SUB_BATCH_SIZE,
+                    loss_ans_tmp / __C.SUB_BATCH_SIZE,
+                    loss_interp_tmp / __C.SUB_BATCH_SIZE,
+                    loss_fusion_tmp / __C.SUB_BATCH_SIZE
+                ), end = '          ')
 
             # Gradient norm clipping
             if __C.GRAD_NORM_CLIP > 0:
