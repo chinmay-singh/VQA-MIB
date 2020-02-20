@@ -78,7 +78,9 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
             bbox_feat_iter,
             ques_ix_iter,
             _,              #Answer_ix_iter is nothing of relevance here in test
-            ans_iter
+            ans_iter,
+            ques_type
+            
     ) in enumerate(dataloader):
 
         print("\rEvaluation: [step %4d/%4d]" % (

@@ -172,7 +172,8 @@ def train_engine(__C, dataset, dataset_eval=None):
                 ans_ix_iter,
                 #End of Edits
 
-                ans_iter
+                ans_iter,
+                ques_type
 
         ) in enumerate(dataloader):
 
