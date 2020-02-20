@@ -233,9 +233,9 @@ class Net(nn.Module):
             fused_feat = proj_feat
 
         # For calculating Fusion Loss in train_engine
-        z_proj = proj_feat.clone().detach()
-        z_ans = ans_feat.clone().detach()
-        z_fused = fused_feat.clone().detach()
+        z_proj = F.normalize(proj_feat.clone(), p=2, dim=1).detach()
+        z_ans = F.normalize(ans_feat.clone(), p=2, dim=1).detach()
+        z_fused = F.normalize(fused_feat.clone(), p=2, dim=1).detach()
 
         # Save the three features
         if (step < self.num and not self.eval_flag):
