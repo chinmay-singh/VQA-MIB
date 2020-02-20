@@ -136,6 +136,7 @@ def train_engine(__C, dataset, dataset_eval=None):
     wandb.watch(net, log="all")
 
     wandb.save("./openvqa/models/" + str(__C.MODEL_USE) + "/net.py")
+    wandb.save("./utils1/train_engine.py")
 
     # Training script
     for epoch in range(start_epoch, __C.MAX_EPOCH):
@@ -339,6 +340,20 @@ def train_engine(__C, dataset, dataset_eval=None):
                         loss_fusion = dist_calc.mean()
 
                         #2. Lower loss for more distance between two pred vectors of same model
+                        '''
+                        calculating pairwise intra distance on same type questions
+                        '''
+
+                        '''
+                        types = ['other', 'yes/no', 'number']
+                        for i in range(3):
+                            indices = [j for j, val in enumerate(ques_type) if val == types[i]]
+                            print(len(arr))
+                            loss_fusion += torch.pdist(a[arr])
+                            print(b.shape)
+                            print(b.mean())
+                        '''
+
                         loss_fusion -= torch.pdist(z_img_ques, 2).mean() 
 
                         loss_fusion -= torch.pdist(z_ans, 2).mean() 
