@@ -37,7 +37,7 @@ class BaseDataSet(Data.Dataset):
 
     def __getitem__(self, idx):
 
-        ques_ix_iter, ans_ix_iter, ans_iter, iid = self.load_ques_ans(idx)
+        ques_ix_iter, ans_ix_iter, ans_iter, iid, ques_type = self.load_ques_ans(idx)
         frcn_feat_iter, grid_feat_iter, bbox_feat_iter = self.load_img_feats(idx, iid)
 
         return \
@@ -46,7 +46,8 @@ class BaseDataSet(Data.Dataset):
             torch.from_numpy(bbox_feat_iter),\
             torch.from_numpy(ques_ix_iter),\
             torch.from_numpy(ans_ix_iter),\
-            torch.from_numpy(ans_iter)
+            torch.from_numpy(ans_iter),\
+            ques_type
 
     def __len__(self):
         return self.data_size
