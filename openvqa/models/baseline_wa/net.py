@@ -214,8 +214,8 @@ class Net(nn.Module):
 
         # Add noise to both encoded representations
         # self.noise_sigma is to be passed
-        noise_vec = self.__C.PROJ_STDDEV * torch.randn(proj_feat.shape).cuda()
-        ans_noise_vec = self.__C.ANS_STDDEV * torch.randn(ans_feat.shape).cuda()
+        noise_vec = self.__C.PROJ_STDDEV * torch.randn(proj_feat.shape, requires_grad=True).cuda()
+        ans_noise_vec = self.__C.ANS_STDDEV * torch.randn(ans_feat.shape, requires_grad=True).cuda()
 
 
         if not self.eval_flag:
@@ -223,7 +223,7 @@ class Net(nn.Module):
             proj_feat += noise_vec
 
         # randomly sample a number 'u' between zero and one
-        u = torch.rand(1).cuda()
+        u = torch.rand(1, requires_grad=True).cuda()
 
         # now we can fuse the vector
         if not self.eval_flag:
@@ -233,9 +233,9 @@ class Net(nn.Module):
             fused_feat = proj_feat
 
         # For calculating Fusion Loss in train_engine
-        z_proj = F.normalize(proj_feat.clone(), p=2, dim=1).detach()
-        z_ans = F.normalize(ans_feat.clone(), p=2, dim=1).detach()
-        z_fused = F.normalize(fused_feat.clone(), p=2, dim=1).detach()
+        z_proj = F.normalize(proj_feat.clone(), p=2, dim=1)
+        z_ans = F.normalize(ans_feat.clone(), p=2, dim=1)
+        z_fused = F.normalize(fused_feat.clone(), p=2, dim=1)
 
         # Save the three features
         if (step < self.num and not self.eval_flag):
