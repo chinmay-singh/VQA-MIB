@@ -135,6 +135,7 @@ def train_engine(__C, dataset, dataset_eval=None):
     # obtain histogram of each gradients in network as it trains
     wandb.watch(net, log="all")
 
+    wandb.save("./openvqa/models/" + str(__C.MODEL_USE) + "/net.py")
 
     # Training script
     for epoch in range(start_epoch, __C.MAX_EPOCH):
