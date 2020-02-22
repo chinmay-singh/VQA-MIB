@@ -50,3 +50,16 @@ Sample command ->
 ```
 python run.py --MODEL='baseline_wa' --DATASET='vqa' --RUN='test' --GPU='0' --VERSION='testing with one question' --CKPT_V='baseline_wa_gru' --CKPT_E=13 --USE_NEW_QUESTION='True' --NEW_QUESTION='What are you doing' --IMAGE_ID=1
 ```
+
+## Visualizing heatmaps
+
+Right now the heatmaps visualization is available only on visualization branch and for mcan model only
+
+It is only supported for NEW_QUESTION as plotting heat map for all the test ques will take more time and won't be easy to analyze.
+So to obtain visualization use TEST mode and NEW_QUESTION
+
+Heatmap visualizations will be saved in results/results_test folder
+Visualization inclued last layer (i.e. layer 6) 8 heads for:
+	ques-ques ( made by encoder which includes only SA)
+	ques-top20objects ( made by decoder which includes both SA and SGA)
+	top20objects-top20objects ( made by decoder which includes both SA and SGA)
