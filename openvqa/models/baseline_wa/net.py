@@ -203,7 +203,7 @@ class Net(nn.Module):
 
         self.ans_lstm.flatten_parameters()
         ans_feat, _ = self.ans_lstm(ans_feat) # (batch, 4, 512)
-        ans_feat_mask = torch.randn(ans_feat.shape[0], 1, 1, ans_feat.shape[1]).bool().cuda()
+        ans_feat_mask = make_mask(ans_ix.unsqueeze(2))
 
         # Flatten to vector
         # (batch, 1024)
