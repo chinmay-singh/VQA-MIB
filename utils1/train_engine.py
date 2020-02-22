@@ -291,7 +291,8 @@ def train_engine(__C, dataset, dataset_eval=None):
                 #print("shape of loss_item_img_ques[0] is {} and of loss_item_img_ques[1] is {}".format(loss_item_img_ques[0],loss_item_img_ques[1]))
                 loss_img_ques = loss_fn(loss_item_img_ques[0], loss_item_img_ques[1])
 
-                loss = loss_img_ques
+                loss = 0
+                loss += loss_img_ques
                 
                 if (__C.WITH_ANSWER):
 
@@ -343,7 +344,6 @@ def train_engine(__C, dataset, dataset_eval=None):
                         '''
                         calculating pairwise intra distance on same type questions
                         '''
-
                         '''
                         types = ['other', 'yes/no', 'number']
                         for i in range(3):
