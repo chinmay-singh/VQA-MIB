@@ -73,6 +73,7 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
     )
 
     for step, (
+            ques_list,
             frcn_feat_iter,
             grid_feat_iter,
             bbox_feat_iter,
@@ -96,6 +97,7 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
 
         if (__C.WITH_ANSWER):
             pred = net(
+                ques_list,    
                 frcn_feat_iter,
                 grid_feat_iter,
                 bbox_feat_iter,
@@ -106,6 +108,7 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
             )[0]
         else:
             pred = net(
+                ques_list,    
                 frcn_feat_iter,
                 grid_feat_iter,
                 bbox_feat_iter,
