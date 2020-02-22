@@ -33,7 +33,7 @@ class MHAtt(nn.Module):
         self.dropout = nn.Dropout(__C.DROPOUT_R)
 
     # shape of v is : (batch, 14, NUM_DIRECTIONS * HIDDEN_SIZE) 
-    def forward(self, v, k, q, mask, visualization):
+    def forward(self, ques_list, v, k, q, mask, encoder):
         n_batches = q.size(0)
 
         # shape of v is : (batch, 14, NUM_DIRECTIONS * HIDDEN_SIZE) 
@@ -64,7 +64,7 @@ class MHAtt(nn.Module):
         ).transpose(1, 2)
 
         # shape of atted: (batch, MULTI_HEAD, 14, NUM_DIRECTIONS*HIDDEN_SIZE/ MULTI_HEAD)
-        atted = self.att(v, k, q, mask, visualization)
+        atted = self.att(ques_list, v, k, q, mask, encoder)
 
         # shape of atted: (batch, MULTI_HEAD, 14, NUM_DIRECTIONS*HIDDEN_SIZE/ MULTI_HEAD)
         # shape of atted after transpose: (batch, 14, MULTI_HEAD, NUM_DIRECTIONS*HIDDEN_SIZE/ MULTI_HEAD)
@@ -82,7 +82,7 @@ class MHAtt(nn.Module):
         return atted
 
     # shape of q is : (batch, MULTI_HEAD, 14, NUM_DIRECTIONS*HIDDEN_SIZE/ MULTI_HEAD) 
-    def att(self, value, key, query, mask, visualization):
+    def att(self, ques_list, value, key, query, mask, encoder):
 
         # d_k = NUM_DIRECTIONS*HIDDEN_SIZE/ MULTI_HEAD
         d_k = query.size(-1)
@@ -102,27 +102,103 @@ class MHAtt(nn.Module):
         # shape of att_map : (batch, MULTI_HEAD, 14, 14) 
         att_map = F.softmax(scores, dim=-1)
         att_map = self.dropout(att_map)
-        
-        if self.__C.USE_NEW_QUESTION == "True" and visualization == True:
-#            print("Making Visualizations: ", att_map)
-            print("####################################")
-            print(att_map.shape)
+
+        if self.__C.USE_NEW_QUESTION == "True" and encoder == True:
+            '''
+            Making encoder visualizations
+            Right now the visualizations are last attention layer 8 heads, i am overwriting the previous 5 layer maps
+            '''
+            
+            ques_list = np.array(ques_list)
+
+            temp = att_map.reshape((att_map.shape[1], att_map.shape[0], att_map.shape[2], att_map.shape[3]))
+            temp = temp.cpu()
+
+            i = 0
+            for x_ in temp:
+
+                x_ = np.array(x_)
+                heat_map = x_[0][:len(ques_list), :len(ques_list)]
+                fig, ax = plt.subplots()
+                im = ax.imshow(heat_map, cmap="Reds")
+
+                cbar = ax.figure.colorbar(im, ax=ax)
+
+                ax.set_xticks(np.arange(len(ques_list)))
+                ax.set_yticks(np.arange(len(ques_list)))
+
+                ax.set_xticklabels(ques_list)
+                ax.set_yticklabels(ques_list)
+
+                plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+
+                for p in range(heat_map.shape[0]):
+                    for q in range(heat_map.shape[1]):
+                        text = ax.text(q, p, round(x_[0][p, q], 2), ha = "center", va = "center", color = "w")
+
+                fig.tight_layout()
+                plt.savefig(self.__C.RESULT_PATH + "/" + str(i) + "_encoder" + ".jpg")
+                i += 1
+                plt.close()
+
+        if self.__C.USE_NEW_QUESTION == "True" and encoder == False:
+
             temp = att_map.reshape((att_map.shape[1], att_map.shape[0], att_map.shape[2], att_map.shape[3]))
             temp = temp.cpu()
 
             i = 0
             for x_ in temp:
                 x_ = np.array(x_)
-                fig, ax = plt.subplots()
-                im = ax.imshow(x_[0])
-                for p in range(x_[0].shape[0]):
-                    for q in range(x_[0].shape[1]):
-                        text = ax.text(q, p, round(x_[0][p, q], 2), ha = "center", va = "center", color = "w")
+                if x_.shape[2] == 14:
+                    heat_map = x_[0][:20, :len(ques_list)]
+                    fig, ax = plt.subplots()
+                    im = ax.imshow(heat_map, cmap="Reds")
 
-                fig.tight_layout()
-                plt.savefig(self.__C.RESULT_PATH + "testing" + str(i) + ".jpg")
-                i += 1
-                plt.close()
+                    cbar = ax.figure.colorbar(im, ax=ax)
+                    
+                    ax.set_xticks(np.arange(len(ques_list)))
+                    ax.set_yticks(np.arange(20))
+
+                    ax.set_xticklabels(ques_list)
+                    ax.set_yticklabels(np.arange(20))
+
+                    plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+
+                    '''
+                    for p in range(heat_map.shape[0]):
+                        for q in range(heat_map.shape[1]):
+                            text = ax.text(q, p, round(x_[0][p, q], 2), ha = "center", va = "center", color = "w")
+                    '''
+
+                    fig.tight_layout()
+                    plt.savefig(self.__C.RESULT_PATH + "/" + str(i) + "_decoder_ques_objects" + ".jpg")
+                    i += 1
+                    plt.close()
+
+                if x_.shape[2] == 100:
+                    heat_map = x_[0][:20, :20]
+                    fig, ax = plt.subplots()
+                    im = ax.imshow(heat_map, cmap="Reds")
+
+                    cbar = ax.figure.colorbar(im, ax=ax)
+ 
+                    ax.set_xticks(np.arange(20))
+                    ax.set_yticks(np.arange(20))
+
+                    ax.set_xticklabels(np.arange(20))
+                    ax.set_yticklabels(np.arange(20))
+
+                    '''
+                    for p in range(heat_map.shape[0]):
+                        for q in range(heat_map.shape[1]):
+                            text = ax.text(q, p, round(x_[0][p, q], 2), ha = "center", va = "center", color = "w")
+                    '''
+
+                    fig.tight_layout()
+                    plt.savefig(self.__C.RESULT_PATH + "/" + str(i) + "_decoder_objects_objects" + ".jpg")
+                    i += 1
+                    plt.close()
+
 
         # shape of att_map : (batch, MULTI_HEAD, 14, 14) 
         # shape of v : (batch, MULTI_HEAD, 14, NUM_DIRECTIONS*HIDDEN_SIZE/ MULTI_HEAD) 
@@ -169,10 +245,10 @@ class SA(nn.Module):
 
     # shape of y is : (batch, 14, NUM_DIRECTIONS * HIDDEN_SIZE) 
     # shape of y_mask is : (batch, 1, 1, 14) 
-    def forward(self, y, y_mask, visualization):
+    def forward(self, ques_list, y, y_mask, encoder):
         y = self.norm1(y + self.dropout1(
             # shape after: (batch, 14, NUM_DIRECTIONS*HIDDEN_SIZE)
-            self.mhatt(y, y, y, y_mask, visualization=visualization)
+            self.mhatt(ques_list, y, y, y, y_mask, encoder=encoder)
         ))
 
         y = self.norm2(y + self.dropout2(
@@ -209,13 +285,13 @@ class SGA(nn.Module):
     # shape of y_mask is : (batch, 1, 1, 14) 
     # shape of x is : (batch, 100, NUM_DIRECTIONS * HIDDEN_SIZE)
     # shape of x_mask is : (batch, 1, 1, 100)
-    def forward(self, x, y, x_mask, y_mask, visualization):
+    def forward(self, ques_list, x, y, x_mask, y_mask, encoder):
         x = self.norm1(x + self.dropout1(
-            self.mhatt1(v=x, k=x, q=x, mask=x_mask, visualization=visualization)
+            self.mhatt1(ques_list, v=x, k=x, q=x, mask=x_mask, encoder=encoder)
         ))
 
         x = self.norm2(x + self.dropout2(
-            self.mhatt2(v=y, k=y, q=x, mask=y_mask, visualization=visualization)
+            self.mhatt2(ques_list, v=y, k=y, q=x, mask=y_mask, encoder=encoder)
         ))
 
         x = self.norm3(x + self.dropout3(
@@ -241,18 +317,17 @@ class MCA_ED(nn.Module):
     # shape of x is : (batch, 100, NUM_DIRECTIONS * HIDDEN_SIZE)
     # shape of x_mask is : (batch, 1, 1, 100)
 
-    def forward(self, y, x, y_mask, x_mask):
+    def forward(self, ques_list, y, x, y_mask, x_mask):
         # Get encoder last hidden vector
         for enc in self.enc_list:
 
             # shape of y is : (batch, 14, NUM_DIRECTIONS * HIDDEN_SIZE) 
-            y = enc(y, y_mask, visualization = True)
+            y = enc(ques_list, y, y_mask, True)
 
         # Input encoder last hidden vector
         # And obtain decoder last hidden vectors
 
         for dec in self.dec_list:
-            # shape of y is : (batch, 14, NUM_DIRECTIONS * HIDDEN_SIZE) 
-            x = dec(x, y, x_mask, y_mask, visualization = False)
+            x = dec(ques_list, x, y, x_mask, y_mask, False)
 
         return y, x
