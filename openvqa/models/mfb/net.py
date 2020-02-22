@@ -189,9 +189,9 @@ class Net(nn.Module):
 
             # For calculating Fusion Loss in train_engine
             # also normalize the vectors before calculating loss
-            z_proj = F.normalize(proj_feat.clone(), p=2, dim=1).detach()
-            z_ans = F.normalize(ans_feat.clone(), p=2, dim=1).detach()
-            z_fused = F.normalize(fused_feat.clone(), p=2, dim=1).detach()
+            z_proj = F.normalize(proj_feat.clone(), p=2, dim=1)
+            z_ans = F.normalize(ans_feat.clone(), p=2, dim=1)
+            z_fused = F.normalize(fused_feat.clone(), p=2, dim=1)
 
             if (step < self.num):
                 self.z_proj[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = proj_feat.clone().detach().cpu().numpy()
@@ -210,29 +210,26 @@ class Net(nn.Module):
                 self.z_fused = np.zeros(shape=self.shape)
 
             # ----------------- #
-            # ---- DECODER no gru ---- #
+            # ---- DECODER ---- #
             # ----------------- #
 
             # (batch_size, HIDDEN_SIZE)
-            #proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
-            #proj_feat = proj_feat.squeeze()
+            proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
+            proj_feat = proj_feat.squeeze()
             # (batch_size, answer_size)
             proj_feat = self.classifier(proj_feat)
             
             # (batch_size, HIDDEN_SIZE)
-            #ans_feat, _ = self.decoder_gru(ans_feat.unsqueeze(1))
-            #ans_feat = ans_feat.squeeze()
+            ans_feat, _ = self.decoder_gru(ans_feat.unsqueeze(1))
+            ans_feat = ans_feat.squeeze()
             # (batch_size, answer_size)
             ans_feat = self.classifier(ans_feat)
             
             # (batch_size, HIDDEN_SIZE)
-            #fused_feat, _ = self.decoder_gru(fused_feat.unsqueeze(1))
-            #fused_feat = fused_feat.squeeze()
+            fused_feat, _ = self.decoder_gru(fused_feat.unsqueeze(1))
+            fused_feat = fused_feat.squeeze()
             # (batch_size, answer_size)
             fused_feat = self.classifier(fused_feat)
 
             return proj_feat, ans_feat, fused_feat, z_proj, z_ans, z_fused
-
-
-        return proj_feat
 
