@@ -332,7 +332,7 @@ class DataSet(BaseDataSet):
             iid = str(ans['image_id'])
 
             # Process question
-            ques_ix_iter = self.proc_ques(ques, self.token_to_ix, max_token=14)
+            ques_list, ques_ix_iter = self.proc_ques(ques, self.token_to_ix, max_token=14)
 
             # Process answer
             ans_iter = self.proc_ans(ans, self.ans_to_ix)
@@ -341,14 +341,14 @@ class DataSet(BaseDataSet):
             ans_ix_iter = self.proc_ans_tokens(ans, self.token_to_ix_ans, max_token = 4)
             #End of Edits
 
-            return ques_ix_iter, ans_ix_iter, ans_iter, iid
+            return ques_list, ques_ix_iter, ans_ix_iter, ans_iter, iid
 
         else:
             ques = self.ques_list[idx]
             iid = str(ques['image_id'])
-            ques_ix_iter = self.proc_ques(ques, self.token_to_ix, max_token=14)
+            ques_list, ques_ix_iter = self.proc_ques(ques, self.token_to_ix, max_token=14)
 
-            return ques_ix_iter, np.zeros(1), np.zeros(1), iid # will have to check, at the time of eval how is processing done
+            return ques_list, ques_ix_iter, np.zeros(1), np.zeros(1), iid # will have to check, at the time of eval how is processing done
 
     def load_img_feats(self, idx, iid):
         frcn_feat = np.load(self.iid_to_frcn_feat_path[iid])
@@ -411,8 +411,11 @@ class DataSet(BaseDataSet):
             '',
             ques['question'].lower()
         ).replace('-', ' ').replace('/', ' ').split()
+        ques_list = list(words)
 
         for ix, word in enumerate(words):
+            ques_list[ix] = word
+
             if word in token_to_ix:
                 ques_ix[ix] = token_to_ix[word]
             else:
@@ -421,7 +424,7 @@ class DataSet(BaseDataSet):
             if ix + 1 == max_token:
                 break
 
-        return ques_ix
+        return ques_list, ques_ix
 
     #Edits
 
