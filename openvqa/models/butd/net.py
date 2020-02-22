@@ -170,9 +170,9 @@ class Net(nn.Module):
 
             # For calculating Fusion Loss in train_engine
             # also normalize the vectors before calculating loss
-            z_proj = F.normalize(proj_feat.clone(), p=2, dim=1).detach()
-            z_ans = F.normalize(ans_feat.clone(), p=2, dim=1).detach()
-            z_fused = F.normalize(fused_feat.clone(), p=2, dim=1).detach()
+            z_proj = F.normalize(proj_feat.clone(), p=2, dim=1)
+            z_ans = F.normalize(ans_feat.clone(), p=2, dim=1)
+            z_fused = F.normalize(fused_feat.clone(), p=2, dim=1)
 
             if (step < self.num):
                 self.z_proj[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = proj_feat.clone().detach().cpu().numpy()
