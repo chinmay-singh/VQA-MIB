@@ -80,3 +80,6 @@ class Cfgs(BaseCfgs):
         # not for VQA dataset 
         self.USE_AUX_FEAT = False
 
+        # True if we want to encode answers in same way as questions
+        self.SAME_ENCODER = False
+
