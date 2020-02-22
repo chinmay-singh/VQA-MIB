@@ -194,7 +194,7 @@ class Net(nn.Module):
             self.z_ans = np.zeros(shape=self.shape) #(batch, 1024)
             self.z_fused = np.zeros(shape=self.shape) #(batch, 1024)
 
-    def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step, epoch):
+    def forward(self, ques_list, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step, epoch):
 
         # Pre-process Language Feature
         # Returns (batch, 1, 1, 14)
@@ -218,6 +218,7 @@ class Net(nn.Module):
         # Backbone Framework 
         # (batch, 14, NUM_DIRECTIONS * HIDDEN_SIZE) (batch, 100, NUM_DIRECTIONS * HIDDEN_SIZE)
         lang_feat, img_feat = self.backbone(
+            ques_list,    
             lang_feat,
             img_feat,
             lang_feat_mask,
