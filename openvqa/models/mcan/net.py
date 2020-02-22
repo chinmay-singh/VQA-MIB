@@ -133,14 +133,13 @@ class Net(nn.Module):
         self.proj_norm = LayerNorm(__C.FLAT_OUT_SIZE)
 
         # Decoder GRU and MLP
-        '''
-        self.decoder_gru = nn.GRU(
-            input_size= __C.FLAT_OUT_SIZE,
-            hidden_size=__C.HIDDEN_SIZE,
-            num_layers=1,
-            batch_first=True
-        )
-        '''
+        if not self.__C.SAME_ENCODER:
+            self.decoder_gru = nn.GRU(
+                input_size= __C.FLAT_OUT_SIZE,
+                hidden_size=__C.FLAT_OUT_SIZE,
+                num_layers=1,
+                batch_first=True
+            )
 
         # using decoder_mlp as a deeper projection layer
         self.decoder_mlp = MLP(
@@ -168,15 +167,6 @@ class Net(nn.Module):
                     self.ans_embedding.weight.data.copy_(torch.from_numpy(pretrain_emb_ans))
 
 
-            '''
-            Changes: Earlier, we were using lstm to encode the answer,
-            now we can try to encode the answer using the self attention mechanism
-            in the SA class in mca.py. How does the answer encoding then differ from the ques encoding?
-            The questions encoding parameters have gradients flowing back from the the SGA (self-guided
-            combining it to the img_feat) but the answer encoding parameter do not.
-            I think using the augmented answer will help.
-            '''
-           
             if (__C.LSTM_NUM_DIRECTIONS is 1):
                 self.lstm_ans = nn.LSTM(
                     input_size=__C.WORD_EMBED_SIZE,
@@ -196,7 +186,8 @@ class Net(nn.Module):
                 )
 
             
-            self.ans_enc_list = nn.ModuleList([SA(__C) for _ in range(__C.LAYER)])
+            if self.__C.SAME_ENCODER:
+                self.ans_enc_list = nn.ModuleList([SA(__C) for _ in range(__C.LAYER)])
 
             self.attflat_ans = AttFlat(__C)
             self.ans_norm = LayerNorm(__C.FLAT_OUT_SIZE)
@@ -259,7 +250,8 @@ class Net(nn.Module):
         # shape: (batch, FLAT_OUT_SIZE)
         proj_feat = lang_feat + img_feat
 
-        #self.decoder_gru.flatten_parameters()
+        if not self.__C.SAME_ENCODER:
+            self.decoder_gru.flatten_parameters()
 
         if (self.__C.WITH_ANSWER == False or self.eval_flag == True):
 
@@ -268,11 +260,12 @@ class Net(nn.Module):
             proj_feat = self.proj_norm(proj_feat) 
 
             # Decoder
-            # also using just a deepe projection layer
-            #proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
-            #proj_feat = proj_feat.squeeze()
-            # (batch_size, answer_size)
-            proj_feat = self.decoder_mlp(proj_feat)
+            # also using just a deeper projection layer
+            if not self.__C.SAME_ENCODER:
+                proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
+                proj_feat = proj_feat.squeeze()
+                #(batch_size, answer_size)
+                proj_feat = self.decoder_mlp(proj_feat)
      
             if (self.eval_flag == True and self.__C.WITH_ANSWER == True):
                 #hack because test_engine expects multiple returns from net but only uses the first
@@ -295,11 +288,12 @@ class Net(nn.Module):
             ans_feat, _ = self.lstm_ans(ans_feat)
 
             '''
-            Changes: pass the answers through the self attention layers
+            Changes: pass the answers through the self attention layers if SAME_ENCODER
             '''
 
-            for ans_enc in self.ans_enc_list:
-                ans_feat = ans_enc(ans_feat, ans_feat_mask)
+            if self.__C.SAME_ENCODER:
+                for ans_enc in self.ans_enc_list:
+                    ans_feat = ans_enc(ans_feat, ans_feat_mask)
 
             # shape: (batch, FLAT_OUT_SIZE)
             ans_feat = self.attflat_ans(
@@ -328,18 +322,18 @@ class Net(nn.Module):
             # ---- NORMALIZE ---- #
             # ------------------- #
 
-            proj_feat = self.proj_norm(proj_feat) 
-            ans_feat = self.ans_norm(ans_feat)
-            fused_feat = self.fused_norm(fused_feat)
+            proj_feat = self.proj_norm(proj_feat, True) 
+            ans_feat = self.ans_norm(ans_feat, True)
+            fused_feat = self.fused_norm(fused_feat, True)
 
             # --------------------------- #
             # ---- SAVE THE FEATURES ---- #
             # --------------------------- #
 
             # For calculating Fusion Loss in train_engine
-            z_proj = proj_feat.clone().detach()
-            z_ans = ans_feat.clone().detach()
-            z_fused = fused_feat.clone().detach()
+            z_proj = proj_feat.clone()
+            z_ans = ans_feat.clone()
+            z_fused = fused_feat.clone()
 
             if (step < self.num):
                 self.z_proj[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = proj_feat.clone().detach().cpu().numpy()
@@ -362,20 +356,23 @@ class Net(nn.Module):
             # ----------------- #
 
             # (batch_size, HIDDEN_SIZE)
-            #proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
-            #proj_feat = proj_feat.squeeze()
+            if not self.__C.SAME_ENCODER:
+                proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
+                proj_feat = proj_feat.squeeze()
             # (batch_size, answer_size)
             proj_feat = self.decoder_mlp(proj_feat)
             
             # (batch_size, HIDDEN_SIZE)
-            #ans_feat, _ = self.decoder_gru(ans_feat.unsqueeze(1))
-            #ans_feat = ans_feat.squeeze()
+            if not self.__C.SAME_ENCODER:
+                ans_feat, _ = self.decoder_gru(ans_feat.unsqueeze(1))
+                ans_feat = ans_feat.squeeze()
             # (batch_size, answer_size)
             ans_feat = self.decoder_mlp(ans_feat)
             
             # (batch_size, HIDDEN_SIZE)
-            #fused_feat, _ = self.decoder_gru(fused_feat.unsqueeze(1))
-            #fused_feat = fused_feat.squeeze()
+            if not self.__C.SAME_ENCODER:
+                fused_feat, _ = self.decoder_gru(fused_feat.unsqueeze(1))
+                fused_feat = fused_feat.squeeze()
             # (batch_size, answer_size)
             fused_feat = self.decoder_mlp(fused_feat)
 

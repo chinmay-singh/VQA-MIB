@@ -344,7 +344,6 @@ def train_engine(__C, dataset, dataset_eval=None):
                         '''
                         calculating pairwise intra distance on same type questions
                         '''
-
                         '''
                         types = ['other', 'yes/no', 'number']
                         for i in range(3):
