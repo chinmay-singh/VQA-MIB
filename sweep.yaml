@@ -1,9 +1,24 @@
-program: knockknock slack --webhook-url https://hooks.slack.com/services/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 --channel terminator python run.py --MODEL='baseline_wa' --RUN='train' --GPU='0' --DATASET='vqa'
+program: run_sweep.py 
 method: random
 metric:
-  name: Loss
-  goal: minimize
+  name: Overall Accuracy
+  goal: maximize
 parameters:
+  MODEL:
+    distribution: constant
+    value:  'baseline_wa' 
+  RUN:
+    distribution: constant
+    value:  'train'
+  GPU:
+    distribution: constant
+    value:  '1'
+  DATASET:
+    distribution: constant
+    value:  'vqa'
+  VERSION:
+    distribution: constant
+    value: 'baseline_wa_sweep'
   BETA:
     distribution: int_uniform
     min: 10

@@ -4,7 +4,7 @@
 # --------------------------------------------------------
 
 from openvqa.models.model_loader import CfgLoader
-from utils1.exec import Execution 
+from utils1.exec1 import Execution 
 import argparse, yaml
 
 
@@ -173,6 +173,14 @@ def parse_args():
     parser.add_argument('--ANS_STDDEV', dest='ANS_STDDEV',
                       help='ALPHA: Combining parameter for interpolation Loss',
                       default=1.0,
+                      type=float)
+    parser.add_argument('--LR_BASE', dest='LR_BASE',
+                      help='Learning rate',
+                      default=0.0001,
+                      type=float)
+    parser.add_argument('--LR_DECAY_R', dest='LR_DECAY_R',
+                      help='learning rate decay',
+                      default=0.2,
                       type=float)
 
     parser.add_argument('--MAX_EPOCH', dest='MAX_EPOCH',
