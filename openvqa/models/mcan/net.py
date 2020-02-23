@@ -265,7 +265,7 @@ class Net(nn.Module):
                 proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
                 proj_feat = proj_feat.squeeze()
                 #(batch_size, answer_size)
-                proj_feat = self.decoder_mlp(proj_feat)
+            proj_feat = self.decoder_mlp(proj_feat)
      
             if (self.eval_flag == True and self.__C.WITH_ANSWER == True):
                 #hack because test_engine expects multiple returns from net but only uses the first

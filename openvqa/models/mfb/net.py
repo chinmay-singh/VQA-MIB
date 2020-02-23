@@ -129,13 +129,13 @@ class Net(nn.Module):
         lang_feat = self.dropout_lstm(lang_feat)
 
         proj_feat = self.backbone(img_feat, lang_feat)  # MFH:(N, 2*O) / MFB:(N, O)
-        #self.decoder_gru.flatten_parameters()
+        self.decoder_gru.flatten_parameters()
 
         if (self.__C.WITH_ANSWER == False or self.eval_flag == True):
             # use the decoder
             # change: do not use the decoder gru
-            #proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
-            #proj_feat = proj_feat.squeeze()
+            proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
+            proj_feat = proj_feat.squeeze()
 
             # Classification/projection layers
             proj_feat = self.classifier(proj_feat)                # (N, answer_size)

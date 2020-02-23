@@ -18,7 +18,4 @@ class LayerNorm(nn.Module):
         mean = x.mean(-1, keepdim=True)
         std = x.std(-1, keepdim=True)
 
-        if to_print:
-            print("Layer norm params, a = {}, b = {}".format(self.a_2, self.b_2))
-
         return self.a_2 * (x - mean) / (std + self.eps) + self.b_2
