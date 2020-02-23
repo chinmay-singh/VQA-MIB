@@ -1,22 +1,26 @@
-program: run_sweep.py
-method: bayes
+program: knockknock slack --webhook-url https://hooks.slack.com/services/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 --channel terminator python run.py --MODEL='baseline_wa' --RUN='train' --GPU='0' --DATASET='vqa'
+method: random
 metric:
-  name: Overall Accuracy 
-  goal: maximize
+  name: Loss
+  goal: minimize
 parameters:
   BETA:
     distribution: int_uniform
-    min: 0
-    max: 60
-  ALPHA:
-    distribution: int_uniform
-    min: 0
-    max: 10
+    min: 10
+    max: 300
   PROJ_STDDEV:
     distribution: uniform
-    min: 0.01
-    max: 0.1
+    min: 0.1
+    max: 0.8
   ANS_STDDEV:
     distribution: uniform
-    min: 0.01
-    max: 0.1
+    min: 0.1
+    max: 0.8
+  LR_BASE:
+    distribution: uniform
+    min: 0.0001
+    max: 0.001
+  LR_DECAY_R:
+    distribution: uniform
+    min: 0.2
+    max: 0.5   
