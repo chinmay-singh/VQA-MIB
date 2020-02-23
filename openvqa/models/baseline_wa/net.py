@@ -85,14 +85,21 @@ class Net(nn.Module):
 
         self.__C = __C
 
-        self.decoder_mlp = MLP(
-            in_size=__C.HIDDEN_SIZE,
-            mid_size= 2*__C.HIDDEN_SIZE,
+        self.decoder_mlp_1 = MLP(
+            in_size=__C.FLAT_OUT_SIZE,
+            mid_size= __C.FLAT_OUT_SIZE,
+            out_size=2*__C.FLAT_OUT_SIZE,
+            dropout_r=0,
+            use_relu=True
+        )
+        
+        self.decoder_mlp_2 = MLP(
+            in_size=2*__C.FLAT_OUT_SIZE,
+            mid_size= __C.FLAT_OUT_SIZE,
             out_size=answer_size,
             dropout_r=0,
             use_relu=True
         )
-
         self.embedding = nn.Embedding(
             num_embeddings=token_size,
             embedding_dim=__C.WORD_EMBED_SIZE
@@ -118,17 +125,6 @@ class Net(nn.Module):
             num_layers=1,
             batch_first=True
         )
-
-        # Generator
-
-        self.gru_gen = nn.GRU(
-            input_size= __C.FLAT_OUT_SIZE,
-            hidden_size=__C.HIDDEN_SIZE,
-            num_layers=1,
-            batch_first=True
-        )
-
-        # End of Generator
 
         self.ans_lstm = nn.LSTM(
             input_size=__C.WORD_EMBED_SIZE,
@@ -255,24 +251,17 @@ class Net(nn.Module):
             self.z_fused = np.zeros(shape=self.shape)
 
         # DECODER
-        self.gru_gen.flatten_parameters()
 
-        # (batch_size, 512)
-        proj_feat, _ = self.gru_gen(proj_feat.unsqueeze(1))
-        proj_feat = proj_feat.squeeze()
         # (batch_size, answer_size)
-        proj_feat = self.decoder_mlp(proj_feat)
+        proj_feat = self.decoder_mlp_1(proj_feat)
+        proj_feat = self.decoder_mlp_2(proj_feat)
         
-        # (batch_size, 512)
-        ans_feat, _ = self.gru_gen(ans_feat.unsqueeze(1))
-        ans_feat = ans_feat.squeeze()
         # (batch_size, answer_size)
-        ans_feat = self.decoder_mlp(ans_feat)
+        ans_feat = self.decoder_mlp_1(ans_feat)
+        ans_feat = self.decoder_mlp_2(ans_feat)
         
-        # (batch_size, 512)
-        fused_feat, _ = self.gru_gen(fused_feat.unsqueeze(1))
-        fused_feat = fused_feat.squeeze()
         # (batch_size, answer_size)
-        fused_feat = self.decoder_mlp(fused_feat)
+        fused_feat = self.decoder_mlp_1(fused_feat)
+        fused_feat = self.decoder_mlp_2(fused_feat)
 
         return proj_feat, ans_feat, fused_feat, z_proj, z_ans, z_fused
