@@ -167,6 +167,9 @@ class BaseCfgs(PATH):
         # (default: -1 means not using)
         self.GRAD_NORM_CLIP = -1
 
+        # use new question or not while eval
+        self.USE_NEW_QUESTION = "False"
+
         # Optimizer
         '''
         Optimizer(case-sensitive): 
