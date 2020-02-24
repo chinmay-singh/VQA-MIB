@@ -394,6 +394,7 @@ class DataSet(BaseDataSet):
     def proc_bbox_feat(self, bbox, img_shape):
         bbox_feat = np.zeros((bbox.shape[0], 5), dtype=np.float32)
 
+        print("orignal dimensions: ", bbox)
         bbox_feat[:, 0] = bbox[:, 0] / float(img_shape[1])
         bbox_feat[:, 1] = bbox[:, 1] / float(img_shape[0])
         bbox_feat[:, 2] = bbox[:, 2] / float(img_shape[1])

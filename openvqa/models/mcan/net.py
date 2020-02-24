@@ -8,6 +8,7 @@ from openvqa.ops.fc import FC, MLP
 from openvqa.ops.layer_norm import LayerNorm
 from openvqa.models.mcan.mca import MCA_ED
 from openvqa.models.mcan.adapter import Adapter
+from PIL import Image
 
 import torch.nn as nn
 import torch.nn.functional as F
@@ -15,7 +16,8 @@ import torch
 import sys
 import math
 import numpy as np
-
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 
 # ------------------------------
 # ---- Flatten the sequence ----
@@ -195,6 +197,26 @@ class Net(nn.Module):
             self.z_fused = np.zeros(shape=self.shape) #(batch, 1024)
 
     def forward(self, ques_list, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step, epoch):
+
+        # Visualization of top 3 objects on orignal image
+        if self.__C.USE_NEW_QUESTION == "True":
+            img = np.array(Image.open('/home/du2/17CS30007/openvqa/COCO_test2015_000000126672.jpg'), dtype=np.uint8)
+            
+            fig,ax = plt.subplots(1)
+
+            ax.imshow(img)
+
+            temp = np.array(bbox_feat.cpu())[0]
+            j = 0
+            for i in temp:
+                if j > 10:
+                    break
+                print("width: ", i[2]*img.shape[1], "height: ", i[3]*img.shape[0])
+                print("x coordinate: ", i[0]*img.shape[1], "y coordinate: ", i[1]*img.shape[0])
+                rect = patches.Rectangle((i[0]*img.shape[1], i[1]*img.shape[0]),i[2]*img.shape[1],i[3]*img.shape[0],linewidth=1,edgecolor='r',facecolor='none')
+                ax.add_patch(rect)
+                j += 1
+            plt.savefig("/home/du2/17CS30007/openvqa/plotted_objects1.jpg") 
 
         # Pre-process Language Feature
         # Returns (batch, 1, 1, 14)
