@@ -8,10 +8,6 @@ from openvqa.ops.fc import FC, MLP
 from openvqa.ops.layer_norm import LayerNorm
 from openvqa.models.mcan.mca import MCA_ED
 from openvqa.models.mcan.adapter import Adapter
-from PIL import Image
-from matplotlib.collections import PatchCollection
-from matplotlib.patches import Polygon
-from matplotlib.patches import Rectangle
 
 import torch.nn as nn
 import torch.nn.functional as F
@@ -19,8 +15,6 @@ import torch
 import sys
 import math
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
 
 # ------------------------------
 # ---- Flatten the sequence ----
@@ -200,45 +194,6 @@ class Net(nn.Module):
             self.z_fused = np.zeros(shape=self.shape) #(batch, 1024)
 
     def forward(self, ques_list, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step, epoch):
-
-        # Visualization of top 3 objects on orignal image
-        if self.__C.USE_NEW_QUESTION == "True":
-            img = np.array(Image.open('./COCO_test2015_000000126672.jpg'), dtype=np.uint8)
-            print("orignal image shape: ", img.shape)  
-            fig,ax = plt.subplots(1)
-
-            ax.imshow(img)
-
-            temp = np.array(bbox_feat.cpu())[0]
-            j = 0
-            polygons = []
-            for i in temp:
-                if j > 3:
-                    break
-                x1_coordinate = i[0]*img.shape[1]
-                y1_coordinate = i[1]*img.shape[0]
-                x4_coordinate = i[2]*img.shape[1] 
-                y4_coordinate = i[3]*img.shape[0]
-
-                width = x4_coordinate - x1_coordinate
-                height = y4_coordinate - y1_coordinate
-
-                x2_coordinate = x4_coordinate
-                y2_coordinate = y1_coordinate
-                x3_coordinate = x1_coordinate
-                y3_coordinate = y4_coordinate
-               
-                poly = [[x1_coordinate, y1_coordinate], [x2_coordinate, y2_coordinate], [x3_coordinate, y3_coordinate], [x4_coordinate, y4_coordinate]]
-                np_poly = np.array(poly).reshape(4,2)
-#                polygons.append(Polygon(np_poly))
-                polygons.append(Rectangle((x1_coordinate, y1_coordinate), width, height))
-                j += 1
-
-            p = PatchCollection(polygons, linewidth=1, edgecolor='r', facecolor='none')
-            ax.add_collection(p)
-
-            print("saving image of plotted object")
-            plt.savefig("./plotted_objects0.jpg") 
 
         # Pre-process Language Feature
         # Returns (batch, 1, 1, 14)
