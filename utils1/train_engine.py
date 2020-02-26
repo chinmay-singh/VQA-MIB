@@ -12,7 +12,9 @@ import wandb
 from openvqa.models.model_loader import ModelLoader
 from openvqa.utils.optim import get_optim, adjust_lr
 from utils1.test_engine import test_engine, ckpt_proc
-
+from vis import plotter, vis_func
+from multiprocessing import Pool
+import multiprocessing
 
 def train_engine(__C, dataset, dataset_eval=None):
 
@@ -123,6 +125,9 @@ def train_engine(__C, dataset, dataset_eval=None):
     logfile.write(str(__C))
     logfile.close()
 
+    # For dry runs
+    # os.environ['WANDB_MODE'] = 'dryrun' 
+
     # initializing the wandb project
     # TODO to change the name of project later, once the proper coding starts
     wandb.init(project="openvqa", name=__C.VERSION, config=__C)
@@ -130,7 +135,8 @@ def train_engine(__C, dataset, dataset_eval=None):
     # obtain histogram of each gradients in network as it trains
     wandb.watch(net, log="all")
 
-
+    wandb.save("./openvqa/models/" + str(__C.MODEL_USE) + "/net.py")
+    wandb.save("./utils1/train_engine.py")
 
     # Training script
     for epoch in range(start_epoch, __C.MAX_EPOCH):
@@ -168,7 +174,8 @@ def train_engine(__C, dataset, dataset_eval=None):
                 ans_ix_iter,
                 #End of Edits
 
-                ans_iter
+                ans_iter,
+                ques_type
 
         ) in enumerate(dataloader):
 
@@ -184,8 +191,18 @@ def train_engine(__C, dataset, dataset_eval=None):
             ans_iter = ans_iter.cuda()
 
             loss_tmp = 0
+
+            loss_img_ques_tmp = 0
+            loss_ans_tmp = 0
+            loss_interp_tmp = 0
+            loss_fusion_tmp = 0
+
             for accu_step in range(__C.GRAD_ACCU_STEPS):
                 loss_tmp = 0
+                loss_img_ques_tmp = 0
+                loss_ans_tmp = 0
+                loss_interp_tmp = 0
+                loss_fusion_tmp = 0
 
                 sub_frcn_feat_iter = \
                     frcn_feat_iter[accu_step * __C.SUB_BATCH_SIZE:
@@ -258,15 +275,15 @@ def train_engine(__C, dataset, dataset_eval=None):
                         loss_item_img_ques[item_ix] = eval('F.' + loss_nonlinear + '(loss_item_img_ques[item_ix], dim=1)')
 
                 for item_ix, loss_nonlinear in enumerate(loss_nonlinear_list):
-                    if loss_nonlinear in ['flat']:
+                    if loss_nonlinear in ['flat'] and __C.WITH_ANSWER:
                         loss_item_ans[item_ix] = loss_item_ans[item_ix].view(-1)
-                    elif loss_nonlinear:
+                    elif loss_nonlinear and __C.WITH_ANSWER:
                         loss_item_ans[item_ix] = eval('F.' + loss_nonlinear + '(loss_item_ans[item_ix], dim=1)')
 
                 for item_ix, loss_nonlinear in enumerate(loss_nonlinear_list):
-                    if loss_nonlinear in ['flat']:
+                    if loss_nonlinear in ['flat'] and __C.WITH_ANSWER:
                         loss_item_interp[item_ix] = loss_item_interp[item_ix].view(-1)
-                    elif loss_nonlinear:
+                    elif loss_nonlinear and __C.WITH_ANSWER:
                         loss_item_interp[item_ix] = eval('F.' + loss_nonlinear + '(loss_item_interp[item_ix], dim=1)')
 
 
@@ -274,7 +291,8 @@ def train_engine(__C, dataset, dataset_eval=None):
                 #print("shape of loss_item_img_ques[0] is {} and of loss_item_img_ques[1] is {}".format(loss_item_img_ques[0],loss_item_img_ques[1]))
                 loss_img_ques = loss_fn(loss_item_img_ques[0], loss_item_img_ques[1])
 
-                loss = loss_img_ques
+                loss = 0
+                loss += loss_img_ques
                 
                 if (__C.WITH_ANSWER):
 
@@ -323,6 +341,22 @@ def train_engine(__C, dataset, dataset_eval=None):
                         loss_fusion = dist_calc.mean()
 
                         #2. Lower loss for more distance between two pred vectors of same model
+                        '''
+                        calculating pairwise intra distance on same type questions
+                        '''
+                        '''
+                        types = ['other', 'yes/no', 'number']
+                        for i in range(3):
+                            j = (i+1)%3
+                            indices_i = [k for k, val in enumerate(ques_type) if val == types[i]]
+                            indices_j = [k for k, val in enumerate(ques_type) if val == types[j]]
+                            if ((indices_i != []) and (indices_j != [])):
+                                loss_fusion -= torch.cdist(z_img_ques[indices_i], z_img_ques[indices_j]).mean()
+                                loss_fusion -= torch.cdist(z_ans[indices_i], z_ans[indices_j]).mean()
+                            if (indices_i != []):
+                                loss_fusion += torch.pdist(z_img_ques[indices_i], 2).mean()
+                                loss_fusion += torch.pdist(z_ans[indices_i], 2).mean()
+                        '''
                         loss_fusion -= torch.pdist(z_img_ques, 2).mean() 
 
                         loss_fusion -= torch.pdist(z_ans, 2).mean() 
@@ -333,7 +367,7 @@ def train_engine(__C, dataset, dataset_eval=None):
 
                         #print('fusion loss is : {}'.format(loss_fusion))
 
-                        loss +=  loss_fusion
+                        loss += loss_fusion
 
                 
                 loss /= __C.GRAD_ACCU_STEPS
@@ -342,23 +376,32 @@ def train_engine(__C, dataset, dataset_eval=None):
                 loss_tmp += loss.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
                 loss_sum += loss.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
 
+                # calculating temp loss of each type
+                if __C.WITH_ANSWER:
+                    loss_img_ques_tmp += loss_img_ques.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
+                    loss_ans_tmp += loss_ans.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
+                    loss_interp_tmp += loss_interp.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
+                    if (__C.WITH_FUSION_LOSS):
+                        loss_fusion_tmp += loss_fusion.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
+
+
             if __C.VERBOSE:
                 if dataset_eval is not None:
                     mode_str = __C.SPLIT['train'] + '->' + __C.SPLIT['val']
                 else:
                     mode_str = __C.SPLIT['train'] + '->' + __C.SPLIT['test']
 
-                print("\r[Version %s][Model %s][Dataset %s][Epoch %2d][Step %4d/%4d][%s] Loss: %.4f, Lr: %.2e" % (
+                print("\r[Version %s][Epoch %2d][Step %4d/%4d] Loss: %.4f [iq: %.4f,ans: %.4f,interp: %.4f,fusion: %.4f]" % (
                     __C.VERSION,
-                    __C.MODEL_USE,
-                    __C.DATASET,
                     epoch + 1,
                     step,
                     int(data_size / __C.BATCH_SIZE),
-                    mode_str,
                     loss_tmp / __C.SUB_BATCH_SIZE,
-                    optim._rate
-                ), end='          ')
+                    loss_img_ques_tmp / __C.SUB_BATCH_SIZE,
+                    loss_ans_tmp / __C.SUB_BATCH_SIZE,
+                    loss_interp_tmp / __C.SUB_BATCH_SIZE,
+                    loss_fusion_tmp / __C.SUB_BATCH_SIZE
+                ), end = '          ')
 
             # Gradient norm clipping
             if __C.GRAD_NORM_CLIP > 0:
@@ -436,8 +479,26 @@ def train_engine(__C, dataset, dataset_eval=None):
             'Elapsed time': int(elapse_time) 
             })
 
+        # ---------------------------------------------- #
+        # ---- Create visualizations in new processes----#
+        # ---------------------------------------------- #
+        dic = {}
+        dic['version'] = __C.VERSION
+        dic['epoch'] = epoch 
+        dic['num_samples'] = 1000
+
+        p = Pool(processes= 1)
+        p.map_async(vis_func, (dic, ))
+        p.close()
+
         # Eval after every epoch
         __C['current_epoch'] = epoch
+
+        epoch_dict = {
+                'current_epoch': epoch
+                }
+        __C.add_args(epoch_dict)
+
         if dataset_eval is not None:
             test_engine(
                 __C,
@@ -446,6 +507,7 @@ def train_engine(__C, dataset, dataset_eval=None):
                 validation=True,
                 epoch = 0
             )
+        p.join()
 
         # if self.__C.VERBOSE:
         #     logfile = open(

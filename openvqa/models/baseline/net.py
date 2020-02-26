@@ -112,7 +112,7 @@ class Net(nn.Module):
             in_size=__C.HIDDEN_SIZE,
             mid_size= 2*__C.HIDDEN_SIZE,
             out_size=answer_size,
-            dropout_r=0,
+            dropout_r=__C.DROPOUT_R,
             use_relu=True
         )
 
@@ -128,21 +128,22 @@ class Net(nn.Module):
         img_feat, img_feat_mask = self.adapter(frcn_feat, grid_feat, bbox_feat) # (batch, 100, 512), (batch, 1, 1, 100)
 
        # Flatten to vector
-        # (batch, 1024)
+        # (batch, FLAT_OUT_SIZE)
         lang_feat = self.attflat_lang(
             lang_feat,
             lang_feat_mask
         )
 
-        # (batch, 1024)
+        # (batch, FLAT_OUT_SIZE)
         img_feat = self.attflat_img(
             img_feat,
             img_feat_mask
         )
 
         # Classification layers
+        # (batch, FLAT_OUT_SIZE)
         proj_feat = lang_feat + img_feat
-        #proj_feat = self.proj_norm(proj_feat) # (batch, 1024)
+        proj_feat = self.proj_norm(proj_feat)
 
         # DECODER
         self.gru_gen.flatten_parameters()

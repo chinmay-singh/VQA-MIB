@@ -12,6 +12,8 @@ import torch.nn.functional as F
 from torch.nn.utils.weight_norm import weight_norm
 import torch
 
+import numpy as np
+import math
 
 # -------------------------
 # ---- Main BUTD Model ----
@@ -100,6 +102,7 @@ class Net(nn.Module):
 
         # Pre-process Language Feature
         # lang_feat_mask = make_mask(ques_ix.unsqueeze(2))
+        self.rnn.flatten_parameters()
         lang_feat = self.embedding(ques_ix)
         lang_feat, _ = self.rnn(lang_feat)
 
@@ -113,13 +116,17 @@ class Net(nn.Module):
         
         self.decoder_gru.flatten_parameters()
 
-        if (self.__C.WITH_ANSWER == False and self.eval_flag = True):
+        if (self.__C.WITH_ANSWER == False or self.eval_flag == True):
             # use the decoder
             proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
             proj_feat = proj_feat.squeeze()
 
             # Classification layers
             proj_feat = self.classifer(proj_feat)
+            
+            if (self.eval_flag == True and self.__C.WITH_ANSWER == True):
+                #hack because test_engine expects multiple returns from net but only uses the first
+                return proj_feat, None 
 
             return proj_feat
         
@@ -134,6 +141,10 @@ class Net(nn.Module):
             self.ans_rnn.flatten_parameters()
 
             ans_feat, _ = self.ans_rnn(ans_feat)
+            ans_feat = ans_feat.sum(1)
+            ######### or do
+            #_, ans_feat = self.ans_rnn(ans_feat) 
+            ######## but summing makes more sense when using one word answers only
 
             # ---------------------- #
             # ---- Adding noise ---- #
@@ -150,6 +161,7 @@ class Net(nn.Module):
 
             # now we can fuse the vector
             # (batch_size, FLAT_OUT_SIZE)
+            #debug
             fused_feat = torch.add(torch.mul(u, proj_feat), torch.mul(1-u, ans_feat))
 
             # --------------------------- #
@@ -157,9 +169,10 @@ class Net(nn.Module):
             # --------------------------- #
 
             # For calculating Fusion Loss in train_engine
-            z_proj = proj_feat.clone().detach()
-            z_ans = ans_feat.clone().detach()
-            z_fused = fused_feat.clone().detach()
+            # also normalize the vectors before calculating loss
+            z_proj = F.normalize(proj_feat.clone(), p=2, dim=1)
+            z_ans = F.normalize(ans_feat.clone(), p=2, dim=1)
+            z_fused = F.normalize(fused_feat.clone(), p=2, dim=1)
 
             if (step < self.num):
                 self.z_proj[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = proj_feat.clone().detach().cpu().numpy()

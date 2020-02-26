@@ -85,14 +85,21 @@ class Net(nn.Module):
 
         self.__C = __C
 
-        self.decoder_mlp = MLP(
-            in_size=__C.HIDDEN_SIZE,
-            mid_size= 2*__C.HIDDEN_SIZE,
+        self.decoder_mlp_1 = MLP(
+            in_size=__C.FLAT_OUT_SIZE,
+            mid_size= __C.FLAT_OUT_SIZE,
+            out_size=2*__C.FLAT_OUT_SIZE,
+            dropout_r=0,
+            use_relu=True
+        )
+        
+        self.decoder_mlp_2 = MLP(
+            in_size=2*__C.FLAT_OUT_SIZE,
+            mid_size= __C.FLAT_OUT_SIZE,
             out_size=answer_size,
             dropout_r=0,
             use_relu=True
         )
-
         self.embedding = nn.Embedding(
             num_embeddings=token_size,
             embedding_dim=__C.WORD_EMBED_SIZE
@@ -118,17 +125,6 @@ class Net(nn.Module):
             num_layers=1,
             batch_first=True
         )
-
-        # Generator
-
-        self.gru_gen = nn.GRU(
-            input_size= __C.FLAT_OUT_SIZE,
-            hidden_size=__C.HIDDEN_SIZE,
-            num_layers=1,
-            batch_first=True
-        )
-
-        # End of Generator
 
         self.ans_lstm = nn.LSTM(
             input_size=__C.WORD_EMBED_SIZE,
@@ -203,7 +199,7 @@ class Net(nn.Module):
 
         self.ans_lstm.flatten_parameters()
         ans_feat, _ = self.ans_lstm(ans_feat) # (batch, 4, 512)
-        ans_feat_mask = torch.randn(ans_feat.shape[0], 1, 1, ans_feat.shape[1]).bool().cuda()
+        ans_feat_mask = make_mask(ans_ix.unsqueeze(2))
 
         # Flatten to vector
         # (batch, 1024)
@@ -214,8 +210,8 @@ class Net(nn.Module):
 
         # Add noise to both encoded representations
         # self.noise_sigma is to be passed
-        noise_vec = self.__C.PROJ_STDDEV * torch.randn(proj_feat.shape).cuda()
-        ans_noise_vec = self.__C.ANS_STDDEV * torch.randn(ans_feat.shape).cuda()
+        noise_vec = self.__C.PROJ_STDDEV * torch.randn(proj_feat.shape, requires_grad=True).cuda()
+        ans_noise_vec = self.__C.ANS_STDDEV * torch.randn(ans_feat.shape, requires_grad=True).cuda()
 
 
         if not self.eval_flag:
@@ -223,7 +219,7 @@ class Net(nn.Module):
             proj_feat += noise_vec
 
         # randomly sample a number 'u' between zero and one
-        u = torch.rand(1).cuda()
+        u = torch.rand(1, requires_grad=True).cuda()
 
         # now we can fuse the vector
         if not self.eval_flag:
@@ -233,9 +229,9 @@ class Net(nn.Module):
             fused_feat = proj_feat
 
         # For calculating Fusion Loss in train_engine
-        z_proj = proj_feat.clone().detach()
-        z_ans = ans_feat.clone().detach()
-        z_fused = fused_feat.clone().detach()
+        z_proj = F.normalize(proj_feat.clone(), p=2, dim=1)
+        z_ans = F.normalize(ans_feat.clone(), p=2, dim=1)
+        z_fused = F.normalize(fused_feat.clone(), p=2, dim=1)
 
         # Save the three features
         if (step < self.num and not self.eval_flag):
@@ -255,24 +251,17 @@ class Net(nn.Module):
             self.z_fused = np.zeros(shape=self.shape)
 
         # DECODER
-        self.gru_gen.flatten_parameters()
 
-        # (batch_size, 512)
-        proj_feat, _ = self.gru_gen(proj_feat.unsqueeze(1))
-        proj_feat = proj_feat.squeeze()
         # (batch_size, answer_size)
-        proj_feat = self.decoder_mlp(proj_feat)
+        proj_feat = self.decoder_mlp_1(proj_feat)
+        proj_feat = self.decoder_mlp_2(proj_feat)
         
-        # (batch_size, 512)
-        ans_feat, _ = self.gru_gen(ans_feat.unsqueeze(1))
-        ans_feat = ans_feat.squeeze()
         # (batch_size, answer_size)
-        ans_feat = self.decoder_mlp(ans_feat)
+        ans_feat = self.decoder_mlp_1(ans_feat)
+        ans_feat = self.decoder_mlp_2(ans_feat)
         
-        # (batch_size, 512)
-        fused_feat, _ = self.gru_gen(fused_feat.unsqueeze(1))
-        fused_feat = fused_feat.squeeze()
         # (batch_size, answer_size)
-        fused_feat = self.decoder_mlp(fused_feat)
+        fused_feat = self.decoder_mlp_1(fused_feat)
+        fused_feat = self.decoder_mlp_2(fused_feat)
 
         return proj_feat, ans_feat, fused_feat, z_proj, z_ans, z_fused

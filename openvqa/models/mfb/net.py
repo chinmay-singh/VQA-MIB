@@ -8,7 +8,11 @@ from openvqa.models.mfb.mfb import CoAtt
 from openvqa.models.mfb.adapter import Adapter
 import torch
 import torch.nn as nn
-
+import numpy as np
+import torch.nn.functional as F
+from torch.nn.utils.weight_norm import weight_norm
+import math
+from openvqa.ops.fc import FC, MLP
 
 # -------------------------------------------------------
 # ---- Main MFB/MFH model with Co-Attention Learning ----
@@ -46,29 +50,41 @@ class Net(nn.Module):
         
         self.adapter = Adapter(__C)
         self.backbone = CoAtt(__C)
+        self.ans_backbone = CoAtt(__C)
         
-        # Decoder GRU
+       # classification/projection layers
         if __C.HIGH_ORDER:      # MFH
-            self.decoder_gru = nn.GRU(
-                input_size= ___C.2*__C.MFB_O,
-                hidden_size=__C.2*__C.MFB_O,
-                num_layers=1,
-                batch_first=True
+            self.decoder_mlp_1 = MLP(
+                in_size=2*__C.MFB_O,
+                mid_size=2*__C.MFB_O,
+                out_size= 4*__C.MFB_O,
+                dropout_r=0,
+                use_relu=True
             )
-        else:
-            self.decoder_gru = nn.GRU(
-                input_size= __C.__C.MFB_O,
-                hidden_size=__C.__C.MFB_O,
-                num_layers=1,
-                batch_first=True
+            
+            self.decoder_mlp_2 = MLP(
+                in_size=4*__C.MFB_O,
+                mid_size=2*__C.MFB_O,
+                out_size=answer_size,
+                dropout_r=0,
+                use_relu=True
             )
-        
-        # classification/projection layers
-        if __C.HIGH_ORDER:      # MFH
-            self.proj = nn.Linear(2*__C.MFB_O, answer_size)
         else:                   # MFB
-            self.proj = nn.Linear(__C.MFB_O, answer_size)
-        
+            self.decoder_mlp_1 = MLP(
+                in_size=__C.MFB_O,
+                mid_size=__C.MFB_O,
+                out_size= 2*__C.MFB_O,
+                dropout_r=0,
+                use_relu=True
+            )
+            
+            self.decoder_mlp_2 = MLP(
+                in_size=2*__C.MFB_O,
+                mid_size=__C.MFB_O,
+                out_size=answer_size,
+                dropout_r=0,
+                use_relu=True
+            )
         # With Answer
         if(self.__C.WITH_ANSWER):
 
@@ -85,14 +101,14 @@ class Net(nn.Module):
             if __C.HIGH_ORDER:
                 self.ans_lstm = nn.LSTM(
                     input_size=__C.WORD_EMBED_SIZE,
-                    hidden_size=2 * __C.MFB_O,
+                    hidden_size=__C.LSTM_OUT_SIZE,
                     num_layers=1,
                     batch_first=True
                 )
             else:
                 self.ans_lstm = nn.LSTM(
                     input_size=__C.WORD_EMBED_SIZE,
-                    hidden_size=__C.MFB_O,
+                    hidden_size=__C.LSTM_OUT_SIZE,
                     num_layers=1,
                     batch_first=True
                 )
@@ -119,21 +135,25 @@ class Net(nn.Module):
         img_feat, _ = self.adapter(frcn_feat, grid_feat, bbox_feat)  # (N, C, FRCN_FEAT_SIZE)
 
         # Pre-process Language Feature
+        self.lstm.flatten_parameters()
         lang_feat = self.embedding(ques_ix)     # (N, T, WORD_EMBED_SIZE)
         lang_feat = self.dropout(lang_feat)
         lang_feat, _ = self.lstm(lang_feat)     # (N, T, LSTM_OUT_SIZE)
         lang_feat = self.dropout_lstm(lang_feat)
 
         proj_feat = self.backbone(img_feat, lang_feat)  # MFH:(N, 2*O) / MFB:(N, O)
-        self.decoder_gru.flatten_parameters()
 
-        if (self.__C.WITH_ANSWER == False and self.eval_flag = True):
+        if (self.__C.WITH_ANSWER == False or self.eval_flag == True):
             # use the decoder
-            proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
-            proj_feat = proj_feat.squeeze()
+            # change: do not use the decoder gru
+            proj_feat = self.decoder_mlp_1(proj_feat)
+            proj_feat = self.decoder_mlp_2(proj_feat)
 
-            # Classification/projection layers
-            proj_feat = self.proj(proj_feat)                # (N, answer_size)
+            if (self.eval_flag == True and self.__C.WITH_ANSWER == True):
+                #hack because test_engine expects multiple returns from net but only uses the first
+                return proj_feat, None 
+
+
             return proj_feat
         
         ############ WITH ANSWER ##############
@@ -143,12 +163,17 @@ class Net(nn.Module):
             # ---- Answer embeddings ---- #
             # --------------------------- #
 
-            ans_feat = self.ans_embedding(ans_ix)
+            ans_img_feat = img_feat.clone()
+
+            # pre-process the ans features
             self.ans_lstm.flatten_parameters()
-
-            # output (batch, (1 or 2) * __C.MFB_O)
+            ans_feat = self.ans_embedding(ans_ix)
+            ans_feat = self.ans_dropout(ans_feat)
             ans_feat, _ = self.ans_lstm(ans_feat)
+            ans_feat = self.ans_dropout_lstm(ans_feat)
 
+            ans_feat = self.ans_backbone(ans_img_feat, ans_feat)
+           
             # ---------------------- #
             # ---- Adding noise ---- #
             # ---------------------- #
@@ -171,9 +196,10 @@ class Net(nn.Module):
             # --------------------------- #
 
             # For calculating Fusion Loss in train_engine
-            z_proj = proj_feat.clone().detach()
-            z_ans = ans_feat.clone().detach()
-            z_fused = fused_feat.clone().detach()
+            # also normalize the vectors before calculating loss
+            z_proj = F.normalize(proj_feat.clone(), p=2, dim=1)
+            z_ans = F.normalize(ans_feat.clone(), p=2, dim=1)
+            z_fused = F.normalize(fused_feat.clone(), p=2, dim=1)
 
             if (step < self.num):
                 self.z_proj[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = proj_feat.clone().detach().cpu().numpy()
@@ -195,26 +221,17 @@ class Net(nn.Module):
             # ---- DECODER ---- #
             # ----------------- #
 
-            # (batch_size, HIDDEN_SIZE)
-            proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
-            proj_feat = proj_feat.squeeze()
             # (batch_size, answer_size)
-            proj_feat = self.classifer(proj_feat)
+            proj_feat = self.decoder_mlp_1(proj_feat)
+            proj_feat = self.decoder_mlp_2(proj_feat)
+
+            # (batch_size, answer_size)
+            ans_feat = self.decoder_mlp_1(ans_feat)
+            ans_feat = self.decoder_mlp_2(ans_feat)
             
-            # (batch_size, HIDDEN_SIZE)
-            ans_feat, _ = self.decoder_gru(ans_feat.unsqueeze(1))
-            ans_feat = ans_feat.squeeze()
             # (batch_size, answer_size)
-            ans_feat = self.classifer(ans_feat)
-            
-            # (batch_size, HIDDEN_SIZE)
-            fused_feat, _ = self.decoder_gru(fused_feat.unsqueeze(1))
-            fused_feat = fused_feat.squeeze()
-            # (batch_size, answer_size)
-            fused_feat = self.classifer(fused_feat)
+            fused_feat = self.decoder_mlp_1(fused_feat)
+            fused_feat = self.decoder_mlp_2(fused_feat)
 
             return proj_feat, ans_feat, fused_feat, z_proj, z_ans, z_fused
-
-
-        return proj_feat
 

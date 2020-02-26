@@ -4,7 +4,7 @@
 # --------------------------------------------------------
 
 from openvqa.models.model_loader import CfgLoader
-from utils1.exec import Execution 
+from utils1.exec1 import Execution 
 import argparse, yaml
 
 
@@ -27,7 +27,7 @@ def parse_args():
                            'mcan_large',
                            'ban_4',
                            #Edits
-                           'ban_wa',
+                           'ban_8_wa',
                            'baseline_wa',
                            #End of Edits
                            'ban_8',
@@ -41,7 +41,9 @@ def parse_args():
                            'baseline',
                            'baseline_wa_no_fusion',
                            'positional',
-                           'mcan_large_wa'
+                           'mcan_large_wa',
+                           'mcan_small_augmented',
+                           'mcan_small_without_a'
                            ]
                         ,
                       help='{'

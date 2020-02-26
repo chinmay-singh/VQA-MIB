@@ -17,8 +17,10 @@ class BaseCfgs(PATH):
         # ---- Experimentation Parameters ----
         # ------------------------------------
 
-        self.WITH_ANSWER = True
-        self.WITH_FUSION_LOSS = True
+        self.WITH_ANSWER = False
+        self.WITH_FUSION_LOSS = False
+
+        self.AUGMENTED_ANSWER = False
 
         # Set Devices
         # If use multi-gpu training, you can set e.g.'0, 1, 2' instead
@@ -164,6 +166,9 @@ class BaseCfgs(PATH):
         # Gradient clip
         # (default: -1 means not using)
         self.GRAD_NORM_CLIP = -1
+
+        # use new question or not while eval
+        self.USE_NEW_QUESTION = "False"
 
         # Optimizer
         '''

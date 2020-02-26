@@ -14,7 +14,7 @@ class LayerNorm(nn.Module):
         self.a_2 = nn.Parameter(torch.ones(size))
         self.b_2 = nn.Parameter(torch.zeros(size))
 
-    def forward(self, x):
+    def forward(self, x, to_print=False):
         mean = x.mean(-1, keepdim=True)
         std = x.std(-1, keepdim=True)
 
