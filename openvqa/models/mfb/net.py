@@ -25,6 +25,7 @@ class Net(nn.Module):
         self.__C = __C
         
         if pretrain_emb_ans is None:
+            print("there is some error in this code\n\n")
             self.eval_flag = True
         else:
             self.eval_flag = False
@@ -50,8 +51,7 @@ class Net(nn.Module):
         
         self.adapter = Adapter(__C)
         self.backbone = CoAtt(__C)
-        self.ans_backbone = CoAtt(__C)
-        
+        self.ans_backbone = CoAtt(__C) 
        # classification/projection layers
         if __C.HIGH_ORDER:      # MFH
             self.decoder_mlp_1 = MLP(
@@ -86,54 +86,68 @@ class Net(nn.Module):
                 use_relu=True
             )
         # With Answer
-        if(self.__C.WITH_ANSWER):
+        #if(self.__C.WITH_ANSWER):
 
-            self.ans_embedding = nn.Embedding(
-                num_embeddings=token_size_ans,
-                embedding_dim=__C.WORD_EMBED_SIZE
+        self.ans_embedding = nn.Embedding(
+            num_embeddings=token_size_ans,
+            embedding_dim=__C.WORD_EMBED_SIZE
+        )
+
+        # Loading the GloVe embedding weights
+        if __C.USE_GLOVE:
+            if not self.eval_flag:
+                self.ans_embedding.weight.data.copy_(torch.from_numpy(pretrain_emb_ans))
+    
+        if __C.HIGH_ORDER:
+            self.ans_lstm = nn.LSTM(
+                input_size=__C.WORD_EMBED_SIZE,
+                hidden_size=__C.LSTM_OUT_SIZE,
+                num_layers=1,
+                batch_first=True
             )
-
-            # Loading the GloVe embedding weights
-            if __C.USE_GLOVE:
-                if not self.eval_flag:
-                    self.ans_embedding.weight.data.copy_(torch.from_numpy(pretrain_emb_ans))
+        else:
+            self.ans_lstm = nn.LSTM(
+                input_size=__C.WORD_EMBED_SIZE,
+                hidden_size=__C.LSTM_OUT_SIZE,
+                num_layers=1,
+                batch_first=True
+            )
         
-            if __C.HIGH_ORDER:
-                self.ans_lstm = nn.LSTM(
-                    input_size=__C.WORD_EMBED_SIZE,
-                    hidden_size=__C.LSTM_OUT_SIZE,
-                    num_layers=1,
-                    batch_first=True
-                )
-            else:
-                self.ans_lstm = nn.LSTM(
-                    input_size=__C.WORD_EMBED_SIZE,
-                    hidden_size=__C.LSTM_OUT_SIZE,
-                    num_layers=1,
-                    batch_first=True
-                )
-            
-            self.ans_dropout = nn.Dropout(__C.DROPOUT_R)
-            self.ans_dropout_lstm = nn.Dropout(__C.DROPOUT_R)
+        self.ans_dropout = nn.Dropout(__C.DROPOUT_R)
+        self.ans_dropout_lstm = nn.Dropout(__C.DROPOUT_R)
 
-            # parameters for storing npy arrays
-            self.batch_size = int(__C.SUB_BATCH_SIZE/__C.N_GPU)
-            self.num = math.ceil(1000/self.batch_size) #313
+        # parameters for storing npy arrays
+        self.batch_size = int(__C.SUB_BATCH_SIZE/__C.N_GPU)
+        self.num = math.ceil(1000/self.batch_size) #313
 
-            # storing npy arrays
-            if __C.HIGH_ORDER:
-                self.shape = (self.num * self.batch_size, int(2*__C.MFB_O))
-            else:
-                self.shape = (self.num * self.batch_size, int(__C.MFB_O))
-            self.z_proj = np.zeros(shape=self.shape)
-            self.z_ans = np.zeros(shape=self.shape)
-            self.z_fused = np.zeros(shape=self.shape)
+        # storing npy arrays
+        if __C.HIGH_ORDER:
+            self.shape = (self.num * self.batch_size, int(2*__C.MFB_O))
+        else:
+            self.shape = (self.num * self.batch_size, int(__C.MFB_O))
+        self.z_proj = np.zeros(shape=self.shape)
+        self.z_ans = np.zeros(shape=self.shape)
+        self.z_fused = np.zeros(shape=self.shape)
 
 
     def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step, epoch):
 
-        img_feat, _ = self.adapter(frcn_feat, grid_feat, bbox_feat)  # (N, C, FRCN_FEAT_SIZE)
+        ans_img_feat, _ = self.adapter(frcn_feat, grid_feat, bbox_feat)  # (N, C, FRCN_FEAT_SIZE)
+        # pre-process the ans features
+        self.ans_lstm.flatten_parameters()
+        ans_feat = self.ans_embedding(ans_ix)
+        ans_feat = self.ans_dropout(ans_feat)
+        ans_feat, _ = self.ans_lstm(ans_feat)
+        ans_feat = self.ans_dropout_lstm(ans_feat)
 
+        ans_feat = self.ans_backbone(ans_img_feat, ans_feat)
+        # (batch_size, answer_size)
+        ans_feat = self.decoder_mlp_1(ans_feat)
+        ans_feat = self.decoder_mlp_2(ans_feat)
+
+        return ans_feat
+
+        '''
         # Pre-process Language Feature
         self.lstm.flatten_parameters()
         lang_feat = self.embedding(ques_ix)     # (N, T, WORD_EMBED_SIZE)
@@ -235,3 +249,4 @@ class Net(nn.Module):
 
             return proj_feat, ans_feat, fused_feat, z_proj, z_ans, z_fused
 
+            '''

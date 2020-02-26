@@ -45,6 +45,9 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
     token_size = dataset.token_size
     ans_size = dataset.ans_size
     pretrained_emb = dataset.pretrained_emb
+    #Edits
+    pretrained_emb_ans = dataset.pretrained_emb_ans
+    token_size_ans = dataset.token_size_ans #End of Edits
 
     #Make changes to this Net implementation
     net = ModelLoader(__C).Net(
@@ -52,8 +55,8 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
         pretrained_emb,
         token_size,
         ans_size,
-        None,                       #Pretrained Embeddings matrix of the answer has to be None if the testing  is running
-        13488    #TODO replace with config variable                      #Size of these embeddings would be this
+        pretrained_emb_ans,                       #Pretrained Embeddings matrix of the answer has to be None if the testing  is running
+        token_size_ans                          #Size of these embeddings would be this
     )
     net.cuda()
     net.eval()
@@ -77,7 +80,7 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
             grid_feat_iter,
             bbox_feat_iter,
             ques_ix_iter,
-            _,              #Answer_ix_iter is nothing of relevance here in test
+            ans_ix_iter,              #Answer_ix_iter is nothing of relevance here in test
             ans_iter,
             ques_type
             
@@ -92,8 +95,9 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
         grid_feat_iter = grid_feat_iter.cuda()
         bbox_feat_iter = bbox_feat_iter.cuda()
         ques_ix_iter = ques_ix_iter.cuda()
+        ans_ix_iter = ans_ix_iter.cuda()
         # edits
-        ans_ix = torch.ones((__C.EVAL_BATCH_SIZE, 4, ), dtype=torch.int64).cuda()
+        #ans_ix = torch.ones((__C.EVAL_BATCH_SIZE, 4, ), dtype=torch.int64).cuda()
         # edits end
 
         if (__C.WITH_ANSWER):
@@ -102,7 +106,7 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
                 grid_feat_iter,
                 bbox_feat_iter,
                 ques_ix_iter,
-                ans_ix, #Where ans_ix_iter would have been
+                ans_ix_iter, #Where ans_ix_iter would have been
                 step,
                 0
             )[0]
@@ -112,7 +116,7 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
                 grid_feat_iter,
                 bbox_feat_iter,
                 ques_ix_iter,
-                ans_ix, #Where ans_ix_iter would have been
+                ans_ix_iter, #Where ans_ix_iter would have been
                 step,
                 0
             )
