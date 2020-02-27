@@ -15,6 +15,7 @@ from utils1.test_engine import test_engine, ckpt_proc
 from vis import plotter, vis_func
 from multiprocessing import Pool
 import multiprocessing
+import sys
 
 def train_engine(__C, dataset, dataset_eval=None):
 
@@ -52,6 +53,60 @@ def train_engine(__C, dataset, dataset_eval=None):
     if (__C.WITH_ANSWER and ((__C.VERSION) not in os.listdir(__C.SAVED_PATH))):
         os.mkdir(__C.SAVED_PATH + '/' + __C.VERSION)
 
+    ###############################################################
+    ######## Load the pretrained ans+img only model ###############
+    ###############################################################
+
+    if __C.LOAD_PRETRAINED:
+        print("using the pretrained model for ans+img encoder and decoder both parts")
+
+        path = __C.CKPTS_PATH + \
+               '/ckpt_' + __C.CKPT_VERSION + \
+               '/epoch' + str(__C.CKPT_EPOCH) + '.pkl'
+        
+        print('Loading ckpt from {}'.format(path))
+        ckpt = torch.load(path)
+        print('Finish!')
+
+        pretrained_state_dict = torch.load(path)['state_dict']
+
+        #print("#################################################")
+        #print("printing the pretrained state dict")
+        #print(pretrained_state_dict)
+        #print("################################################\n\n\n")
+        #print("----------------------------------------------------\n\n\n")
+        
+        net_state_dict = net.state_dict()
+
+        #print("filtering keys from pretrained state dict")
+        #pretrained_state_dict_updated = {k: v for k, v in pretrained_state_dict.items() if k in net_state_dict} 
+    
+        print("updating keys in net_state_dict form pretrained state dict")
+        net_state_dict.update(pretrained_state_dict)
+
+        #print("#################################################")
+        #print("printing the updated net state dict")
+        #print(net_state_dict)
+        #print("################################################\n\n\n")
+        #print("----------------------------------------------------\n\n\n")
+        print("loading this state dict in the net")
+
+        '''
+        if __C.N_GPU > 1:
+            net.load_state_dict(ckpt_proc(net_state_dict))
+        else:
+        '''
+        net.load_state_dict(net_state_dict)
+        print("loaded net state dict succesfully")
+ 
+        #print("#################################################")
+        #print("printing the updated net state dict")
+        #print(net.state_dict())
+        #print("################################################\n\n\n")
+        #print("----------------------------------------------------\n\n\n")
+
+        #sys.exit("------------------------------------------------------------")
+       
 
     # Load checkpoint if resume training
     if __C.RESUME:
