@@ -56,7 +56,7 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
         pretrained_emb,
         token_size,
         ans_size,
-        pretrained_emb_ans,                       #Pretrained Embeddings matrix of the answer has to be None if the testing  is running
+        None,                       #Pretrained Embeddings matrix of the answer has to be None if the testing  is running
         token_size_ans                          #Size of these embeddings would be this
     )
     net.cuda()
