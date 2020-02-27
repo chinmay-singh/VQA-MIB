@@ -98,7 +98,7 @@ class Net(nn.Module):
             self.z_fused = np.zeros(shape=self.shape)
 
 
-    def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step, epoch):
+    def forward(self, ques_list, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step, epoch):
 
         # Pre-process Language Feature
         # lang_feat_mask = make_mask(ques_ix.unsqueeze(2))
