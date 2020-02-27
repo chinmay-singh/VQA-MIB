@@ -360,14 +360,14 @@ class DataSet(BaseDataSet):
                 ans_ix_iter = self.proc_ans_tokens(ans, self.token_to_ix_ans, max_token = 4)
             #End of Edits
 
-            return ques_list, ques_ix_iter, ans_ix_iter, ans_iter, iid
+            return ques_list, ques_ix_iter, ans_ix_iter, ans_iter, iid, ques_type
 
         else:
             ques = self.ques_list[idx]
             iid = str(ques['image_id'])
             ques_list, ques_ix_iter = self.proc_ques(ques, self.token_to_ix, max_token=14)
 
-            return ques_list, ques_ix_iter, np.zeros(1), np.zeros(1), iid # will have to check, at the time of eval how is processing done
+            return ques_list, ques_ix_iter, np.zeros(1), np.zeros(1), iid, "testing" # will have to check, at the time of eval how is processing done
 
     def load_img_feats(self, idx, iid):
         frcn_feat = np.load(self.iid_to_frcn_feat_path[iid])
