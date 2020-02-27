@@ -50,6 +50,7 @@ class Net(nn.Module):
         
         self.adapter = Adapter(__C)
         self.backbone = CoAtt(__C)
+        self.ans_backbone = CoAtt(__C)
         
        # classification/projection layers
         if __C.HIGH_ORDER:      # MFH
@@ -100,14 +101,14 @@ class Net(nn.Module):
             if __C.HIGH_ORDER:
                 self.ans_lstm = nn.LSTM(
                     input_size=__C.WORD_EMBED_SIZE,
-                    hidden_size=2 * __C.MFB_O,
+                    hidden_size=__C.LSTM_OUT_SIZE,
                     num_layers=1,
                     batch_first=True
                 )
             else:
                 self.ans_lstm = nn.LSTM(
                     input_size=__C.WORD_EMBED_SIZE,
-                    hidden_size=__C.MFB_O,
+                    hidden_size=__C.LSTM_OUT_SIZE,
                     num_layers=1,
                     batch_first=True
                 )
@@ -162,18 +163,17 @@ class Net(nn.Module):
             # ---- Answer embeddings ---- #
             # --------------------------- #
 
-            ans_feat = self.ans_embedding(ans_ix)
+            ans_img_feat = img_feat.clone()
+
+            # pre-process the ans features
             self.ans_lstm.flatten_parameters()
-
-            # output (batch, (1 or 2) * __C.MFB_O)
+            ans_feat = self.ans_embedding(ans_ix)
+            ans_feat = self.ans_dropout(ans_feat)
             ans_feat, _ = self.ans_lstm(ans_feat)
-            
-            ans_feat = ans_feat.sum(1)
-            ######### or do
-            #_, ans_feat = self.ans_rnn(ans_feat) 
-            ######## but summing makes more sense when using one word answers only
+            ans_feat = self.ans_dropout_lstm(ans_feat)
 
-
+            ans_feat = self.ans_backbone(ans_img_feat, ans_feat)
+           
             # ---------------------- #
             # ---- Adding noise ---- #
             # ---------------------- #
