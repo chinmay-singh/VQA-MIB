@@ -9,6 +9,7 @@ import torch.nn as nn
 import torch.utils.data as Data
 from openvqa.models.model_loader import ModelLoader
 from openvqa.datasets.dataset_loader import EvalLoader
+import sys
 
 
 # Evaluation
