@@ -25,7 +25,6 @@ class Net(nn.Module):
     def __init__(self, __C, pretrained_emb, token_size, answer_size, pretrain_emb_ans, token_size_ans):
         super(Net, self).__init__()
         self.__C = __C
-        '''
         if pretrain_emb_ans is None:
             #print("there is some error in this code\n\n")
             print("Evaluation______________________________")
@@ -50,13 +49,11 @@ class Net(nn.Module):
         )
         self.dropout = nn.Dropout(__C.DROPOUT_R)
         self.dropout_lstm = nn.Dropout(__C.DROPOUT_R)
-        '''
         
         self.adapter = Adapter(__C)
         self.ans_backbone = CoAtt(__C) 
         # this adapter will be used in answer part processing,
         # so it does not require gradients
-        '''
         for params in self.adapter.parameters():
             params.requires_grad = False
         # will be used in the ans part, does not require grads
@@ -65,7 +62,6 @@ class Net(nn.Module):
 
         self.img_adapter = Adapter(__C)
         self.backbone = CoAtt(__C)
-        '''
         
        # classification/projection layers
        # for the time being keep the decoder trainable
@@ -88,6 +84,7 @@ class Net(nn.Module):
             )
             '''
             self.proj = nn.Linear(2*__C.MFB_O, answer_size)
+            
         else:                   # MFB
             '''
             self.decoder_mlp_1 = MLP(
@@ -107,7 +104,9 @@ class Net(nn.Module):
             )
             '''
             self.proj = nn.Linear(__C.MFB_O, answer_size)
-
+            
+        for params in self.proj.parameters():
+            params.requires_grad = False
 
         # no grads ---- fixed decoder
 
@@ -125,10 +124,9 @@ class Net(nn.Module):
             embedding_dim=__C.WORD_EMBED_SIZE
         )
         # will be used in the ans part, does not require grads
-        '''
         for params in self.ans_embedding.parameters():
             params.requires_grad = False
-        '''
+        
         # Loading the GloVe embedding weights
         if __C.USE_GLOVE:
             #if not self.eval_flag:
@@ -152,7 +150,6 @@ class Net(nn.Module):
         self.ans_dropout = nn.Dropout(__C.DROPOUT_R)
         self.ans_dropout_lstm = nn.Dropout(__C.DROPOUT_R)
         # will be used in the ans part, does not require grads
-        '''
         for params in self.ans_lstm.parameters():
             params.requires_grad = False
 
@@ -160,7 +157,7 @@ class Net(nn.Module):
             params.requires_grad = False
         for params in self.ans_dropout_lstm.parameters():
             params.requires_grad = False
-        '''
+        
         # parameters for storing npy arrays
         self.batch_size = int(__C.SUB_BATCH_SIZE/__C.N_GPU)
         self.num = math.ceil(1000/self.batch_size) #313
@@ -177,6 +174,7 @@ class Net(nn.Module):
 
     def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step, epoch):
 
+        '''
         ans_img_feat, _ = self.adapter(frcn_feat, grid_feat, bbox_feat)  # (N, C, FRCN_FEAT_SIZE)
         # pre-process the ans features
         self.ans_lstm.flatten_parameters()
@@ -205,8 +203,10 @@ class Net(nn.Module):
         if (self.__C.WITH_ANSWER == False or self.eval_flag == True):
             # use the decoder
             # change: do not use the decoder gru
-            proj_feat = self.decoder_mlp_1(proj_feat)
-            proj_feat = self.decoder_mlp_2(proj_feat)
+            #proj_feat = self.decoder_mlp_1(proj_feat)
+            #proj_feat = self.decoder_mlp_2(proj_feat)
+
+            proj_feat = self.proj(proj_feat)
 
             if (self.eval_flag == True and self.__C.WITH_ANSWER == True):
                 #hack because test_engine expects multiple returns from net but only uses the first
@@ -280,17 +280,19 @@ class Net(nn.Module):
             # ----------------- #
 
             # (batch_size, answer_size)
-            proj_feat = self.decoder_mlp_1(proj_feat)
-            proj_feat = self.decoder_mlp_2(proj_feat)
+            #proj_feat = self.decoder_mlp_1(proj_feat)
+            #proj_feat = self.decoder_mlp_2(proj_feat)
+            proj_feat = self.proj(proj_feat)
 
-            # (batch_size, answer_size)
-            ans_feat = self.decoder_mlp_1(ans_feat)
-            ans_feat = self.decoder_mlp_2(ans_feat)
-            
-            # (batch_size, answer_size)
-            fused_feat = self.decoder_mlp_1(fused_feat)
-            fused_feat = self.decoder_mlp_2(fused_feat)
+            ## (batch_size, answer_size)
+            #ans_feat = self.decoder_mlp_1(ans_feat)
+            #ans_feat = self.decoder_mlp_2(ans_feat)
+            ans_feat = self.proj(ans_feat)
+            #
+            ## (batch_size, answer_size)
+            #fused_feat = self.decoder_mlp_1(fused_feat)
+            #fused_feat = self.decoder_mlp_2(fused_feat)
+            fused_feat = self.proj(fused_feat)
 
             return proj_feat, ans_feat, fused_feat, z_proj, z_ans, z_fused
 
-        '''
