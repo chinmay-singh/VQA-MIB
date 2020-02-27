@@ -18,16 +18,20 @@ from openvqa.ops.fc import FC, MLP
 # ---- Main MFB/MFH model with Co-Attention Learning ----
 # -------------------------------------------------------
 
+def grad_reverse(x):
+    return GradReverse.apply(x)
 
 class Net(nn.Module):
     def __init__(self, __C, pretrained_emb, token_size, answer_size, pretrain_emb_ans, token_size_ans):
         super(Net, self).__init__()
         self.__C = __C
-        
+        '''
         if pretrain_emb_ans is None:
-            print("there is some error in this code\n\n")
+            #print("there is some error in this code\n\n")
+            print("Evaluation______________________________")
             self.eval_flag = True
         else:
+            print("Training________________________________")
             self.eval_flag = False
 
 
@@ -35,10 +39,8 @@ class Net(nn.Module):
             num_embeddings=token_size,
             embedding_dim=__C.WORD_EMBED_SIZE
         )
-
-        # Loading the GloVe embedding weights
-        if __C.USE_GLOVE:
-            self.embedding.weight.data.copy_(torch.from_numpy(pretrained_emb))
+        # Loading the GloVe embedding weights if __C.USE_GLOVE:
+        self.embedding.weight.data.copy_(torch.from_numpy(pretrained_emb))
 
         self.lstm = nn.LSTM(
             input_size=__C.WORD_EMBED_SIZE,
@@ -48,12 +50,27 @@ class Net(nn.Module):
         )
         self.dropout = nn.Dropout(__C.DROPOUT_R)
         self.dropout_lstm = nn.Dropout(__C.DROPOUT_R)
+        '''
         
         self.adapter = Adapter(__C)
-        self.backbone = CoAtt(__C)
         self.ans_backbone = CoAtt(__C) 
+        # this adapter will be used in answer part processing,
+        # so it does not require gradients
+        '''
+        for params in self.adapter.parameters():
+            params.requires_grad = False
+        # will be used in the ans part, does not require grads
+        for params in self.ans_backbone.parameters():
+            params.requires_grad = False
+
+        self.img_adapter = Adapter(__C)
+        self.backbone = CoAtt(__C)
+        '''
+        
        # classification/projection layers
+       # for the time being keep the decoder trainable
         if __C.HIGH_ORDER:      # MFH
+            '''
             self.decoder_mlp_1 = MLP(
                 in_size=2*__C.MFB_O,
                 mid_size=2*__C.MFB_O,
@@ -69,7 +86,10 @@ class Net(nn.Module):
                 dropout_r=0,
                 use_relu=True
             )
+            '''
+            self.proj = nn.Linear(2*__C.MFB_O, answer_size)
         else:                   # MFB
+            '''
             self.decoder_mlp_1 = MLP(
                 in_size=__C.MFB_O,
                 mid_size=__C.MFB_O,
@@ -85,6 +105,18 @@ class Net(nn.Module):
                 dropout_r=0,
                 use_relu=True
             )
+            '''
+            self.proj = nn.Linear(__C.MFB_O, answer_size)
+
+
+        # no grads ---- fixed decoder
+
+        '''
+        for params in self.decoder_mlp_1.parameters():
+            params.requires_grad = False
+        for params in self.decoder_mlp_2.parameters():
+            params.requires_grad = False
+        '''
         # With Answer
         #if(self.__C.WITH_ANSWER):
 
@@ -92,11 +124,15 @@ class Net(nn.Module):
             num_embeddings=token_size_ans,
             embedding_dim=__C.WORD_EMBED_SIZE
         )
-
+        # will be used in the ans part, does not require grads
+        '''
+        for params in self.ans_embedding.parameters():
+            params.requires_grad = False
+        '''
         # Loading the GloVe embedding weights
         if __C.USE_GLOVE:
-            if not self.eval_flag:
-                self.ans_embedding.weight.data.copy_(torch.from_numpy(pretrain_emb_ans))
+            #if not self.eval_flag:
+            self.ans_embedding.weight.data.copy_(torch.from_numpy(pretrain_emb_ans))
     
         if __C.HIGH_ORDER:
             self.ans_lstm = nn.LSTM(
@@ -115,7 +151,16 @@ class Net(nn.Module):
         
         self.ans_dropout = nn.Dropout(__C.DROPOUT_R)
         self.ans_dropout_lstm = nn.Dropout(__C.DROPOUT_R)
+        # will be used in the ans part, does not require grads
+        '''
+        for params in self.ans_lstm.parameters():
+            params.requires_grad = False
 
+        for params in self.ans_dropout.parameters():
+            params.requires_grad = False
+        for params in self.ans_dropout_lstm.parameters():
+            params.requires_grad = False
+        '''
         # parameters for storing npy arrays
         self.batch_size = int(__C.SUB_BATCH_SIZE/__C.N_GPU)
         self.num = math.ceil(1000/self.batch_size) #313
@@ -142,12 +187,12 @@ class Net(nn.Module):
 
         ans_feat = self.ans_backbone(ans_img_feat, ans_feat)
         # (batch_size, answer_size)
-        ans_feat = self.decoder_mlp_1(ans_feat)
-        ans_feat = self.decoder_mlp_2(ans_feat)
+        ans_feat = self.proj(ans_feat)
 
         return ans_feat
-
         '''
+        
+        img_feat, _ = self.img_adapter(frcn_feat, grid_feat, bbox_feat)  # (N, C, FRCN_FEAT_SIZE)
         # Pre-process Language Feature
         self.lstm.flatten_parameters()
         lang_feat = self.embedding(ques_ix)     # (N, T, WORD_EMBED_SIZE)
@@ -177,8 +222,7 @@ class Net(nn.Module):
             # ---- Answer embeddings ---- #
             # --------------------------- #
 
-            ans_img_feat = img_feat.clone()
-
+            ans_img_feat, _ = self.adapter(frcn_feat, grid_feat, bbox_feat)  # (N, C, FRCN_FEAT_SIZE)
             # pre-process the ans features
             self.ans_lstm.flatten_parameters()
             ans_feat = self.ans_embedding(ans_ix)
@@ -198,8 +242,8 @@ class Net(nn.Module):
             proj_noise = self.__C.PROJ_STDDEV * torch.randn(proj_feat.shape).cuda()
             ans_noise = self.__C.ANS_STDDEV * torch.randn(ans_feat.shape).cuda()
             
-            ans_feat += ans_noise
-            proj_feat += proj_noise
+            #ans_feat += ans_noise
+            #proj_feat += proj_noise
 
             # now we can fuse the vector
             # (batch_size, (1 or 2) * __C.MFB_O)
@@ -249,4 +293,4 @@ class Net(nn.Module):
 
             return proj_feat, ans_feat, fused_feat, z_proj, z_ans, z_fused
 
-            '''
+        '''
