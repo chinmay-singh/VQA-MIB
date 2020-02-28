@@ -49,7 +49,7 @@ class Net(nn.Module):
         )
         self.dropout = nn.Dropout(__C.DROPOUT_R)
         self.dropout_lstm = nn.Dropout(__C.DROPOUT_R)
-        
+
         self.adapter = Adapter(__C)
         self.ans_backbone = CoAtt(__C) 
         # this adapter will be used in answer part processing,
@@ -129,8 +129,8 @@ class Net(nn.Module):
         
         # Loading the GloVe embedding weights
         if __C.USE_GLOVE:
-            #if not self.eval_flag:
-            self.ans_embedding.weight.data.copy_(torch.from_numpy(pretrain_emb_ans))
+            if not self.eval_flag:
+                self.ans_embedding.weight.data.copy_(torch.from_numpy(pretrain_emb_ans))
     
         if __C.HIGH_ORDER:
             self.ans_lstm = nn.LSTM(
@@ -197,8 +197,9 @@ class Net(nn.Module):
         lang_feat = self.dropout(lang_feat)
         lang_feat, _ = self.lstm(lang_feat)     # (N, T, LSTM_OUT_SIZE)
         lang_feat = self.dropout_lstm(lang_feat)
-
+        
         proj_feat = self.backbone(img_feat, lang_feat)  # MFH:(N, 2*O) / MFB:(N, O)
+
 
         if (self.__C.WITH_ANSWER == False or self.eval_flag == True):
             # use the decoder
