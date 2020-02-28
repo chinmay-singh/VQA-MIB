@@ -332,21 +332,16 @@ class DataSet(BaseDataSet):
         if self.__C.RUN_MODE in ['train']:
 
             ans = self.ans_list[idx]
-            ques = self.qid_to_ques[str(ans['question_id'])]
 
-            ques_from_ans_dict = ans['question']
-
-
+            ques = ans['question']
             ques_type = ans['answer_type']
             explanation = ans['explanation'][0]
-            print(ques_from_ans_dict, explanation)
 
             # Begin of edit
-            ans['question'] = ques['question']
+            ans['question'] = ques
             # End of edit
 
-            assert ques == ques_from_ans_dict, print("from ques: %s\nfromans_dict: %s\n" % (ans['question'], ques_from_ans_dict))
-            iid = str(ans['image_id'])
+            iid = str(ans['img_id'])
 
             # Process question
             ques_ix_iter = self.proc_ques(ques, self.token_to_ix, max_token=14)
@@ -356,8 +351,8 @@ class DataSet(BaseDataSet):
             ans_iter = self.proc_ans(ans, self.ans_to_ix)
             
             #Edits
-            if (self.__C.EXPLANATIONS):
-                ans_ix_iter = self.proc_ans_tokens(ans, self.token_to_ix_ans, max_token = 14)
+            if (self.__C.EXPLANATION):
+                ans_ix_iter = self.proc_ans_tokens(ans, self.token_to_ix_ans, max_token = 20)
             elif (self.__C.AUGMENTED_ANSWER):
                 ans_ix_iter = self.proc_ans_tokens(ans, self.token_to_ix_ans, max_token = 14)
             else:
@@ -432,7 +427,7 @@ class DataSet(BaseDataSet):
         words = re.sub(
             r"([.,'!?\"()*#:;])",
             '',
-            ques['question'].lower()
+            ques.lower()
         ).replace('-', ' ').replace('/', ' ').split()
 
         for ix, word in enumerate(words):
@@ -451,8 +446,8 @@ class DataSet(BaseDataSet):
     def proc_ans_tokens(self, ans, token_to_ix_ans, max_token):
         ans_ix = np.zeros(max_token, np.int64)
 
-        if (self.__C.EXPLANATIONS):
-            explanation = ans['explanation']
+        if (self.__C.EXPLANATION):
+            explanation = ans['explanation'][0]
             words = prep_ans(explanation).split()
 
         elif (self.__C.AUGMENTED_ANSWER):
