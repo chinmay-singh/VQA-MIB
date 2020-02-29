@@ -12,6 +12,7 @@ from torch.nn.utils.weight_norm import weight_norm
 import torch
 import math
 import cv2
+import numpy as np
 
 # ------------------------------
 # ----- Weight Normal MLP ------
@@ -95,25 +96,29 @@ class TDA(nn.Module):
         if self.__C.USE_NEW_QUESTION == "True":
             print("plotting attention of objects on image")
 
-            img = cv2.imread('./COCO_test2015_000000126672.jpg', 3)
-            print(img.shape)
+            img = cv2.imread('test_images/COCO_test2015_' + str(self.__C.IMAGE_ID).zfill(12) + '.jpg', 3)
+            img1 = np.array(img).astype('float64')
             
             bbox_normalized = bbox_feat.squeeze()
             att_squeezed = att.squeeze()
             
             for i in range(bbox_normalized.shape[0]):
 
+                '''
+                if float(att_squeezed[i]) < 0.09:
+                    continue
+                '''
                 x1_coordinate = bbox_normalized[i][0]*float(img.shape[1])
                 y1_coordinate = bbox_normalized[i][1]*float(img.shape[0])
 
                 x4_coordinate = bbox_normalized[i][2]*float(img.shape[1])
                 y4_coordinate = bbox_normalized[i][3]*float(img.shape[0])
 
-                img[int(x1_coordinate):int(x4_coordinate), int(y1_coordinate):int(y4_coordinate), :] = float(img[int(x1_coordinate):int(x4_coordinate), int(y1_coordinate):int(y4_coordinate), :] * float(att_squeezed[i].cpu()))
-                print(img)
-                #img = cv2.rectangle(img, (x1_coordinate, y1_coordinate), (x4_coordinate, y4_coordinate), (255,0,0), 2)        
+                img1[int(y1_coordinate):int(y4_coordinate), int(x1_coordinate):int(x4_coordinate), :] += (255. * float(att_squeezed[i].cpu()))
+                img = cv2.rectangle(img, (x1_coordinate, y1_coordinate), (x4_coordinate, y4_coordinate), (255,0,0), 2)        
 
-            cv2.imwrite('plotting_images_500.jpg', img)
+            cv2.imwrite('test_images/attention/COCO_test2015_' + str(self.__C.IMAGE_ID).zfill(12) + '.jpg', img1)
+            cv2.imwrite('test_images/bounding_box/COCO_test2015_' + str(self.__C.IMAGE_ID).zfill(12) + '.jpg', img)
 
         atted_v = (att * v).sum(1)
         q_repr = self.q_net(q)
