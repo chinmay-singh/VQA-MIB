@@ -11,6 +11,7 @@ import torch.nn.functional as F
 from torch.nn.utils.weight_norm import weight_norm
 import torch
 import math
+import cv2
 
 # ------------------------------
 # ----- Weight Normal MLP ------
@@ -88,8 +89,32 @@ class TDA(nn.Module):
         self.q_net = MLP([__C.HIDDEN_SIZE, __C.HIDDEN_SIZE])
         self.v_net = MLP([__C.IMG_FEAT_SIZE, __C.HIDDEN_SIZE])
 
-    def forward(self, q, v):
+    def forward(self, q, v, bbox_feat):
         att = self.v_att(q, v)
+
+        if self.__C.USE_NEW_QUESTION == "True":
+            print("plotting attention of objects on image")
+
+            img = cv2.imread('./COCO_test2015_000000126672.jpg', 3)
+            print(img.shape)
+            
+            bbox_normalized = bbox_feat.squeeze()
+            att_squeezed = att.squeeze()
+            
+            for i in range(bbox_normalized.shape[0]):
+
+                x1_coordinate = bbox_normalized[i][0]*float(img.shape[1])
+                y1_coordinate = bbox_normalized[i][1]*float(img.shape[0])
+
+                x4_coordinate = bbox_normalized[i][2]*float(img.shape[1])
+                y4_coordinate = bbox_normalized[i][3]*float(img.shape[0])
+
+                img[int(x1_coordinate):int(x4_coordinate), int(y1_coordinate):int(y4_coordinate), :] = float(img[int(x1_coordinate):int(x4_coordinate), int(y1_coordinate):int(y4_coordinate), :] * float(att_squeezed[i].cpu()))
+                print(img)
+                #img = cv2.rectangle(img, (x1_coordinate, y1_coordinate), (x4_coordinate, y4_coordinate), (255,0,0), 2)        
+
+            cv2.imwrite('plotting_images_500.jpg', img)
+
         atted_v = (att * v).sum(1)
         q_repr = self.q_net(q)
         v_repr = self.v_net(atted_v)
