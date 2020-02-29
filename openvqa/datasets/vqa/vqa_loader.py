@@ -413,44 +413,6 @@ class DataSet(BaseDataSet):
     def proc_bbox_feat(self, bbox, img_shape):
         bbox_feat = np.zeros((bbox.shape[0], 5), dtype=np.float32)
 
-        # Visualization of top 3 objects on orignal image
-        if self.__C.USE_NEW_QUESTION == "True":
-            img = np.array(Image.open('./COCO_test2015_000000434386.jpg'), dtype=np.uint8)
-            print("orignal image shape: ", img.shape)  
-            fig,ax = plt.subplots(1)
-
-            ax.imshow(img)
-
-            j = 0
-            polygons = []
-            for i in bbox:
-                if j > 3:
-                    break
-                x1_coordinate = i[0] 
-                y1_coordinate = i[1] 
-                x4_coordinate = i[2]
-                y4_coordinate = i[3]
-
-                width = x4_coordinate - x1_coordinate
-                height = y4_coordinate - y1_coordinate
-
-                x2_coordinate = x4_coordinate
-                y2_coordinate = y1_coordinate
-                x3_coordinate = x1_coordinate
-                y3_coordinate = y4_coordinate
-               
-                poly = [[x1_coordinate, y1_coordinate], [x2_coordinate, y2_coordinate], [x3_coordinate, y3_coordinate], [x4_coordinate, y4_coordinate]]
-                np_poly = np.array(poly).reshape(4,2)
-#                polygons.append(Polygon(np_poly))
-                polygons.append(Rectangle((x1_coordinate, y1_coordinate), width, height))
-                j += 1
-
-            p = PatchCollection(polygons, linewidth=1, edgecolor='r', facecolor='none')
-            ax.add_collection(p)
-
-            print("saving image of plotted object")
-            plt.savefig("./plotted_objects9.jpg") 
-
         bbox_feat[:, 0] = bbox[:, 0] / float(img_shape[1])
         bbox_feat[:, 1] = bbox[:, 1] / float(img_shape[0])
         bbox_feat[:, 2] = bbox[:, 2] / float(img_shape[1])
