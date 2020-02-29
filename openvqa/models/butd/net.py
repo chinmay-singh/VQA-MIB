@@ -111,7 +111,8 @@ class Net(nn.Module):
         # Backbone Framework
         proj_feat = self.backbone(
             lang_feat[:, -1],
-            img_feat
+            img_feat,
+            bbox_feat
         )
         
         self.decoder_gru.flatten_parameters()
