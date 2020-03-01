@@ -24,11 +24,12 @@ class Net(nn.Module):
         super(Net, self).__init__()
         self.__C = __C
         
+        '''
         if pretrain_emb_ans is None:
             self.eval_flag = True
         else:
             self.eval_flag = False
-
+        '''
 
         self.embedding = nn.Embedding(
             num_embeddings=token_size,
@@ -50,9 +51,12 @@ class Net(nn.Module):
         
         self.adapter = Adapter(__C)
         self.backbone = CoAtt(__C)
+        '''
         self.ans_backbone = CoAtt(__C)
+        '''
         
        # classification/projection layers
+       '''
         if __C.HIGH_ORDER:      # MFH
             self.decoder_mlp_1 = MLP(
                 in_size=2*__C.MFB_O,
@@ -69,7 +73,10 @@ class Net(nn.Module):
                 dropout_r=0,
                 use_relu=True
             )
+        '''
+            self.proj = nn.Linear(2*__C.MFB_O, answer_size)
         else:                   # MFB
+        '''
             self.decoder_mlp_1 = MLP(
                 in_size=__C.MFB_O,
                 mid_size=__C.MFB_O,
@@ -85,6 +92,8 @@ class Net(nn.Module):
                 dropout_r=0,
                 use_relu=True
             )
+        '''
+            self.proj = nn.Linear(2*__C.MFB_O, answer_size)
         # With Answer
         if(self.__C.WITH_ANSWER):
 
@@ -146,9 +155,10 @@ class Net(nn.Module):
         if (self.__C.WITH_ANSWER == False or self.eval_flag == True):
             # use the decoder
             # change: do not use the decoder gru
-            proj_feat = self.decoder_mlp_1(proj_feat)
-            proj_feat = self.decoder_mlp_2(proj_feat)
+            #proj_feat = self.decoder_mlp_1(proj_feat)
+            #proj_feat = self.decoder_mlp_2(proj_feat)
 
+            proj_feat = self.proj(proj_feat)
             if (self.eval_flag == True and self.__C.WITH_ANSWER == True):
                 #hack because test_engine expects multiple returns from net but only uses the first
                 return proj_feat, None 
