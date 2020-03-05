@@ -6,6 +6,11 @@
 
 from openvqa.models.mfb.mfb import CoAtt
 from openvqa.models.mfb.adapter import Adapter
+
+from openvqa.models.mfb.tda import CoAtt_vis
+
+
+
 import torch
 import torch.nn as nn
 import numpy as np
@@ -24,12 +29,11 @@ class Net(nn.Module):
         super(Net, self).__init__()
         self.__C = __C
         
-        '''
         if pretrain_emb_ans is None:
             self.eval_flag = True
         else:
             self.eval_flag = False
-        '''
+    
 
         self.embedding = nn.Embedding(
             num_embeddings=token_size,
@@ -50,7 +54,16 @@ class Net(nn.Module):
         self.dropout_lstm = nn.Dropout(__C.DROPOUT_R)
         
         self.adapter = Adapter(__C)
-        self.backbone = CoAtt(__C)
+
+############Checking is visualization is to be done##############
+
+        if self.__C.USE_NEW_QUESTION == "True":
+            self.backbone = CoAtt_vis(__C)
+        else:
+            self.backbone = CoAtt(__C)
+
+
+
         '''
         self.ans_backbone = CoAtt(__C)
         '''
@@ -142,7 +155,13 @@ class Net(nn.Module):
 
     def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step, epoch):
 
-        img_feat, _ = self.adapter(frcn_feat, grid_feat, bbox_feat)  # (N, C, FRCN_FEAT_SIZE)
+        img_feat, _ = self.adapter(frcn_feat, grid_feat)
+
+
+        
+
+
+
 
         # Pre-process Language Feature
         self.lstm.flatten_parameters()
@@ -151,7 +170,18 @@ class Net(nn.Module):
         lang_feat, _ = self.lstm(lang_feat)     # (N, T, LSTM_OUT_SIZE)
         lang_feat = self.dropout_lstm(lang_feat)
 
-        proj_feat = self.backbone(img_feat, lang_feat)  # MFH:(N, 2*O) / MFB:(N, O)
+
+        #######################################################
+        ########## Using bbox feat for attention vis ##########
+
+        #Backbone to combine the image and the Question
+        if (self.__C.USE_NEW_QUESTION == "True"):
+            proj_feat = self.backbone(img_feat, lang_feat, bbox_feat)     # MFH:(N, 2*O) / MFB:(N, O)
+
+        else:
+            proj_feat = self.backbone(img_feat, lang_feat)  # MFH:(N, 2*O) / MFB:(N, O)
+
+
 
         if (self.__C.WITH_ANSWER == False or self.eval_flag == True):
             # use the decoder
