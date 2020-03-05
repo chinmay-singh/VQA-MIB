@@ -102,6 +102,7 @@ class IAtt(nn.Module):
 
         iatt_maps = self.mlp(z)                         # (N, C, I_GLIMPSES)
         iatt_maps = F.softmax(iatt_maps, dim=1)         # (N, C, I_GLIMPSES)
+        print("shape of attention map is,     ",iatt_maps.shape)
 
         iatt_feat_list = []
         for i in range(self.__C.I_GLIMPSES):

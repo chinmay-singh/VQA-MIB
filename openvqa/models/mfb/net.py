@@ -56,8 +56,8 @@ class Net(nn.Module):
         '''
         
        # classification/projection layers
-       '''
         if __C.HIGH_ORDER:      # MFH
+            '''
             self.decoder_mlp_1 = MLP(
                 in_size=2*__C.MFB_O,
                 mid_size=2*__C.MFB_O,
@@ -73,10 +73,10 @@ class Net(nn.Module):
                 dropout_r=0,
                 use_relu=True
             )
-        '''
+            '''
             self.proj = nn.Linear(2*__C.MFB_O, answer_size)
         else:                   # MFB
-        '''
+            '''
             self.decoder_mlp_1 = MLP(
                 in_size=__C.MFB_O,
                 mid_size=__C.MFB_O,
@@ -92,8 +92,9 @@ class Net(nn.Module):
                 dropout_r=0,
                 use_relu=True
             )
-        '''
+            '''
             self.proj = nn.Linear(2*__C.MFB_O, answer_size)
+
         # With Answer
         if(self.__C.WITH_ANSWER):
 
