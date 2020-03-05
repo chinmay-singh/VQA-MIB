@@ -432,10 +432,15 @@ class DataSet(BaseDataSet):
     def proc_ques(self, ques, token_to_ix, max_token):
         ques_ix = np.zeros(max_token, np.int64)
 
+        # print("Question is",ques)
+        # print("#############")
+        # print("ixs are",token_to_ix)
+        # print("############")
+        
         words = re.sub(
             r"([.,'!?\"()*#:;])",
             '',
-            ques.lower()
+            ques["question"].lower()
         ).replace('-', ' ').replace('/', ' ').split()
         ques_list = list(words)
 

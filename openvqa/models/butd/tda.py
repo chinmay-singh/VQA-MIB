@@ -13,6 +13,7 @@ import torch
 import math
 import cv2
 import numpy as np
+import os
 
 # ------------------------------
 # ----- Weight Normal MLP ------
@@ -116,9 +117,20 @@ class TDA(nn.Module):
 
                 img1[int(y1_coordinate):int(y4_coordinate), int(x1_coordinate):int(x4_coordinate), :] += (255. * float(att_squeezed[i].cpu()))
                 img = cv2.rectangle(img, (x1_coordinate, y1_coordinate), (x4_coordinate, y4_coordinate), (255,0,0), 2)        
+            
+            #making folder for the models name
+            save_dir_attention = 'test_images/attention/'+str(self.__C.MODEL_USE)
+            if not os.path.exists(save_dir_attention):
+                os.mkdir(save_dir_attention)
+            
+            save_dir_bounding_box = 'test_images/bounding_box/'+str(self.__C.MODEL_USE)
+            if not os.path.exists(save_dir_bounding_box):
+                os.mkdir(save_dir_bounding_box)
+            
 
-            cv2.imwrite('test_images/attention/COCO_test2015_' + str(self.__C.IMAGE_ID).zfill(12) + '.jpg', img1)
-            cv2.imwrite('test_images/bounding_box/COCO_test2015_' + str(self.__C.IMAGE_ID).zfill(12) + '.jpg', img)
+
+            cv2.imwrite(save_dir_attention+'/COCO_test2015_' + str(self.__C.IMAGE_ID).zfill(12) + '.jpg', img1)
+            cv2.imwrite(save_dir_bounding_box+'/COCO_test2015_' + str(self.__C.IMAGE_ID).zfill(12) + '.jpg', img)
 
         atted_v = (att * v).sum(1)
         q_repr = self.q_net(q)
