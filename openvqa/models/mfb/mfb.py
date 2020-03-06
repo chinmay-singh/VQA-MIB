@@ -8,6 +8,9 @@ from openvqa.ops.fc import MLP
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import numpy as np
+import cv2
+import os
 
 
 # -------------------------------------------------------------
@@ -90,7 +93,7 @@ class IAtt(nn.Module):
             use_relu=True
         )
 
-    def forward(self, img_feat, ques_att_feat):
+    def forward(self, img_feat, ques_att_feat, bbox_feat):
         '''
             img_feats.size() -> (N, C, FRCN_FEAT_SIZE)
             ques_att_feat.size() -> (N, LSTM_OUT_SIZE * Q_GLIMPSES)
@@ -103,6 +106,67 @@ class IAtt(nn.Module):
         iatt_maps = self.mlp(z)                         # (N, C, I_GLIMPSES)
         iatt_maps = F.softmax(iatt_maps, dim=1)         # (N, C, I_GLIMPSES)
         print("shape of attention map is,     ",iatt_maps.shape)
+
+        #Inserting code to make the attention map
+        if self.__C.USE_NEW_QUESTION == "True":
+        
+            print("plotting attention of objects on image")
+
+            img = cv2.imread('test_images/COCO_test2015_' + str(self.__C.IMAGE_ID).zfill(12) + '.jpg', 3)
+            img1 = np.array(img).astype('float64')
+            img1 = np.copy(img1)
+            img2 = np.copy(img1)
+            
+            bbox_normalized = bbox_feat.squeeze()
+            
+            # att_squeezed = i_att.squeeze()
+            att_squeezed = []
+
+            for i in range(self.__C.I_GLIMPSES):
+                att_squeezed.append(iatt_maps[:, :, i:i + 1].squeeze())
+
+            for i in range(bbox_normalized.shape[0]):
+
+                '''
+                if float(att_squeezed[i]) < 0.09:
+                    continue
+                '''
+                x1_coordinate = bbox_normalized[i][0]*float(img.shape[1])
+                y1_coordinate = bbox_normalized[i][1]*float(img.shape[0])
+
+                x4_coordinate = bbox_normalized[i][2]*float(img.shape[1])
+                y4_coordinate = bbox_normalized[i][3]*float(img.shape[0])
+                
+
+                img1[int(y1_coordinate):int(y4_coordinate), int(x1_coordinate):int(x4_coordinate), :] += (255. * float(att_squeezed[0][i].cpu()))
+                img2[int(y1_coordinate):int(y4_coordinate), int(x1_coordinate):int(x4_coordinate), :] += (255. * float(att_squeezed[1][i].cpu()))
+
+                img = cv2.rectangle(img, (x1_coordinate, y1_coordinate), (x4_coordinate, y4_coordinate), (255,0,0), 2)
+
+
+            #making folder for the models name
+            save_dir_attention = 'test_images/attention/'+str(self.__C.MODEL_USE)
+            if not os.path.exists(save_dir_attention):
+                os.mkdir(save_dir_attention)
+            
+            save_dir_bounding_box = 'test_images/bounding_box/'+str(self.__C.MODEL_USE)
+            if not os.path.exists(save_dir_bounding_box):
+                os.mkdir(save_dir_bounding_box)
+            
+
+
+            cv2.imwrite(save_dir_attention+'/COCO_test2015_' + str(self.__C.IMAGE_ID).zfill(12)+"_glimpse1" + '.jpg', img1)
+            cv2.imwrite(save_dir_attention+'/COCO_test2015_' + str(self.__C.IMAGE_ID).zfill(12)+"_glimpse2" + '.jpg', img2)
+            cv2.imwrite(save_dir_bounding_box+'/COCO_test2015_' + str(self.__C.IMAGE_ID).zfill(12) + '.jpg', img)
+
+            #############################################
+            ########End of Visualization thingy##########
+
+
+
+
+
+
 
         iatt_feat_list = []
         for i in range(self.__C.I_GLIMPSES):
@@ -133,14 +197,14 @@ class CoAtt(nn.Module):
         else:  # MFB
             self.mfb = MFB(__C, img_att_feat_size, ques_att_feat_size, True)
 
-    def forward(self, img_feat, ques_feat):
+    def forward(self, img_feat, ques_feat , bbox_feat):
         '''
             img_feat.size() -> (N, C, FRCN_FEAT_SIZE)
             ques_feat.size() -> (N, T, LSTM_OUT_SIZE)
             z.size() -> MFH:(N, 2*O) / MFB:(N, O)
         '''
         ques_feat = self.q_att(ques_feat)               # (N, LSTM_OUT_SIZE*Q_GLIMPSES)
-        fuse_feat = self.i_att(img_feat, ques_feat)     # (N, FRCN_FEAT_SIZE*I_GLIMPSES)
+        fuse_feat = self.i_att(img_feat, ques_feat, bbox_feat)     # (N, FRCN_FEAT_SIZE*I_GLIMPSES)
 
         if self.__C.HIGH_ORDER:  # MFH
             z1, exp1 = self.mfh1(fuse_feat.unsqueeze(1), ques_feat.unsqueeze(1))        # z1:(N, 1, O)  exp1:(N, C, K*O)

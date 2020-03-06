@@ -15,8 +15,6 @@ from matplotlib.patches import Rectangle
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
-
-
 class DataSet(BaseDataSet):
     def __init__(self, __C):
         super(DataSet, self).__init__()
@@ -32,7 +30,7 @@ class DataSet(BaseDataSet):
                 json.load(open(__C.RAW_PATH[__C.DATASET]['train'], 'r'))['questions'] + \
                 json.load(open(__C.RAW_PATH[__C.DATASET]['val'], 'r'))['questions'] + \
                 json.load(open(__C.RAW_PATH[__C.DATASET]['test'], 'r'))['questions'] + \
-                json.load(open(__C.RAW_PATH[__C.DATASET]['vg'], 'r'))['questions'] 
+                json.load(open(__C.RAW_PATH[__C.DATASET]['vg'], 'r'))['questions']
 
         '''
         stat_ques_list = [
@@ -42,11 +40,12 @@ class DataSet(BaseDataSet):
         '''
 
         # Loading answer word list
-        '''
+        #Might Comment
+
         stat_ans_list = \
                 json.load(open(__C.RAW_PATH[__C.DATASET]['train-anno'], 'r'))['annotations'] + \
                 json.load(open(__C.RAW_PATH[__C.DATASET]['val-anno'], 'r'))['annotations']
-        '''
+        # Might Comment till here
 
         if self.__C.USE_NEW_QUESTION == "False":
 
@@ -65,8 +64,8 @@ class DataSet(BaseDataSet):
             split_list = __C.SPLIT[__C.RUN_MODE].split('+')
             for split in split_list:
                 self.ques_list += json.load(open(__C.RAW_PATH[__C.DATASET][split], 'r'))['questions']
-                if __C.RUN_MODE in ['train']:
-                    self.ans_list += json.load(open(__C.RAW_PATH[__C.DATASET][split + '-anno'], 'r'))['annotations']
+                #if __C.RUN_MODE in ['train']:
+                self.ans_list += json.load(open(__C.RAW_PATH[__C.DATASET][split + '-anno'], 'r'))['annotations']
 
             # Define run data size
             if __C.RUN_MODE in ['train']:
@@ -110,7 +109,6 @@ class DataSet(BaseDataSet):
         from itertools import islice
         print( list(islice(self.qid_to_ques.items(), 2)))
         print( list(islice(self.iid_to_frcn_feat_path.items(), 2)))
-
         qid_to_ques = {
             '458752000': {'image_id': 458752, 'question': 'What is this photo taken looking through?', 'question_id': 458752000},
             '458752001': {'image_id': 458752, 'question': 'What position is this man playing?', 'question_id': 458752001}
@@ -136,41 +134,38 @@ class DataSet(BaseDataSet):
 
         #Edits
         #Added the initialization of these two only when mode is train
-        if __C.RUN_MODE in ['train']:
-            print("Tokenising answers")
-            # No of different words in all answers combined
-
-            # Creates a token_to_ix ans ans pretrained_emb_ans (idx to embedding) for individual words in mutiple_choice_answers
-            self.token_to_ix_ans , self.pretrained_emb_ans = self.tokenize_ans(self.ans_list, __C.USE_GLOVE)
-            self.token_size_ans = self.token_to_ix_ans.__len__()
-            print(" ========== Answer token vocab size: ", self.token_size_ans)
-            '''
-            token_to_ix_ans = {
-                'PAD': 0, 
-                'UNK': 1,
-                'CLS': 2, 
-                'net': 3,
-                'pitcher': 4,
-                'orange': 5,
-                'yes': 6,
-                'white': 7,
-                'skiing': 8,
-                'red': 9,
-                'frisbee': 10,
-                .
-                .
-                .
-            }
-            # To print first 50 items
-            from itertools import islice
-            print( list(islice(self.token_to_ix_ans.items(), 50)))
-            sys.exit(0)
-            '''
+        #if __C.RUN_MODE in ['train']:
+        print("Tokenising answers")
+        # No of different words in all answers combined
+        self.token_to_ix_ans , self.pretrained_emb_ans = self.tokenize_ans(stat_ans_list, __C.USE_GLOVE)
+        self.token_size_ans = self.token_to_ix_ans.__len__()
+        print(" ========== Answer token vocab size: ", self.token_size_ans)
+        '''
+        token_to_ix_ans = {
+            'PAD': 0, 
+            'UNK': 1,
+            'CLS': 2, 
+            'net': 3,
+            'pitcher': 4,
+            'orange': 5,
+            'yes': 6,
+            'white': 7,
+            'skiing': 8,
+            'red': 9,
+            'frisbee': 10,
+            .
+            .
+            .
+        }
+        # To print first 50 items
+        from itertools import islice
+        print( list(islice(self.token_to_ix_ans.items(), 50)))
+        sys.exit(0)
+        '''
 
         #ENd of our edit
 
         ans_freq = 8
-        # gives ans_to_idx and idx_to_ans for all multiple_choice_answer that pass the freq requirement (not individual words)
         self.ans_to_ix, self.ix_to_ans = self.ans_stat_from_file('openvqa/datasets/vqa/answer_dict.json')
         # self.ans_to_ix, self.ix_to_ans = self.ans_stat(stat_ans_list, ans_freq=ans_freq)
         self.ans_size = self.ans_to_ix.__len__()
@@ -338,43 +333,41 @@ class DataSet(BaseDataSet):
 
     def load_ques_ans(self, idx):
         if self.__C.RUN_MODE in ['train']:
-
+            #PUT THE pretrained part all in the train condition
             ans = self.ans_list[idx]
+            ques = self.qid_to_ques[str(ans['question_id'])]
 
-            ques = ans['question']
             ques_type = ans['answer_type']
-            explanation = ans['explanation'][0]
 
             # Begin of edit
-            ans['question'] = ques
+            ans['question'] = ques['question']
             # End of edit
 
-            iid = str(ans['img_id'])
+            iid = str(ans['image_id'])
 
             # Process question
-            ques_list, ques_ix_iter = self.proc_ques(ques, self.token_to_ix, max_token=14)
+            ques_ix_iter = self.proc_ques(ques, self.token_to_ix, max_token=14)
 
             # Process answer
-            # Gets the score array for every possible answer (that is in answer vocab)
             ans_iter = self.proc_ans(ans, self.ans_to_ix)
             
             #Edits
-            if (self.__C.EXPLANATION):
-                ans_ix_iter = self.proc_ans_tokens(ans, self.token_to_ix_ans, max_token = 20)
-            elif (self.__C.AUGMENTED_ANSWER):
+            if (self.__C.AUGMENTED_ANSWER):
                 ans_ix_iter = self.proc_ans_tokens(ans, self.token_to_ix_ans, max_token = 14)
             else:
                 ans_ix_iter = self.proc_ans_tokens(ans, self.token_to_ix_ans, max_token = 4)
             #End of Edits
 
-            return ques_list, ques_ix_iter, ans_ix_iter, ans_iter, iid, ques_type
+            return ques_ix_iter, ans_ix_iter, ans_iter, iid, ques_type
 
         else:
+        
             ques = self.ques_list[idx]
             iid = str(ques['image_id'])
             ques_list, ques_ix_iter = self.proc_ques(ques, self.token_to_ix, max_token=14)
 
             return ques_list, ques_ix_iter, np.zeros(1), np.zeros(1), iid, "testing" # will have to check, at the time of eval how is processing done
+    
 
     def load_img_feats(self, idx, iid):
         frcn_feat = np.load(self.iid_to_frcn_feat_path[iid])
@@ -432,21 +425,15 @@ class DataSet(BaseDataSet):
     def proc_ques(self, ques, token_to_ix, max_token):
         ques_ix = np.zeros(max_token, np.int64)
 
-        # print("Question is",ques)
-        # print("#############")
-        # print("ixs are",token_to_ix)
-        # print("############")
-        
         words = re.sub(
             r"([.,'!?\"()*#:;])",
             '',
-            ques["question"].lower()
+            ques['question'].lower()
         ).replace('-', ' ').replace('/', ' ').split()
         ques_list = list(words)
 
         for ix, word in enumerate(words):
             ques_list[ix] = word
-
             if word in token_to_ix:
                 ques_ix[ix] = token_to_ix[word]
             else:
@@ -462,11 +449,7 @@ class DataSet(BaseDataSet):
     def proc_ans_tokens(self, ans, token_to_ix_ans, max_token):
         ans_ix = np.zeros(max_token, np.int64)
 
-        if (self.__C.EXPLANATION):
-            explanation = ans['explanation'][0]
-            words = prep_ans(explanation).split()
-
-        elif (self.__C.AUGMENTED_ANSWER):
+        if (self.__C.AUGMENTED_ANSWER):
             question = ans['question']
             augmented_ans = re.sub(
                     r"([.,'!?\"()*#:;])",
@@ -513,7 +496,7 @@ class DataSet(BaseDataSet):
         ans_prob_dict = {}
 
         for ans_ in ans['answers']:
-            ans_proc = prep_ans(ans_)
+            ans_proc = prep_ans(ans_['answer'])
             if ans_proc not in ans_prob_dict:
                 ans_prob_dict[ans_proc] = 1
             else:

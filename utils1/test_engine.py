@@ -45,6 +45,8 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
     token_size = dataset.token_size
     ans_size = dataset.ans_size
     pretrained_emb = dataset.pretrained_emb
+    pretrained_emb_ans = dataset.pretrained_emb_ans
+    token_size_ans = dataset.token_size_ans
 
     #Make changes to this Net implementation
     net = ModelLoader(__C).Net(
@@ -53,7 +55,7 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
         token_size,
         ans_size,
         None,                       #Pretrained Embeddings matrix of the answer has to be None if the testing  is running
-        13488    #TODO replace with config variable                      #Size of these embeddings would be this
+        16596    #TODO replace with config variable                      #Size of these embeddings would be this
     )
     net.cuda()
     net.eval()
