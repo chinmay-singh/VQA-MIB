@@ -64,8 +64,9 @@ class DataSet(BaseDataSet):
             split_list = __C.SPLIT[__C.RUN_MODE].split('+')
             for split in split_list:
                 self.ques_list += json.load(open(__C.RAW_PATH[__C.DATASET][split], 'r'))['questions']
-                #if __C.RUN_MODE in ['train']:
-                self.ans_list += json.load(open(__C.RAW_PATH[__C.DATASET][split + '-anno'], 'r'))['annotations']
+
+                if __C.RUN_MODE in ['train']:
+                    self.ans_list += json.load(open(__C.RAW_PATH[__C.DATASET][split + '-anno'], 'r'))['annotations']
 
             # Define run data size
             if __C.RUN_MODE in ['train']:
