@@ -5,7 +5,7 @@
 
 from openvqa.models.model_loader import CfgLoader
 from utils1.exec1 import Execution 
-import argparse, yaml
+import argparse, yaml, json
 
 
 def parse_args():
@@ -207,8 +207,15 @@ if __name__ == '__main__':
     # FINAL PREFERENCE OF CFGS:
     # COMMAND LINE > YAML FILE > MODEL CFGS > BASE CFGS
 
-    print('Hyper Parameters:')
-    print(__C)
+    ques_list = json.load(open('ques_attention_list.json', 'r'))
+    
+    for p in range(100):
+        __C.USE_NEW_QUESTION = 'True'
+        __C.NEW_QUESTION = ques_list[p]['question']
+        __C.IMAGE_ID = ques_list[p]['image_id']
 
-    execution = Execution(__C)
-    execution.run(__C.RUN_MODE)
+        print('Hyper Parameters:')
+        print(__C)
+
+        execution = Execution(__C)
+        execution.run(__C.RUN_MODE)
