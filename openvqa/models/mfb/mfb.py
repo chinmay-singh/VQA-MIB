@@ -108,8 +108,8 @@ class IAtt(nn.Module):
         print("shape of attention map is,     ",iatt_maps.shape)
 
         #Inserting code to make the attention map
-        if self.__C.USE_NEW_QUESTION == "True":
-        
+        if self.__C.USE_NEW_QUESTION == "True":        
+
             print("plotting attention of objects on image")
 
             img = cv2.imread('test_images/COCO_test2015_' + str(self.__C.IMAGE_ID).zfill(12) + '.jpg', 3)
