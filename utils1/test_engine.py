@@ -131,6 +131,8 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
         if __C.USE_NEW_QUESTION == 'True' and pred_np.shape == (3129,):
             pred_np = np.reshape(pred_np, (1, pred_np.shape[0]))
 
+        temp = pred_np.squeeze()
+        res = sorted(range(len(temp)), key = lambda sub: temp[sub])[-5:]
         pred_argmax = np.argmax(pred_np, axis=1)
 
         # Save the answer index
@@ -183,7 +185,7 @@ def test_engine(__C, dataset, state_dict=None, validation=False, epoch = 0):
     else:
         log_file = __C.LOG_PATH + '/log_run_' + __C.VERSION + '.txt'
 
-    EvalLoader(__C).eval(dataset, ans_ix_list, pred_list, result_eval_file, ensemble_file, log_file, validation)
+    EvalLoader(__C).eval(dataset, pred_np, res, ans_ix_list, pred_list, result_eval_file, ensemble_file, log_file, validation)
 
 
 def ckpt_proc(state_dict):
