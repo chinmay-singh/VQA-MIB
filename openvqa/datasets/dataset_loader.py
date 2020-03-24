@@ -25,5 +25,5 @@ class EvalLoader:
         eval_moudle_path = 'openvqa.datasets.' + self.dataset + '.' + 'eval' + '.' + 'result_eval'
         self.eval_moudle = import_module(eval_moudle_path)
 
-    def eval(self, __arg1, __arg2, __arg3, __arg4, __arg5, __arg6, __arg7):
-        return self.eval_moudle.eval(self.__C, __arg1, __arg2, __arg3, __arg4, __arg5, __arg6, __arg7)
+    def eval(self, __arg1, __arg2, __arg3, __arg4, __arg5, __arg6, __arg7, __arg8, __arg9):
+        return self.eval_moudle.eval(self.__C, __arg1, __arg2, __arg3, __arg4, __arg5, __arg6, __arg7, __arg8, __arg9)
