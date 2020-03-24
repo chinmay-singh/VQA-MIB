@@ -112,7 +112,7 @@ class IAtt(nn.Module):
 
             print("plotting attention of objects on image")
 
-            img = cv2.imread('test_images/COCO_test2015_' + str(self.__C.IMAGE_ID).zfill(12) + '.jpg', 3)
+            img = cv2.imread('/mnt/sdb/yash/data_olddirectory/vqa/coco/raw/test2015/COCO_test2015_' + str(self.__C.IMAGE_ID).zfill(12) + '.jpg', 3)
             img1 = np.array(img).astype('float64')
             img1 = np.copy(img1)
             img2 = np.copy(img1)
