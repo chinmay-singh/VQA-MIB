@@ -211,8 +211,8 @@ if __name__ == '__main__':
     
     for p in range(100):
         __C.USE_NEW_QUESTION = 'True'
-        __C.NEW_QUESTION = ques_list[p]['question']
-        __C.IMAGE_ID = ques_list[p]['image_id']
+        __C.NEW_QUESTION = str(ques_list[p]['question'])
+        __C.IMAGE_ID = str(ques_list[p]['image_id'])
 
         print('Hyper Parameters:')
         print(__C)
