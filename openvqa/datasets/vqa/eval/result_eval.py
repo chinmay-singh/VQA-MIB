@@ -20,16 +20,25 @@ def send_message_to_slack(text):
     except Exception as em:
         print("EXCEPTION: " + str(em))
 
-def eval(__C, dataset, ans_ix_list, pred_list, result_eval_file, ensemble_file, log_file, valid=False):
+def eval(__C, dataset, pred_np, res, ans_ix_list, pred_list, result_eval_file, ensemble_file, log_file, valid=False):
     result_eval_file = result_eval_file + '.json'
 
     qid_list = [ques['question_id'] for ques in dataset.ques_list]
     ans_size = dataset.ans_size
-
     result = [{
         'answer': dataset.ix_to_ans[str(ans_ix_list[qix])],
-        # 'answer': dataset.ix_to_ans[ans_ix_list[qix]],
-        'question_id': int(qid_list[qix])
+        'answer_0': dataset.ix_to_ans[str(res[4])],
+        'answer_0_confidence': pred_np[res[4]],
+        'answer_1': dataset.ix_to_ans[str(res[3])],
+        'answer_1_confidence': pred_np[res[3]],
+        'answer_2': dataset.ix_to_ans[str(res[2])],
+        'answer_2_confidence': pred_np[res[2]],
+        'answer_3': dataset.ix_to_ans[str(res[1])],
+        'answer_3_confidence': pred_np[res[1]],
+        'answer_4': dataset.ix_to_ans[str(res[0])],
+        'answer_4_confidence': pred_np[res[0]],
+        'question': __C.NEW_QUESTION,
+        'image_id': __C.IMAGE_ID
     } for qix in range(qid_list.__len__())]
 
     if __C.USE_NEW_QUESTION == "True":
@@ -38,7 +47,11 @@ def eval(__C, dataset, ans_ix_list, pred_list, result_eval_file, ensemble_file, 
         print("")
 
     print('Save the result to file: {}'.format(result_eval_file))
-    json.dump(result, open(result_eval_file, 'w'))
+    temp = []
+    with open(result_eval_file, 'a+', encoding='utf-8') as f:
+        temp = list(f)
+        temp.append(result)
+        json.dump(temp, f, ensure_ascii=False, indent=4)
 
     if __C.TEST_SAVE_PRED:
         print('Save the prediction vector to file: {}'.format(ensemble_file))
