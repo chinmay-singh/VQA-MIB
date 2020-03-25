@@ -145,11 +145,11 @@ class IAtt(nn.Module):
 
 
             #making folder for the models name
-            save_dir_attention = 'test_images/attention/'+str(self.__C.MODEL_USE)
+            save_dir_attention = 'test_images/attention/'+str(self.__C.CKPT_VERSION)
             if not os.path.exists(save_dir_attention):
                 os.mkdir(save_dir_attention)
             
-            save_dir_bounding_box = 'test_images/bounding_box/'+str(self.__C.MODEL_USE)
+            save_dir_bounding_box = 'test_images/bounding_box/'+str(self.__C.CKPT_VERSION)
             if not os.path.exists(save_dir_bounding_box):
                 os.mkdir(save_dir_bounding_box)
             
