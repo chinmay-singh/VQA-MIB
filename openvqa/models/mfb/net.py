@@ -20,6 +20,7 @@ class Net(nn.Module):
     def __init__(self, __C, pretrained_emb, token_size, answer_size, pretrain_emb_ans, token_size_ans):
         super(Net, self).__init__()
         self.__C = __C
+        '''
         if pretrain_emb_ans is None:
             #print("there is some error in this code\n\n")
             print("Evaluation______________________________")
@@ -27,7 +28,7 @@ class Net(nn.Module):
         else:
             print("Training________________________________")
             self.eval_flag = False
-
+        '''
 
         self.embedding = nn.Embedding(
             num_embeddings=token_size,
@@ -44,7 +45,8 @@ class Net(nn.Module):
         )
         self.dropout = nn.Dropout(__C.DROPOUT_R)
         self.dropout_lstm = nn.Dropout(__C.DROPOUT_R)
-
+        
+        '''
         self.adapter = Adapter(__C)
         self.ans_backbone = CoAtt(__C) 
         # this adapter will be used in answer part processing,
@@ -54,11 +56,8 @@ class Net(nn.Module):
         # will be used in the ans part, does not require grads
         for params in self.ans_backbone.parameters():
             params.requires_grad = False
-
+        '''
         self.img_adapter = Adapter(__C)
-        
-
-
         self.backbone = CoAtt(__C)
 
         
@@ -104,16 +103,19 @@ class Net(nn.Module):
             '''
             self.proj = nn.Linear(__C.MFB_O, answer_size)
             
+        '''
         for params in self.proj.parameters():
             params.requires_grad = False
 
         # no grads ---- fixed decoder
 
         '''
+        '''
         for params in self.decoder_mlp_1.parameters():
             params.requires_grad = False
         for params in self.decoder_mlp_2.parameters():
             params.requires_grad = False
+        '''
         '''
         # With Answer
         #if(self.__C.WITH_ANSWER):
@@ -171,6 +173,7 @@ class Net(nn.Module):
         self.z_ans = np.zeros(shape=self.shape)
         self.z_fused = np.zeros(shape=self.shape)
 
+        '''
 
     def forward(self, ques_list, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step, epoch):
 
@@ -212,7 +215,7 @@ class Net(nn.Module):
 
             proj_feat = self.proj(proj_feat)
 
-            if (self.eval_flag == True and self.__C.WITH_ANSWER == True):
+            if (self.__C.WITH_ANSWER == True and self.eval_flag == True):
                 #hack because test_engine expects multiple returns from net but only uses the first
                 return proj_feat, None 
 
