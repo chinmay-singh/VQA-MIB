@@ -1,4 +1,4 @@
-# ProjectX
+# VQA-MIB
 
 <div>
 	<a href="https://openvqa.readthedocs.io/en/latest/?badge=latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/openvqa/badge/?version=latest"/></a>
