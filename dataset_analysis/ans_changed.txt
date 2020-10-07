@@ -1,0 +1,1516 @@
+   3767 Changed: none===========>0
+    587 Changed: no one===========>no 1
+    146 Changed: one way===========>1 way
+    143 Changed: a===========>
+     73 Changed: t-shirt===========>t shirt
+     60 Changed: one on right===========>1 on right
+     58 Changed: one on left===========>1 on left
+     38 Changed: right one===========>right 1
+     34 Changed: mercedes-benz===========>mercedes benz
+     33 Changed: red, white, blue===========>red white blue
+     32 Changed: left one===========>left 1
+     31 Changed: one in front===========>1 in front
+     24 Changed: red, white, and blue===========>red white and blue
+     20 Changed: one in back===========>1 in back
+     20 Changed: 1/4===========>1 4
+     18 Changed: five star===========>5 star
+     17 Changed: red, white and blue===========>red white and blue
+     16 Changed: one world===========>1 world
+     16 Changed: coca-cola===========>coca cola
+     14 Changed: one in middle===========>1 in middle
+     13 Changed: there are none===========>there are 0
+     11 Changed: 4-way===========>4 way
+     11 Changed: 1/3===========>1 3
+     10 Changed: yellow one===========>yellow 1
+     10 Changed: white one===========>white 1
+     10 Changed: the===========>
+     10 Changed: middle one===========>middle 1
+     10 Changed: blue one===========>blue 1
+     10 Changed: 0-0===========>0 0
+      9 Changed: this one===========>this 1
+      9 Changed: red one===========>red 1
+      9 Changed: one piece===========>1 piece
+      9 Changed: black one===========>black 1
+      8 Changed: front one===========>front 1
+      8 Changed: cross-country===========>cross country
+      8 Changed: can't you see it's green?===========>can't you see it's green
+      8 Changed: brown one===========>brown 1
+      8 Changed: all-war===========>all war
+      7 Changed: t-shirt and jeans===========>t shirt and jeans
+      7 Changed: red,white,blue===========>red white blue
+      7 Changed: back one===========>back 1
+      6 Changed: white, blue, yellow===========>white blue yellow
+      6 Changed: white, black===========>white black
+      6 Changed: the secret life of bees===========>secret life of bees
+      6 Changed: there is none===========>there is 0
+      6 Changed: t-ball===========>t ball
+      6 Changed: spritztour - reisen===========>spritztour reisen
+      6 Changed: red, yellow, blue===========>red yellow blue
+      6 Changed: multi-colored===========>multi colored
+      6 Changed: mid-day===========>mid day
+      6 Changed: blue, white===========>blue white
+      6 Changed: big one===========>big 1
+      6 Changed: begin one way street===========>begin 1 way street
+      6 Changed: 3/4===========>3 4
+      6 Changed: 1/2===========>1 2
+      6 Changed: 08/03/2012===========>08 03 2012
+      6 Changed: 03/09/2009===========>03 09 2009
+      6 Changed: !===========>
+      5 Changed: t-shirts===========>t shirts
+      5 Changed: tallest one===========>tallest 1
+      5 Changed: smaller one===========>smaller 1
+      5 Changed: man-made===========>man made
+      5 Changed: green, yellow, red===========>green yellow red
+      5 Changed: green one===========>green 1
+      5 Changed: blue, yellow and red===========>blue yellow and red
+      5 Changed: bigger one===========>bigger 1
+      5 Changed: 5'5"===========>5'5
+      4 Changed: yellow, black===========>yellow black
+      4 Changed: white, blue===========>white blue
+      4 Changed: wall-paper===========>wall paper
+      4 Changed: usopen.org===========>usopenorg
+      4 Changed: two way traffic===========>2 way traffic
+      4 Changed: two way===========>2 way
+      4 Changed: two people===========>2 people
+      4 Changed: red, yellow and green===========>red yellow and green
+      4 Changed: red, blue, white===========>red blue white
+      4 Changed: red, black, yellow===========>red black yellow
+      4 Changed: pepperoni, sausage, cheese===========>pepperoni sausage cheese
+      4 Changed: one way sign===========>1 way sign
+      4 Changed: one in blue===========>1 in blue
+      4 Changed: not a through street===========>not through street
+      4 Changed: no one is sitting===========>no 1 is sitting
+      4 Changed: no one is home===========>no 1 is home
+      4 Changed: melon, pineapple, grape===========>melon pineapple grape
+      4 Changed: left-wing===========>left wing
+      4 Changed: l-4===========>l 4
+      4 Changed: jackson-triggs===========>jackson triggs
+      4 Changed: j-868===========>j 868
+      4 Changed: j-144===========>j 144
+      4 Changed: j-063===========>j 063
+      4 Changed: j-009===========>j 009
+      4 Changed: high five===========>high 5
+      4 Changed: hang ten===========>hang 10
+      4 Changed: green, black and white===========>green black and white
+      4 Changed: e-on===========>e on
+      4 Changed: e-13===========>e 13
+      4 Changed: d-etel===========>d etel
+      4 Changed: d-eoju===========>d eoju
+      4 Changed: closest one===========>closest 1
+      4 Changed: can-am===========>can am
+      4 Changed: b/w===========>b w
+      4 Changed: blue, white and red===========>blue white and red
+      4 Changed: blue, green===========>blue green
+      4 Changed: black, white, gray===========>black white gray
+      4 Changed: black, white and yellow===========>black white and yellow
+      4 Changed: batter, catcher, umpire===========>batter catcher umpire
+      4 Changed: a praying life===========>praying life
+      4 Changed: all-way===========>all way
+      4 Changed: 855-441-1300===========>855 441 1300
+      4 Changed: 7-11===========>7 11
+      4 Changed: 6"===========>6
+      4 Changed: 40-50===========>40 50
+      4 Changed: 27/08/2011===========>27 08 2011
+      4 Changed: 22-296===========>22 296
+      4 Changed: 2037/01/13===========>2037 01 13
+      4 Changed: 2-0===========>2 0
+      4 Changed: 189 060-7===========>189 060 7
+      4 Changed: 185 334-7===========>185 334 7
+      4 Changed: 185 196-3===========>185 196 3
+      4 Changed: 12/17/2012===========>12 17 2012
+      4 Changed: 103 245-7===========>103 245 7
+      4 Changed: 10/19/2004===========>10 19 2004
+      4 Changed: 1010 003-0===========>1010 003 0
+      4 Changed: 06/24/2003===========>06 24 2003
+      4 Changed: 02/10/2009===========>02 10 2009
+      4 Changed: 02/07/2012===========>02 07 2012
+      4 Changed: 01/06/2008===========>01 06 2008
+      3 Changed: zero===========>0
+      3 Changed: yellow, red, green===========>yellow red green
+      3 Changed: yellow, red, blue===========>yellow red blue
+      3 Changed: yellow, orange, green===========>yellow orange green
+      3 Changed: wwwgo-metrocom===========>wwwgo metrocom
+      3 Changed: winnie the pooh===========>winnie pooh
+      3 Changed: white, red===========>white red
+      3 Changed: white, green and blue===========>white green and blue
+      3 Changed: u-turn===========>u turn
+      3 Changed: right side-up===========>right side up
+      3 Changed: red, yellow===========>red yellow
+      3 Changed: red, yellow and white===========>red yellow and white
+      3 Changed: red, white, gray===========>red white gray
+      3 Changed: red, white, blue, yellow===========>red white blue yellow
+      3 Changed: red, white and black===========>red white and black
+      3 Changed: red/green===========>red green
+      3 Changed: red, gray===========>red gray
+      3 Changed: pink, black, white===========>pink black white
+      3 Changed: oral-b===========>oral b
+      3 Changed: one laying down===========>1 laying down
+      3 Changed: one in blue shirt===========>1 in blue shirt
+      3 Changed: little one===========>little 1
+      3 Changed: knife, fork===========>knife fork
+      3 Changed: green, yellow, white===========>green yellow white
+      3 Changed: green, white===========>green white
+      3 Changed: green beans, carrots===========>green beans carrots
+      3 Changed: go one way===========>go 1 way
+      3 Changed: fork, knife, spoon===========>fork knife spoon
+      3 Changed: first one===========>first 1
+      3 Changed: closer one===========>closer 1
+      3 Changed: brown, white===========>brown white
+      3 Changed: brown, black, white===========>brown black white
+      3 Changed: bottom one===========>bottom 1
+      3 Changed: black, white===========>black white
+      3 Changed: black, red===========>black red
+      3 Changed: 7am-7pm===========>7am 7pm
+      3 Changed: 27"===========>27
+      3 Changed: 2/3===========>2 3
+      3 Changed: 12"===========>12
+      3 Changed: 10,000 feet===========>10000 feet
+      2 Changed: zu-fbc===========>zu fbc
+      2 Changed: zot! zot! zot!===========>zot zot zot
+      2 Changed: zebras, giraffes===========>zebras giraffes
+      2 Changed: zebra, ox===========>zebra ox
+      2 Changed: zebra, giraffe===========>zebra giraffe
+      2 Changed: zakuro 2f+===========>zakuro 2f
+      2 Changed: yellow, white, pink===========>yellow white pink
+      2 Changed: yellow, white, blue===========>yellow white blue
+      2 Changed: yellow, silver===========>yellow silver
+      2 Changed: yellow, pink, purple, blue, green===========>yellow pink purple blue green
+      2 Changed: yellow, pink, green, blue===========>yellow pink green blue
+      2 Changed: yellow, orange, white===========>yellow orange white
+      2 Changed: yellow, orange, black, red and green===========>yellow orange black red and green
+      2 Changed: yellow, orange, and green===========>yellow orange and green
+      2 Changed: yellow, green===========>yellow green
+      2 Changed: yellow, green, pink, and blue===========>yellow green pink and blue
+      2 Changed: yellow, green, blue, red===========>yellow green blue red
+      2 Changed: yellow, gray===========>yellow gray
+      2 Changed: yellow, for shade===========>yellow for shade
+      2 Changed: yellow bus/certain route===========>yellow bus certain route
+      2 Changed: yellow, blue===========>yellow blue
+      2 Changed: yellow, blue, silver===========>yellow blue silver
+      2 Changed: yellow, blue, red===========>yellow blue red
+      2 Changed: yellow, blue, red, orange, pink, purple,===========>yellow blue red orange pink purple
+      2 Changed: yellow, blue, red, black===========>yellow blue red black
+      2 Changed: yellow, blue, purple===========>yellow blue purple
+      2 Changed: yellow, blue and white===========>yellow blue and white
+      2 Changed: yellow, black and white===========>yellow black and white
+      2 Changed: yellow and pink one===========>yellow and pink 1
+      2 Changed: yahoo! mascot===========>yahoo mascot
+      2 Changed: x-ray vision===========>x ray vision
+      2 Changed: world war i remembrance, royal british legion===========>world war i remembrance royal british legion
+      2 Changed: won't kill you!===========>won't kill you
+      2 Changed: wi-fi===========>wi fi
+      2 Changed: wide-angle===========>wide angle
+      2 Changed: why knot?===========>why knot
+      2 Changed: who are you?===========>who are you
+      2 Changed: white, yellow, red, and purple===========>white yellow red and purple
+      2 Changed: white,yellow,green, purple===========>whiteyellowgreen purple
+      2 Changed: white, yellow, black===========>white yellow black
+      2 Changed: white, yellow and blue===========>white yellow and blue
+      2 Changed: white, yellow and black===========>white yellow and black
+      2 Changed: white/red===========>white red
+      2 Changed: white, red, green, blue===========>white red green blue
+      2 Changed: white, red, brown===========>white red brown
+      2 Changed: white, red, black===========>white red black
+      2 Changed: white, purple===========>white purple
+      2 Changed: white, orange, green, and red===========>white orange green and red
+      2 Changed: white, green===========>white green
+      2 Changed: white, green, red and blue===========>white green red and blue
+      2 Changed: white, green, orange===========>white green orange
+      2 Changed: white, gray===========>white gray
+      2 Changed: white, gray, black===========>white gray black
+      2 Changed: white, gray and orange===========>white gray and orange
+      2 Changed: white-collared===========>white collared
+      2 Changed: white, brown===========>white brown
+      2 Changed: white, brown, blue===========>white brown blue
+      2 Changed: white, brown, blonde===========>white brown blonde
+      2 Changed: white, blue, red===========>white blue red
+      2 Changed: white, blue, pink, green, yellow===========>white blue pink green yellow
+      2 Changed: white, blue, and red===========>white blue and red
+      2 Changed: white, blue and red===========>white blue and red
+      2 Changed: white, blue, and purple stripes===========>white blue and purple stripes
+      2 Changed: white, black, red===========>white black red
+      2 Changed: white, black, brown===========>white black brown
+      2 Changed: white, black and orange===========>white black and orange
+      2 Changed: wheeling, wv===========>wheeling wv
+      2 Changed: "what";shirt and pants===========>what shirt and pants
+      2 Changed: what do you think litchattics?===========>what do you think litchattics
+      2 Changed: westjet.com===========>westjetcom
+      2 Changed: way to go!===========>way to go
+      2 Changed: wayland, michigan===========>wayland michigan
+      2 Changed: wall-e===========>wall e
+      2 Changed: waffles,pancakes,bacon,hashbrown's,grits===========>waffles pancakes bacon hashbrown's grits
+      2 Changed: waffles, ham, potatoes and orange juice===========>waffles ham potatoes and orange juice
+      2 Changed: w 31, dyer===========>w 31 dyer
+      2 Changed: w 25 1/2 st===========>w 25 1 2 st
+      2 Changed: volga-dnepr===========>volga dnepr
+      2 Changed: vita-mix===========>vita mix
+      2 Changed: visa/mastercard===========>visa mastercard
+      2 Changed: venice beach, california===========>venice beach california
+      2 Changed: vegetable, grains===========>vegetable grains
+      2 Changed: vans "off wall"===========>vans off wall
+      2 Changed: use scissors,then band aid===========>use scissors then band aid
+      2 Changed: upside-down===========>upside down
+      2 Changed: upper-left===========>upper left
+      2 Changed: unibaseball.org===========>unibaseballorg
+      2 Changed: umbrella says "i love rain"===========>umbrella says i love rain
+      2 Changed: u-25159===========>u 25159
+      2 Changed: two wheel===========>2 wheel
+      2 Changed: two-tone===========>2 tone
+      2 Changed: two story===========>2 story
+      2 Changed: two signs===========>2 signs
+      2 Changed: two roots===========>2 roots
+      2 Changed: two men playing wii===========>2 men playing wii
+      2 Changed: two and half men===========>2 and half men
+      2 Changed: t-shirt and shorts===========>t shirt and shorts
+      2 Changed: t-rex===========>t rex
+      2 Changed: towards him/her===========>towards him her
+      2 Changed: top one===========>top 1
+      2 Changed: toothpaste, toothbrushes===========>toothpaste toothbrushes
+      2 Changed: toothbrush, camera===========>toothbrush camera
+      2 Changed: tom - you have supply's on dock thanks===========>tom you have supply's on dock thanks
+      2 Changed: tomato, spinach, onion, goat cheese===========>tomato spinach onion goat cheese
+      2 Changed: tomato, pineapple===========>tomato pineapple
+      2 Changed: tomato, olives, cheese===========>tomato olives cheese
+      2 Changed: tomato, olives and cheese===========>tomato olives and cheese
+      2 Changed: tomatoes, cheese===========>tomatoes cheese
+      2 Changed: tomato, cheese, ham===========>tomato cheese ham
+      2 Changed: tomato, broccoli, carrot, potato, zucchini===========>tomato broccoli carrot potato zucchini
+      2 Changed: toast, bacon, egg===========>toast bacon egg
+      2 Changed: tired one===========>tired 1
+      2 Changed: tin/concrete===========>tin concrete
+      2 Changed: time-lapse===========>time lapse
+      2 Changed: tilt-shift===========>tilt shift
+      2 Changed: three-legged mare===========>3 legged mare
+      2 Changed: the temple bar===========>temple bar
+      2 Changed: the tar sands===========>tar sands
+      2 Changed: the skeptic===========>skeptic
+      2 Changed: there isn't one===========>there isn't 1
+      2 Changed: the red bus===========>red bus
+      2 Changed: the original tour===========>original tour
+      2 Changed: the original sightseeing tour===========>original sightseeing tour
+      2 Changed: the optical center===========>optical center
+      2 Changed: the onion===========>onion
+      2 Changed: the lucky taco===========>lucky taco
+      2 Changed: the lion===========>lion
+      2 Changed: the lab===========>lab
+      2 Changed: the hate===========>hate
+      2 Changed: the harvey girls===========>harvey girls
+      2 Changed: the greatest show on earth===========>greatest show on earth
+      2 Changed: the cowshed===========>cowshed
+      2 Changed: the clock===========>clock
+      2 Changed: the buskers===========>buskers
+      2 Changed: the bitter end===========>bitter end
+      2 Changed: than people? #litchat===========>than people #litchat
+      2 Changed: thank you for your business!===========>thank you for your business
+      2 Changed: terrasse-dufferin===========>terrasse dufferin
+      2 Changed: tan, red, blue===========>tan red blue
+      2 Changed: taller one===========>taller 1
+      2 Changed: t33-2068===========>t33 2068
+      2 Changed: sv-6260===========>sv 6260
+      2 Changed: sushi, broccoli, noodles, rice===========>sushi broccoli noodles rice
+      2 Changed: sunexpress.com===========>sunexpresscom
+      2 Changed: suit, shirt===========>suit shirt
+      2 Changed: strawberry, kiwi, banana, pineapple===========>strawberry kiwi banana pineapple
+      2 Changed: strawberries, blueberries===========>strawberries blueberries
+      2 Changed: strawberries, blueberries, kiwi and oranges===========>strawberries blueberries kiwi and oranges
+      2 Changed: strawberries, bananas, blueberries===========>strawberries bananas blueberries
+      2 Changed: straight, left, u-turn===========>straight left u turn
+      2 Changed: stove, fridge===========>stove fridge
+      2 Changed: stop marks, dividing lanes===========>stop marks dividing lanes
+      2 Changed: stop 9-11 cover-up===========>stop 9 11 cover up
+      2 Changed: sterling.eu===========>sterlingeu
+      2 Changed: stadium-style===========>stadium style
+      2 Changed: sp-yyy===========>sp yyy
+      2 Changed: spoon, knife and fork===========>spoon knife and fork
+      2 Changed: sp-kan===========>sp kan
+      2 Changed: spinach, tomatoes, and wheat===========>spinach tomatoes and wheat
+      2 Changed: spinach, pepperoni, cheese and sauce===========>spinach pepperoni cheese and sauce
+      2 Changed: spider!===========>spider
+      2 Changed: south common, westwood, ridgeway===========>south common westwood ridgeway
+      2 Changed: south america, africa and australia===========>south america africa and australia
+      2 Changed: some containers, cell phone, keys, plant, paper on display===========>some containers cell phone keys plant paper on display
+      2 Changed: soda,water===========>soda water
+      2 Changed: soda, candy, ice cream===========>soda candy ice cream
+      2 Changed: skiing, snowboarding===========>skiing snowboarding
+      2 Changed: silver, red, blue===========>silver red blue
+      2 Changed: signal_jam===========>signal jam
+      2 Changed: shorts, t shirt===========>shorts t shirt
+      2 Changed: shorter one===========>shorter 1
+      2 Changed: sept 26, 2013===========>sept 26 2013
+      2 Changed: save a life===========>save life
+      2 Changed: sausage, peppers, onion===========>sausage peppers onion
+      2 Changed: sausage,peppers, mushrooms===========>sausagepeppers mushrooms
+      2 Changed: sausage, ham, egg===========>sausage ham egg
+      2 Changed: sausage, broccoli===========>sausage broccoli
+      2 Changed: sandwich, chips===========>sandwich chips
+      2 Changed: sandwich, chips, and pickles===========>sandwich chips and pickles
+      2 Changed: sandwich, chips, and pickle===========>sandwich chips and pickle
+      2 Changed: san antonio, texas===========>san antonio texas
+      2 Changed: salami, ham, pepperoncini, mushroom===========>salami ham pepperoncini mushroom
+      2 Changed: saint-mathieu and baile===========>saint mathieu and baile
+      2 Changed: safety/security/traffic patrol===========>safety security traffic patrol
+      2 Changed: s-6414-86===========>s 6414 86
+      2 Changed: russell road, princes street===========>russell road princes street
+      2 Changed: rudi-dutschke-strasse===========>rudi dutschke strasse
+      2 Changed: ronald-reagan-allee===========>ronald reagan allee
+      2 Changed: rnli 16-23===========>rnli 16 23
+      2 Changed: ripe one===========>ripe 1
+      2 Changed: rice, olives, broccoli, beans, peas, corn and carrots===========>rice olives broccoli beans peas corn and carrots
+      2 Changed: rice, broccoli chicken===========>rice broccoli chicken
+      2 Changed: refrigerator, dishwasher, microwave, coffee maker===========>refrigerator dishwasher microwave coffee maker
+      2 Changed: refrigerator, blender, stove, coffee maker===========>refrigerator blender stove coffee maker
+      2 Changed: red, yellow, white===========>red yellow white
+      2 Changed: red, yellow, white and blue===========>red yellow white and blue
+      2 Changed: red/yellow===========>red yellow
+      2 Changed: red, yellow, orange===========>red yellow orange
+      2 Changed: red, yellow, green===========>red yellow green
+      2 Changed: red, yellow, black, brown===========>red yellow black brown
+      2 Changed: red, white, tan, purple===========>red white tan purple
+      2 Changed: red, white, green===========>red white green
+      2 Changed: red, white, black===========>red white black
+      2 Changed: red, orange, yellow, green===========>red orange yellow green
+      2 Changed: red, orange, black, white===========>red orange black white
+      2 Changed: red,orange and yellow===========>red orange and yellow
+      2 Changed: red, orange, and yellow===========>red orange and yellow
+      2 Changed: red, green, yellow===========>red green yellow
+      2 Changed: red, green, yellow, blue===========>red green yellow blue
+      2 Changed: red, green, orange===========>red green orange
+      2 Changed: red, green, blue, yellow===========>red green blue yellow
+      2 Changed: red,green,blue===========>red green blue
+      2 Changed: red, green and black===========>red green and black
+      2 Changed: red/gray and white/gray===========>red gray and white gray
+      2 Changed: red, cream, brown striped===========>red cream brown striped
+      2 Changed: red,blue,yellow,black===========>red blue yellow black
+      2 Changed: red, blue, white, blue===========>red blue white blue
+      2 Changed: red, blue, green, yellow, purple===========>red blue green yellow purple
+      2 Changed: red, blue, green===========>red blue green
+      2 Changed: red, blue, black===========>red blue black
+      2 Changed: red, blue and yellow===========>red blue and yellow
+      2 Changed: red, blue and white===========>red blue and white
+      2 Changed: red & black, gray===========>red & black gray
+      2 Changed: red, black, and blue===========>red black and blue
+      2 Changed: ra-3560k===========>ra 3560k
+      2 Changed: queen of england, prince charles ,and camilla===========>queen of england prince charles and camilla
+      2 Changed: q-tip===========>q tip
+      2 Changed: purse, pens, phone, keys, card, lighter, mp3, lipstick lip gloss, sunglasses===========>purse pens phone keys card lighter mp3 lipstick lip gloss sunglasses
+      2 Changed: purple,tan,black===========>purple tan black
+      2 Changed: purple, orange===========>purple orange
+      2 Changed: purple one===========>purple 1
+      2 Changed: pro-one===========>pro 1
+      2 Changed: pow-mia===========>pow mia
+      2 Changed: potato, carrot, corn, tomato===========>potato carrot corn tomato
+      2 Changed: post-its===========>post its
+      2 Changed: play-doh===========>play doh
+      2 Changed: place jacques-cartier===========>place jacques cartier
+      2 Changed: pizza, fries, meat, slaw===========>pizza fries meat slaw
+      2 Changed: pizza, fires, chocolate covered strawberries, cake===========>pizza fires chocolate covered strawberries cake
+      2 Changed: pitbull, doberman mutt===========>pitbull doberman mutt
+      2 Changed: pink, yellow , purple, green and blue===========>pink yellow purple green and blue
+      2 Changed: pink, yellow, blue, and white===========>pink yellow blue and white
+      2 Changed: pink, yellow, and orange===========>pink yellow and orange
+      2 Changed: pink, white, yellow, brown===========>pink white yellow brown
+      2 Changed: pink shirt, black pants===========>pink shirt black pants
+      2 Changed: pink, purple, yellow===========>pink purple yellow
+      2 Changed: pink, purple, green, white===========>pink purple green white
+      2 Changed: pink, green and yellow===========>pink green and yellow
+      2 Changed: pink, blue, lime green===========>pink blue lime green
+      2 Changed: pink, blue, green===========>pink blue green
+      2 Changed: pink, black, blue, yellow, white===========>pink black blue yellow white
+      2 Changed: pickles, bacon, ketchup, mustard===========>pickles bacon ketchup mustard
+      2 Changed: phone, answering machine, newspaper===========>phone answering machine newspaper
+      2 Changed: ph-hrk===========>ph hrk
+      2 Changed: ph-bea===========>ph bea
+      2 Changed: petitplat by sk_===========>petitplat by sk
+      2 Changed: pete's bar-b-que===========>pete's bar b que
+      2 Changed: peppers, sausage===========>peppers sausage
+      2 Changed: peppers,red onions, spinach and mushrooms===========>peppersred onions spinach and mushrooms
+      2 Changed: peppers, onions, mushrooms===========>peppers onions mushrooms
+      2 Changed: pepperoni, onions===========>pepperoni onions
+      2 Changed: pepperoni, olives, cheese===========>pepperoni olives cheese
+      2 Changed: pepperoni, olives, cheese and sausage===========>pepperoni olives cheese and sausage
+      2 Changed: pepperoni, cheese, olive===========>pepperoni cheese olive
+      2 Changed: pedestrian, bicycle, car===========>pedestrian bicycle car
+      2 Changed: peb-5250===========>peb 5250
+      2 Changed: peas, tomatoes, peppers===========>peas tomatoes peppers
+      2 Changed: pears, avocados, bananas===========>pears avocados bananas
+      2 Changed: pb-58-02===========>pb 58 02
+      2 Changed: pawn gold, jewelry, and others===========>pawn gold jewelry and others
+      2 Changed: pasta/broccoli===========>pasta broccoli
+      2 Changed: otto veterans god bless the usa===========>otto veterans god bless usa
+      2 Changed: orange, yellow, red===========>orange yellow red
+      2 Changed: orange, yellow, blue & purple===========>orange yellow blue & purple
+      2 Changed: orange, white, yellow and purple===========>orange white yellow and purple
+      2 Changed: orange, white, blue===========>orange white blue
+      2 Changed: orange, white and yellow===========>orange white and yellow
+      2 Changed: orange, white, and black===========>orange white and black
+      2 Changed: orange, toast, jelly===========>orange toast jelly
+      2 Changed: oranges, tomatoes, and small melons===========>oranges tomatoes and small melons
+      2 Changed: oranges, peppers, apples===========>oranges peppers apples
+      2 Changed: oranges, melons===========>oranges melons
+      2 Changed: oranges, mango===========>oranges mango
+      2 Changed: orange, red, blue===========>orange red blue
+      2 Changed: orange, red, blue and yellow===========>orange red blue and yellow
+      2 Changed: orange, pineapple, strawberry===========>orange pineapple strawberry
+      2 Changed: orange, lemon, mini lemons===========>orange lemon mini lemons
+      2 Changed: orange juice, milk beer, soda===========>orange juice milk beer soda
+      2 Changed: orange, green,yellow===========>orange greenyellow
+      2 Changed: orange, green, blue, white===========>orange green blue white
+      2 Changed: orange, black, off white===========>orange black off white
+      2 Changed: open one===========>open 1
+      2 Changed: only one===========>only 1
+      2 Changed: onions, pickles===========>onions pickles
+      2 Changed: onions, ketchup, relish===========>onions ketchup relish
+      2 Changed: on four legs===========>on 4 legs
+      2 Changed: one with frisbee===========>1 with frisbee
+      2 Changed: one wearing black===========>1 wearing black
+      2 Changed: one way, stop===========>1 way stop
+      2 Changed: one tree hill===========>1 tree hill
+      2 Changed: one that takes her home===========>1 that takes her home
+      2 Changed: one that says it===========>1 that says it
+      2 Changed: one sweet ride===========>1 sweet ride
+      2 Changed: one standing===========>1 standing
+      2 Changed: one sitting===========>1 sitting
+      2 Changed: one plays music===========>1 plays music
+      2 Changed: one on snowmobile===========>1 on snowmobile
+      2 Changed: one on phone===========>1 on phone
+      2 Changed: one on keyboard===========>1 on keyboard
+      2 Changed: one on far left===========>1 on far left
+      2 Changed: one on bench===========>1 on bench
+      2 Changed: one night stand===========>1 night stand
+      2 Changed: one man is on phone and other is looking at pictures on his camera===========>1 man is on phone and other is looking at pictures on his camera
+      2 Changed: one lane===========>1 lane
+      2 Changed: one is woman===========>1 is woman
+      2 Changed: one is standing===========>1 is standing
+      2 Changed: one is real===========>1 is real
+      2 Changed: one is in dress===========>1 is in dress
+      2 Changed: one is easier to type on===========>1 is easier to type on
+      2 Changed: one is baby===========>1 is baby
+      2 Changed: one in water===========>1 in water
+      2 Changed: one in robe===========>1 in robe
+      2 Changed: one in corner===========>1 in corner
+      2 Changed: one holding surfboard===========>1 holding surfboard
+      2 Changed: one has motor===========>1 has motor
+      2 Changed: one has dress one has shorts===========>1 has dress 1 has shorts
+      2 Changed: one closest to camera===========>1 closest to camera
+      2 Changed: one by net===========>1 by net
+      2 Changed: one at back===========>1 at back
+      2 Changed: one above lake===========>1 above lake
+      2 Changed: one===========>1
+      2 Changed: olives, tomatoes, cheese===========>olives tomatoes cheese
+      2 Changed: olives, onions, tomatoes===========>olives onions tomatoes
+      2 Changed: olives, cheese, bacon===========>olives cheese bacon
+      2 Changed: olives, basil, mozzarella cheese===========>olives basil mozzarella cheese
+      2 Changed: olive, parsley, rosemary, thyme, bay===========>olive parsley rosemary thyme bay
+      2 Changed: olive,onions,tomato===========>olive onions tomato
+      2 Changed: olf-e11===========>olf e11
+      2 Changed: olde nj ave 1/2 off drinks 4-7===========>olde nj ave 1 2 off drinks 4 7
+      2 Changed: old, brick===========>old brick
+      2 Changed: oh come let us adore them, they're orangey===========>oh come let us adore them they're orangey
+      2 Changed: oatmeal, cinnamon, banana, butter, chocolate chips, nuts===========>oatmeal cinnamon banana butter chocolate chips nuts
+      2 Changed: nv2-193===========>nv2 193
+      2 Changed: nu-venture===========>nu venture
+      2 Changed: not english- can't read it===========>not english can't read it
+      2 Changed: not a thru street===========>not thru street
+      2 Changed: no one wants to eat it yet===========>no 1 wants to eat it yet
+      2 Changed: no one is watching===========>no 1 is watching
+      2 Changed: no one is watching it===========>no 1 is watching it
+      2 Changed: no one is using it===========>no 1 is using it
+      2 Changed: no one is there===========>no 1 is there
+      2 Changed: non-potable water do not drink===========>non potable water do not drink
+      2 Changed: non-english===========>non english
+      2 Changed: no, 1===========>no 1
+      2 Changed: nick -a- nees===========>nick nees
+      2 Changed: new york, philadelphia, chicago===========>new york philadelphia chicago
+      2 Changed: nanny, not recently===========>nanny not recently
+      2 Changed: my two cats===========>my 2 cats
+      2 Changed: mustard, chili, onion===========>mustard chili onion
+      2 Changed: mustard, cheese, peppers===========>mustard cheese peppers
+      2 Changed: muskoka, canada===========>muskoka canada
+      2 Changed: mushroom, spinach, tomato, broccoli===========>mushroom spinach tomato broccoli
+      2 Changed: museum, zoo===========>museum zoo
+      2 Changed: museum; prolly in past wars===========>museum prolly in past wars
+      2 Changed: multi-paned===========>multi paned
+      2 Changed: mta metro-north===========>mta metro north
+      2 Changed: motorcycle, suv===========>motorcycle suv
+      2 Changed: mother/child===========>mother child
+      2 Changed: mon-sat 8am-6pm===========>mon sat 8am 6pm
+      2 Changed: milk, meat, cheese===========>milk meat cheese
+      2 Changed: milk, juice===========>milk juice
+      2 Changed: mid-way===========>mid way
+      2 Changed: mid-state service, inc operator===========>mid state service inc operator
+      2 Changed: microwave, toaster, coffee maker===========>microwave toaster coffee maker
+      2 Changed: mi-49682===========>mi 49682
+      2 Changed: mhbaker.com===========>mhbakercom
+      2 Changed: merge, don't turn, construction site===========>merge don't turn construction site
+      2 Changed: meine-reiseberichtenet===========>meine reiseberichtenet
+      2 Changed: meat, peas, carrots cauliflower lettuce===========>meat peas carrots cauliflower lettuce
+      2 Changed: md - del line rd===========>md del line rd
+      2 Changed: mayonnaise, relish===========>mayonnaise relish
+      2 Changed: mayonnaise, ketchup, chili===========>mayonnaise ketchup chili
+      2 Changed: maybe he is waiting for other one to finish===========>maybe he is waiting for other 1 to finish
+      2 Changed: may 15, 2011===========>may 15 2011
+      2 Changed: mashed potatoes, onions, peas, carrots===========>mashed potatoes onions peas carrots
+      2 Changed: march 19, 2008===========>march 19 2008
+      2 Changed: many, at least 20===========>many at least 20
+      2 Changed: man - right===========>man right
+      2 Changed: man-made sanctuary===========>man made sanctuary
+      2 Changed: m5 via 5av/bway===========>m5 via 5av bway
+      2 Changed: lowest one===========>lowest 1
+      2 Changed: lower one===========>lower 1
+      2 Changed: love park? help feed meter!===========>love park help feed meter
+      2 Changed: long one===========>long 1
+      2 Changed: long-haired cows===========>long haired cows
+      2 Changed: london, new york, berlin, tokyo===========>london new york berlin tokyo
+      2 Changed: lion, panda and elephant===========>lion panda and elephant
+      2 Changed: lime, banana, apple===========>lime banana apple
+      2 Changed: lighter-colored one===========>lighter colored 1
+      2 Changed: liberty, equality, brotherhood===========>liberty equality brotherhood
+      2 Changed: let us c++===========>let us c
+      2 Changed: lettuce, tomato, onion===========>lettuce tomato onion
+      2 Changed: lettuce, tomato, mushroom===========>lettuce tomato mushroom
+      2 Changed: lettuce, tomato===========>lettuce tomato
+      2 Changed: lettuce, broccoli and tomato===========>lettuce broccoli and tomato
+      2 Changed: less than one week===========>less than 1 week
+      2 Changed: leonidas_smith 1866 2013===========>leonidas smith 1866 2013
+      2 Changed: lemons,apples,and bananas===========>lemons apples and bananas
+      2 Changed: left waiting again, because===========>left waiting again because
+      2 Changed: left-most===========>left most
+      2 Changed: leeks, carrots, potatoes, parsley===========>leeks carrots potatoes parsley
+      2 Changed: lebe deinen traum!===========>lebe deinen traum
+      2 Changed: lb-0816===========>lb 0816
+      2 Changed: laptop, cell phone and tablet===========>laptop cell phone and tablet
+      2 Changed: lamp, binoculars and book===========>lamp binoculars and book
+      2 Changed: knife,spoon,fork===========>knife spoon fork
+      2 Changed: knife, fork, spoon===========>knife fork spoon
+      2 Changed: knife, fork and spoon===========>knife fork and spoon
+      2 Changed: knee pads, elbow pads, helmet===========>knee pads elbow pads helmet
+      2 Changed: knee-length===========>knee length
+      2 Changed: kiwi, grapes, pineapple, strawberries, and pineapple===========>kiwi grapes pineapple strawberries and pineapple
+      2 Changed: kid,skateboard,hurdle===========>kid skateboard hurdle
+      2 Changed: kickerclub.com===========>kickerclubcom
+      2 Changed: keyboards,computer mouse and wires===========>keyboards computer mouse and wires
+      2 Changed: keyboard, mouse, booklet===========>keyboard mouse booklet
+      2 Changed: ketchup, onions===========>ketchup onions
+      2 Changed: ketchup, mustard, tomato, onion, cucumber===========>ketchup mustard tomato onion cucumber
+      2 Changed: ketchup, mustard, relish===========>ketchup mustard relish
+      2 Changed: karl-marx-allee===========>karl marx allee
+      2 Changed: july 6, 2008===========>july 6 2008
+      2 Changed: julia louis-dreyfus===========>julia louis dreyfus
+      2 Changed: jo@tw===========>jo tw
+      2 Changed: jordaan westerkerk anne frank huis homo - monument===========>jordaan westerkerk anne frank huis homo monument
+      2 Changed: jeans, t shirt and coat===========>jeans t shirt and coat
+      2 Changed: j-donuts===========>j donuts
+      2 Changed: jack (unknown) stadium court===========>jack unknown stadium court
+      2 Changed: j-52z===========>j 52z
+      2 Changed: j-520===========>j 520
+      2 Changed: j-018===========>j 018
+      2 Changed: j-011===========>j 011
+      2 Changed: it's on, dude===========>it's on dude
+      2 Changed: identification / tagging===========>identification tagging
+      2 Changed: icing, cake===========>icing cake
+      2 Changed: ibm, garnier===========>ibm garnier
+      2 Changed: hush puppies, lettuce, broccoli===========>hush puppies lettuce broccoli
+      2 Changed: hot + spicy===========>hot spicy
+      2 Changed: hot sauce bottle, glass of tea===========>hot sauce bottle glass of tea
+      2 Changed: hot dogs, fries, ketchup and drink===========>hot dogs fries ketchup and drink
+      2 Changed: hot dogs, beans, tomatoes===========>hot dogs beans tomatoes
+      2 Changed: horses, elephant and giraffe===========>horses elephant and giraffe
+      2 Changed: hornets, white sox===========>hornets white sox
+      2 Changed: hop-off===========>hop off
+      2 Changed: hole punch, scissors, mechanical pencil===========>hole punch scissors mechanical pencil
+      2 Changed: hmm bad hair day or pointy hat day?===========>hmm bad hair day or pointy hat day
+      2 Changed: hey cupcake!===========>hey cupcake
+      2 Changed: herald-sun===========>herald sun
+      2 Changed: helmet, knee pads, elbow pads===========>helmet knee pads elbow pads
+      2 Changed: head, hands, feet===========>head hands feet
+      2 Changed: have you paid?===========>have you paid
+      2 Changed: hat, shirt, shorts, socks and shoes===========>hat shirt shorts socks and shoes
+      2 Changed: harley-davidson===========>harley davidson
+      2 Changed: happy birthday julia!===========>happy birthday julia
+      2 Changed: hannah-arendt-strafze===========>hannah arendt strafze
+      2 Changed: "hang loose"===========>hang loose
+      2 Changed: ham, peppers, cheese, sauce, dough===========>ham peppers cheese sauce dough
+      2 Changed: ham, kale, and onions===========>ham kale and onions
+      2 Changed: hamburger, salad and biscuits===========>hamburger salad and biscuits
+      2 Changed: guitar picks, stickers, dog tags===========>guitar picks stickers dog tags
+      2 Changed: growing up, bobby always hated "leftover" night===========>growing up bobby always hated leftover night
+      2 Changed: green, yellow, pink, orange===========>green yellow pink orange
+      2 Changed: green, white blue, gray===========>green white blue gray
+      2 Changed: green, white, blue, and red===========>green white blue and red
+      2 Changed: green, white and yellow===========>green white and yellow
+      2 Changed: green, white, and red===========>green white and red
+      2 Changed: green t-shirt===========>green t shirt
+      2 Changed: green, red, white===========>green red white
+      2 Changed: green, red, grey, and blue===========>green red grey and blue
+      2 Changed: green, red, and yellow===========>green red and yellow
+      2 Changed: green, pink, orange===========>green pink orange
+      2 Changed: green, orange and yellow===========>green orange and yellow
+      2 Changed: green, brown, black, orange===========>green brown black orange
+      2 Changed: green, blue===========>green blue
+      2 Changed: green/black/white===========>green black white
+      2 Changed: green beans, kiwi, broccoli===========>green beans kiwi broccoli
+      2 Changed: gray, yellow===========>gray yellow
+      2 Changed: gray, blue, white===========>gray blue white
+      2 Changed: grapes, oranges, apple===========>grapes oranges apple
+      2 Changed: grapes, apples, bananas===========>grapes apples bananas
+      2 Changed: grandparent/grandchild===========>grandparent grandchild
+      2 Changed: got air?===========>got air
+      2 Changed: goody two shoes===========>goody 2 shoes
+      2 Changed: "good god, i gotta take lift, from reality i just can't shift"===========>good god i gotta take lift from reality i just can't shift
+      2 Changed: glynlowe.com===========>glynlowecom
+      2 Changed: glass, steel, and asphalt shingles===========>glass steel and asphalt shingles
+      2 Changed: glasses, tea, tissue===========>glasses tea tissue
+      2 Changed: giraffes, zebras, kangaroos, dolphins===========>giraffes zebras kangaroos dolphins
+      2 Changed: gear-up===========>gear up
+      2 Changed: g-bsvh===========>g bsvh
+      2 Changed: g-a aok===========>g aok
+      2 Changed: fun go!===========>fun go
+      2 Changed: fuji 1/2 peck $6===========>fuji 1 2 peck $6
+      2 Changed: fries, hot dog, and burger===========>fries hot dog and burger
+      2 Changed: fork, spoon===========>fork spoon
+      2 Changed: fork, knife, and spoon===========>fork knife and spoon
+      2 Changed: food, picture, glasses and bottles===========>food picture glasses and bottles
+      2 Changed: following smaller one===========>following smaller 1
+      2 Changed: flour, cheese, tomato sauce, spinach and olives===========>flour cheese tomato sauce spinach and olives
+      2 Changed: floor, counter===========>floor counter
+      2 Changed: fish, meat, sushi===========>fish meat sushi
+      2 Changed: fire-hydrant obscure by bushes===========>fire hydrant obscure by bushes
+      2 Changed: far right, bald man===========>far right bald man
+      2 Changed: facebook, twitter,===========>facebook twitter
+      2 Changed: everlast round one===========>everlast round 1
+      2 Changed: eva longoria, eva mendes===========>eva longoria eva mendes
+      2 Changed: eu-china===========>eu china
+      2 Changed: eu07-007===========>eu07 007
+      2 Changed: elvertbarnescom/mixology===========>elvertbarnescom mixology
+      2 Changed: eight mile===========>8 mile
+      2 Changed: egg, toast===========>egg toast
+      2 Changed: eggs, potatoes, pancakes===========>eggs potatoes pancakes
+      2 Changed: eggs, bacon, potatoes===========>eggs bacon potatoes
+      2 Changed: eating/drinking===========>eating drinking
+      2 Changed: dublin, nh===========>dublin nh
+      2 Changed: do you like it well done? cos i do it well===========>do you like it well done cos i do it well
+      2 Changed: double-decker===========>double decker
+      2 Changed: don't see one===========>don't see 1
+      2 Changed: don't eat us, we're music!===========>don't eat us we're music
+      2 Changed: don't believin!===========>don't believin
+      2 Changed: do not enter one way traffic===========>do not enter 1 way traffic
+      2 Changed: dog is my co-pilot===========>dog is my co pilot
+      2 Changed: dodgers.com===========>dodgerscom
+      2 Changed: d-mvfr===========>d mvfr
+      2 Changed: did you check your lipstick?===========>did you check your lipstick
+      2 Changed: diary of a wimpy kid===========>diary of wimpy kid
+      2 Changed: desert-like===========>desert like
+      2 Changed: delicious hand-crafted natural ice cream===========>delicious hand crafted natural ice cream
+      2 Changed: d-bebe===========>d bebe
+      2 Changed: dark one===========>dark 1
+      2 Changed: cucumbers, bacon===========>cucumbers bacon
+      2 Changed: @cskulevold===========>cskulevold
+      2 Changed: cream, dough, caramel, cinnamon===========>cream dough caramel cinnamon
+      2 Changed: cpe-097===========>cpe 097
+      2 Changed: cows, horses===========>cows horses
+      2 Changed: cow, pig, and chicken===========>cow pig and chicken
+      2 Changed: counter-clockwise===========>counter clockwise
+      2 Changed: corn, carrots, onions, rice===========>corn carrots onions rice
+      2 Changed: corn, carrots, beans, mushroom, rice, breaded chicken===========>corn carrots beans mushroom rice breaded chicken
+      2 Changed: cordeau, church===========>cordeau church
+      2 Changed: co-op downtown===========>co op downtown
+      2 Changed: co-op===========>co op
+      2 Changed: continuum (dale)===========>continuum dale
+      2 Changed: coach/baggage===========>coach baggage
+      2 Changed: clean-shaven===========>clean shaven
+      2 Changed: cleaning materials, paper plates, cooler, potato chips===========>cleaning materials paper plates cooler potato chips
+      2 Changed: cinelli-esperia===========>cinelli esperia
+      2 Changed: chili sauce, cheese and onions===========>chili sauce cheese and onions
+      2 Changed: chicken, rice, broccoli===========>chicken rice broccoli
+      2 Changed: chicken, onion, orange===========>chicken onion orange
+      2 Changed: chicken, fries, bun===========>chicken fries bun
+      2 Changed: chicken, broccoli, pasta===========>chicken broccoli pasta
+      2 Changed: chicken, broccoli, and pancakes===========>chicken broccoli and pancakes
+      2 Changed: chicken, broccoli and beans===========>chicken broccoli and beans
+      2 Changed: chi-boy===========>chi boy
+      2 Changed: cheez-it===========>cheez it
+      2 Changed: cheese, tomatoes, spinach===========>cheese tomatoes spinach
+      2 Changed: cheese, tomatoes===========>cheese tomatoes
+      2 Changed: cheese, spinach===========>cheese spinach
+      2 Changed: cheese, onion, sausage===========>cheese onion sausage
+      2 Changed: cheese, mushroom, black olives===========>cheese mushroom black olives
+      2 Changed: cheese, figs, lettuce===========>cheese figs lettuce
+      2 Changed: c-gthl===========>c gthl
+      2 Changed: c-gtad===========>c gtad
+      2 Changed: cf-hpy===========>cf hpy
+      2 Changed: center a===========>center
+      2 Changed: cd-rw===========>cd rw
+      2 Changed: (c) copyright 2012 foodnutcom===========>c copyright 2012 foodnutcom
+      2 Changed: c/b===========>c b
+      2 Changed: car, truck===========>car truck
+      2 Changed: cars, trucks===========>cars trucks
+      2 Changed: cars, bikes, bus, truck===========>cars bikes bus truck
+      2 Changed: carrots, zucchini, raspberry, bread===========>carrots zucchini raspberry bread
+      2 Changed: carrots, peas, corn, cucumber===========>carrots peas corn cucumber
+      2 Changed: carrots, onion, jalapeno===========>carrots onion jalapeno
+      2 Changed: carrots, cucumber, broccoli, mushrooms===========>carrots cucumber broccoli mushrooms
+      2 Changed: carrots, corn, potatoes===========>carrots corn potatoes
+      2 Changed: carrots, celery, and chicken===========>carrots celery and chicken
+      2 Changed: carrots, broccoli, cauliflower===========>carrots broccoli cauliflower
+      2 Changed: carrot, cabbage===========>carrot cabbage
+      2 Changed: carnations, violets, lilies, hydrangeas===========>carnations violets lilies hydrangeas
+      2 Changed: car, legs===========>car legs
+      2 Changed: capital one===========>capital 1
+      2 Changed: can you see me now?===========>can you see me now
+      2 Changed: candlesticks , and vase===========>candlesticks and vase
+      2 Changed: call 831-420-5552===========>call 831 420 5552
+      2 Changed: call 33-22-555===========>call 33 22 555
+      2 Changed: c-524===========>c 524
+      2 Changed: by men;s clothing===========>by men s clothing
+      2 Changed: bus, truck, car===========>bus truck car
+      2 Changed: bus lane 7am-7pm===========>bus lane 7am 7pm
+      2 Changed: bus, car, van===========>bus car van
+      2 Changed: bud light, emerald, yahoo===========>bud light emerald yahoo
+      2 Changed: brussels, paris, delhi===========>brussels paris delhi
+      2 Changed: brown & white, black & white===========>brown & white black & white
+      2 Changed: brown, white, black===========>brown white black
+      2 Changed: brown, red, green, purple, and white===========>brown red green purple and white
+      2 Changed: brown one on right===========>brown 1 on right
+      2 Changed: brown, gold, tan & black===========>brown gold tan & black
+      2 Changed: brown, black, and white===========>brown black and white
+      2 Changed: brown and white one===========>brown and white 1
+      2 Changed: brook ledge, inc===========>brook ledge inc
+      2 Changed: broccoli, squash, lettuce===========>broccoli squash lettuce
+      2 Changed: broccoli, rice, beans===========>broccoli rice beans
+      2 Changed: broccoli, potatoes, onion===========>broccoli potatoes onion
+      2 Changed: broccoli, peppers, tomatoes, corn===========>broccoli peppers tomatoes corn
+      2 Changed: broccoli, peppers===========>broccoli peppers
+      2 Changed: broccoli, celery===========>broccoli celery
+      2 Changed: broccoli, carrots, mushrooms===========>broccoli carrots mushrooms
+      2 Changed: broccoli, carrots, cauliflower===========>broccoli carrots cauliflower
+      2 Changed: broccoli, carrots and zucchini===========>broccoli carrots and zucchini
+      2 Changed: broccoli, carrot===========>broccoli carrot
+      2 Changed: broccoli, artichoke, onions===========>broccoli artichoke onions
+      2 Changed: bricks, paint, frames===========>bricks paint frames
+      2 Changed: bread, sausage and chicken===========>bread sausage and chicken
+      2 Changed: bread, raspberry, peanut butter===========>bread raspberry peanut butter
+      2 Changed: bread, broccoli, chicken, peppers and noodles===========>bread broccoli chicken peppers and noodles
+      2 Changed: bottom, right corner===========>bottom right corner
+      2 Changed: bottle, cup===========>bottle cup
+      2 Changed: bo(red)===========>bo red
+      2 Changed: blue, yellow, green===========>blue yellow green
+      2 Changed: blue,yellow===========>blue yellow
+      2 Changed: blue, yellow and white===========>blue yellow and white
+      2 Changed: blue, yellow , and white===========>blue yellow and white
+      2 Changed: blue, yellow and green===========>blue yellow and green
+      2 Changed: blue, white, teal===========>blue white teal
+      2 Changed: blue, white, tan and black===========>blue white tan and black
+      2 Changed: blue, white, red, yellow===========>blue white red yellow
+      2 Changed: blue, white, black===========>blue white black
+      2 Changed: blue, white and brown===========>blue white and brown
+      2 Changed: blue, silver, purple===========>blue silver purple
+      2 Changed: blue, red, yellow===========>blue red yellow
+      2 Changed: blue, red, white===========>blue red white
+      2 Changed: blue, red, purple, pink===========>blue red purple pink
+      2 Changed: blue, red, pink, white===========>blue red pink white
+      2 Changed: blue, red, orange, and yellow===========>blue red orange and yellow
+      2 Changed: blue, red and yellow===========>blue red and yellow
+      2 Changed: blue, red and white===========>blue red and white
+      2 Changed: blue, red and pink===========>blue red and pink
+      2 Changed: blue, red, and orange===========>blue red and orange
+      2 Changed: blue, orange, red===========>blue orange red
+      2 Changed: blue, orange, purple, white, yellow, red===========>blue orange purple white yellow red
+      2 Changed: blue, orange, pink===========>blue orange pink
+      2 Changed: blue, green, yellow, orange===========>blue green yellow orange
+      2 Changed: blue, green, orange, red, black===========>blue green orange red black
+      2 Changed: blue/green===========>blue green
+      2 Changed: blue, green and white===========>blue green and white
+      2 Changed: blue, brown, cream===========>blue brown cream
+      2 Changed: blue, black, red===========>blue black red
+      2 Changed: blue, black===========>blue black
+      2 Changed: blueberries, strawberries===========>blueberries strawberries
+      2 Changed: blue-and-white one===========>blue and white 1
+      2 Changed: blonde, grey, brown===========>blonde grey brown
+      2 Changed: blonde, brown===========>blonde brown
+      2 Changed: black, white, yellow, blue===========>black white yellow blue
+      2 Changed: black, white, tan===========>black white tan
+      2 Changed: black, white, red, yellow===========>black white red yellow
+      2 Changed: black, white, gold===========>black white gold
+      2 Changed: black, white, brown===========>black white brown
+      2 Changed: black/white===========>black white
+      2 Changed: black,white===========>black white
+      2 Changed: black, white and green===========>black white and green
+      2 Changed: black, red and white===========>black red and white
+      2 Changed: black, orange and blue===========>black orange and blue
+      2 Changed: black, green, blue, orange, pink===========>black green blue orange pink
+      2 Changed: black/gray/silver===========>black gray silver
+      2 Changed: black, brown, white===========>black brown white
+      2 Changed: black, blue, red, orange, yellow===========>black blue red orange yellow
+      2 Changed: black and yellow, white===========>black and yellow white
+      2 Changed: black and white one===========>black and white 1
+      2 Changed: biscuit, loaf, and rice===========>biscuit loaf and rice
+      2 Changed: bird, tree, rainbow===========>bird tree rainbow
+      2 Changed: bi-plane===========>bi plane
+      2 Changed: bio-ethanol ed95===========>bio ethanol ed95
+      2 Changed: bike, moped, car===========>bike moped car
+      2 Changed: biggest one===========>biggest 1
+      2 Changed: big ben, very large===========>big ben very large
+      2 Changed: bethel rd, old 66 rd===========>bethel rd old 66 rd
+      2 Changed: beige or light gray, dark gray, red===========>beige or light gray dark gray red
+      2 Changed: beer, tv===========>beer tv
+      2 Changed: beef, milk, cheese===========>beef milk cheese
+      2 Changed: bear, monkey, cow===========>bear monkey cow
+      2 Changed: bbx, hitachi, lg===========>bbx hitachi lg
+      2 Changed: baseball jersey, bat, glove===========>baseball jersey bat glove
+      2 Changed: baptist state convention of north carolina medical-dental center===========>baptist state convention of north carolina medical dental center
+      2 Changed: bananas, waffles and syrup===========>bananas waffles and syrup
+      2 Changed: banana, strawberry, watermelon===========>banana strawberry watermelon
+      2 Changed: banana, starfruit, papaya===========>banana starfruit papaya
+      2 Changed: bananas, strawberries, oranges===========>bananas strawberries oranges
+      2 Changed: bananas, plantains, mangoes, star fruit & oranges===========>bananas plantains mangoes star fruit & oranges
+      2 Changed: bananas, pineapples, oranges, watermelons===========>bananas pineapples oranges watermelons
+      2 Changed: bananas, peaches, strawberries, blueberries, grapes, apples, oranges===========>bananas peaches strawberries blueberries grapes apples oranges
+      2 Changed: bananas, oranges, blueberries, grapes, apples and strawberries===========>bananas oranges blueberries grapes apples and strawberries
+      2 Changed: bananas, orange, lemons, peaches===========>bananas orange lemons peaches
+      2 Changed: bananas, orange, lemons===========>bananas orange lemons
+      2 Changed: bananas, apples, pears===========>bananas apples pears
+      2 Changed: banana, plums, grapes, pear, oranges===========>banana plums grapes pear oranges
+      2 Changed: banana, pear, orange, apple, avocado===========>banana pear orange apple avocado
+      2 Changed: banana, orange, cantaloupe===========>banana orange cantaloupe
+      2 Changed: banana, orange, apple===========>banana orange apple
+      2 Changed: banana orange, apple===========>banana orange apple
+      2 Changed: banana, orange and apples===========>banana orange and apples
+      2 Changed: banana, kiwi, oranges, apple===========>banana kiwi oranges apple
+      2 Changed: banana, kiwi, guava===========>banana kiwi guava
+      2 Changed: banana, apple===========>banana apple
+      2 Changed: bacon, cheese, peppers, tomatoes===========>bacon cheese peppers tomatoes
+      2 Changed: back, right===========>back right
+      2 Changed: a/v production===========>v production
+      2 Changed: avoiding the fez===========>avoiding fez
+      2 Changed: avenue des champs-elysees===========>avenue des champs elysees
+      2 Changed: avenue des beaux-arts===========>avenue des beaux arts
+      2 Changed: at-101===========>at 101
+      2 Changed: a smelly story===========>smelly story
+      2 Changed: arrr!===========>arrr
+      2 Changed: are your neighbors raptors?===========>are your neighbors raptors
+      2 Changed: area closed sunset-8am===========>area closed sunset 8am
+      2 Changed: arby four===========>arby 4
+      2 Changed: apples, oranges, bananas===========>apples oranges bananas
+      2 Changed: apples, oranges, and lemons===========>apples oranges and lemons
+      2 Changed: apples, melon===========>apples melon
+      2 Changed: apples, blueberries, cherries===========>apples blueberries cherries
+      2 Changed: apples,bananas,kiwi===========>apples bananas kiwi
+      2 Changed: apple, orange, pear===========>apple orange pear
+      2 Changed: apple, orange, lemon, kiwi===========>apple orange lemon kiwi
+      2 Changed: apple, lemons===========>apple lemons
+      2 Changed: apple, banana, orange===========>apple banana orange
+      2 Changed: a place to stand===========>place to stand
+      2 Changed: ansett-ana===========>ansett ana
+      2 Changed: anm5022(086)===========>anm5022 086
+      2 Changed: afia-se===========>afia se
+      2 Changed: a dream is a wish your heart makes===========>dream is wish your heart makes
+      2 Changed: a4(e) a46===========>a4 e a46
+      2 Changed: a 1109===========>1109
+      2 Changed: 9/7/33===========>9 7 33
+      2 Changed: 960-wzz===========>960 wzz
+      2 Changed: 954-501-0045===========>954 501 0045
+      2 Changed: 95-104===========>95 104
+      2 Changed: 9/2/32===========>9 2 32
+      2 Changed: 922,509===========>922509
+      2 Changed: 9/20/09===========>9 20 09
+      2 Changed: 9/14/2007===========>9 14 2007
+      2 Changed: 9/11===========>9 11
+      2 Changed: 8am-8pm===========>8am 8pm
+      2 Changed: 87-91===========>87 91
+      2 Changed: 877-pwp-green===========>877 pwp green
+      2 Changed: 8/24/10===========>8 24 10
+      2 Changed: 82-2980===========>82 2980
+      2 Changed: 8-10===========>8 10
+      2 Changed: 7pm-7am===========>7pm 7am
+      2 Changed: 7-9am 4-6pm===========>7 9am 4 6pm
+      2 Changed: 772-461-8868===========>772 461 8868
+      2 Changed: 7-12-36===========>7 12 36
+      2 Changed: 7' 0"===========>7' 0
+      2 Changed: 6r-24l===========>6r 24l
+      2 Changed: 6am-3pm===========>6am 3pm
+      2 Changed: 6/8/2003===========>6 8 2003
+      2 Changed: 674-2176===========>674 2176
+      2 Changed: 667-136===========>667 136
+      2 Changed: 66-05===========>66 05
+      2 Changed: 64 foster/canfield===========>64 foster canfield
+      2 Changed: 617-497-4111===========>617 497 4111
+      2 Changed: 6'1"===========>6'1
+      2 Changed: 6-12===========>6 12
+      2 Changed: 6/12/2009===========>6 12 2009
+      2 Changed: 610-929-4856===========>610 929 4856
+      2 Changed: 60-70===========>60 70
+      2 Changed: 604-909-7275===========>604 909 7275
+      2 Changed: $6,000===========>$6000
+      2 Changed: 5av/bway===========>5av bway
+      2 Changed: 594-8939===========>594 8939
+      2 Changed: 5, 8, 9===========>5 8 9
+      2 Changed: 5-7===========>5 7
+      2 Changed: 561-5900===========>561 5900
+      2 Changed: (55) 851380===========>55 851380
+      2 Changed: 546-3213===========>546 3213
+      2 Changed: 545 via sr-520===========>545 via sr 520
+      2 Changed: 5-2===========>5 2
+      2 Changed: 50-50===========>50 50
+      2 Changed: 501-2626===========>501 2626
+      2 Changed: 5,000 ft===========>5000 ft
+      2 Changed: 4-cheese===========>4 cheese
+      2 Changed: 4.99/kg===========>4.99 kg
+      2 Changed: 48-92-tnb===========>48 92 tnb
+      2 Changed: 48, 49, 46===========>48 49 46
+      2 Changed: 4-8===========>4 8
+      2 Changed: 4/8/08===========>4 8 08
+      2 Changed: 434-760-2506===========>434 760 2506
+      2 Changed: 42"===========>42
+      2 Changed: 4/2===========>4 2
+      2 Changed: 4-18-45===========>4 18 45
+      2 Changed: 412-9889===========>412 9889
+      2 Changed: 3-way===========>3 way
+      2 Changed: 371-355===========>371 355
+      2 Changed: 36+38===========>36 38
+      2 Changed: 361-698-2707===========>361 698 2707
+      2 Changed: 3/5===========>3 5
+      2 Changed: 340-600===========>340 600
+      2 Changed: 32"===========>32
+      2 Changed: 3-2===========>3 2
+      2 Changed: 31/5/07===========>31 5 07
+      2 Changed: 3/1/2008===========>3 1 2008
+      2 Changed: 30-47===========>30 47
+      2 Changed: 30, 31, 35, 1, 2, 4===========>30 31 35 1 2 4
+      2 Changed: 30-30-30===========>30 30 30
+      2 Changed: 300-901===========>300 901
+      2 Changed: 3,000,000,000,000===========>3000000000000
+      2 Changed: 28, 8===========>28 8
+      2 Changed: 2/7===========>2 7
+      2 Changed: 2-6 am===========>2 6 am
+      2 Changed: 25-411-10===========>25 411 10
+      2 Changed: 25-35===========>25 35
+      2 Changed: 2-5===========>2 5
+      2 Changed: 244-9654===========>244 9654
+      2 Changed: 242 151-9===========>242 151 9
+      2 Changed: 23/01/2004===========>23 01 2004
+      2 Changed: 2/15/2012===========>2 15 2012
+      2 Changed: 2-1===========>2 1
+      2 Changed: 20 zone drive slow! save lives!===========>20 zone drive slow save lives
+      2 Changed: 2012/8/13===========>2012 8 13
+      2 Changed: 2010/02/07===========>2010 02 07
+      2 Changed: 2010/01/18===========>2010 01 18
+      2 Changed: 2009/05/07===========>2009 05 07
+      2 Changed: 2007/10/09===========>2007 10 09
+      2 Changed: 2007/10/04===========>2007 10 04
+      2 Changed: 2007/09/26===========>2007 09 26
+      2 Changed: 1 woman, 2 men===========>1 woman 2 men
+      2 Changed: 1 noon, 2 yes===========>1 noon 2 yes
+      2 Changed: 1975-1982===========>1975 1982
+      2 Changed: 1955-2004===========>1955 2004
+      2 Changed: 19/03/2009===========>19 03 2009
+      2 Changed: 1-877-994-4357===========>1 877 994 4357
+      2 Changed: 1-877-4fps-411===========>1 877 4fps 411
+      2 Changed: 186-290===========>186 290
+      2 Changed: 186 141-8===========>186 141 8
+      2 Changed: 181 206-4===========>181 206 4
+      2 Changed: 1-800-738-8622===========>1 800 738 8622
+      2 Changed: 1-800-22-0015===========>1 800 22 0015
+      2 Changed: 17-35===========>17 35
+      2 Changed: 163-000-5===========>163 000 5
+      2 Changed: 16-19===========>16 19
+      2 Changed: 1/6===========>1 6
+      2 Changed: 158-01===========>158 01
+      2 Changed: 15-33===========>15 33
+      2 Changed: 151 039-5===========>151 039 5
+      2 Changed: 1,4,7,2,5,8,0===========>1472580
+      2 Changed: 14'-10"===========>14' 10
+      2 Changed: 14/06/2005===========>14 06 2005
+      2 Changed: 13-071===========>13 071
+      2 Changed: 1/2 mile===========>1 2 mile
+      2 Changed: 125-1===========>125 1
+      2 Changed: 12-45===========>12 45
+      2 Changed: 124-100===========>124 100
+      2 Changed: 1, 2, 3, 4, 5, 6, 7, 8, 9, 0===========>1 2 3 4 5 6 7 8 9 0
+      2 Changed: 12/27/2008===========>12 27 2008
+      2 Changed: 122 044-1===========>122 044 1
+      2 Changed: 12/15/2012===========>12 15 2012
+      2 Changed: 12/15/2011===========>12 15 2011
+      2 Changed: 12-14===========>12 14
+      2 Changed: 12/05/2012===========>12 05 2012
+      2 Changed: 120126-8===========>120126 8
+      2 Changed: 11-6-53===========>11 6 53
+      2 Changed: 1 1/4 mile===========>1 1 4 mile
+      2 Changed: 11:45-12:15===========>11:45 12:15
+      2 Changed: 11/26/2009===========>11 26 2009
+      2 Changed: 1-12===========>1 12
+      2 Changed: 1 - 12===========>1 12
+      2 Changed: 11/19/2006===========>11 19 2006
+      2 Changed: 11/16/2005===========>11 16 2005
+      2 Changed: 11/1/2006===========>11 1 2006
+      2 Changed: 11-11===========>11 11
+      2 Changed: 1-1===========>1 1
+      2 Changed: -11===========>11
+      2 Changed: 105 215-1===========>105 215 1
+      2 Changed: 1-0===========>1 0
+      2 Changed: 1,00===========>100
+      2 Changed: 10,000===========>10000
+      2 Changed: $10,000===========>$10000
+      2 Changed: 09/19/2008===========>09 19 2008
+      2 Changed: 09/14/2007===========>09 14 2007
+      2 Changed: 09/02/2009===========>09 02 2009
+      2 Changed: 09/01/2004===========>09 01 2004
+      2 Changed: 08/14/2013===========>08 14 2013
+      2 Changed: 07/22/2013===========>07 22 2013
+      2 Changed: 07/15/2013===========>07 15 2013
+      2 Changed: 0659 001-5===========>0659 001 5
+      2 Changed: 06/08/2012===========>06 08 2012
+      2 Changed: 06/05/2011===========>06 05 2011
+      2 Changed: 06/02/2010===========>06 02 2010
+      2 Changed: 05/29/2013===========>05 29 2013
+      2 Changed: 05/15/2012 11:27===========>05 15 2012 11:27
+      2 Changed: 04/15/2003===========>04 15 2003
+      2 Changed: 04/12/2009===========>04 12 2009
+      2 Changed: 04/07/2012===========>04 07 2012
+      2 Changed: 04-05===========>04 05
+      2 Changed: 0-4===========>0 4
+      2 Changed: 04/01/2011===========>04 01 2011
+      2 Changed: 03/31/2009===========>03 31 2009
+      2 Changed: 03/09/2011===========>03 09 2011
+      2 Changed: 02/14/2013===========>02 14 2013
+      2 Changed: 02/12/2011===========>02 12 2011
+      2 Changed: 02-08-2009===========>02 08 2009
+      2 Changed: 02/05/2013===========>02 05 2013
+      2 Changed: 0-2===========>0 2
+      2 Changed: 01/14/2011===========>01 14 2011
+      2 Changed: 01/13/2017===========>01 13 2017
+      1 Changed: zucchini, broccoli, green beans===========>zucchini broccoli green beans
+      1 Changed: zk-eae===========>zk eae
+      1 Changed: yes, 3===========>yes 3
+      1 Changed: yes, 2===========>yes 2
+      1 Changed: yellow, white, pink, red===========>yellow white pink red
+      1 Changed: yellow, red, white===========>yellow red white
+      1 Changed: yellow, red, blue, gray, black===========>yellow red blue gray black
+      1 Changed: yellow, red, blue and green===========>yellow red blue and green
+      1 Changed: yellow, red and blue===========>yellow red and blue
+      1 Changed: yellow, green, black, brown===========>yellow green black brown
+      1 Changed: yellow, blue and red===========>yellow blue and red
+      1 Changed: yellow, black, red, white===========>yellow black red white
+      1 Changed: yellow, black, pink===========>yellow black pink
+      1 Changed: xf-80===========>xf 80
+      1 Changed: wwwpbasecom/roncantrell===========>wwwpbasecom roncantrell
+      1 Changed: wwwnycgov/dot===========>wwwnycgov dot
+      1 Changed: wtatennis.com===========>wtatenniscom
+      1 Changed: wind-up bird chronicle===========>wind up bird chronicle
+      1 Changed: white, yellow, orange===========>white yellow orange
+      1 Changed: white shirt, gray tie, blue jeans, gray sneakers, black watch===========>white shirt gray tie blue jeans gray sneakers black watch
+      1 Changed: white, red, yellow and green===========>white red yellow and green
+      1 Changed: white, red, white, green, and yellow===========>white red white green and yellow
+      1 Changed: white, red, blue===========>white red blue
+      1 Changed: white, red, and yellowish brown===========>white red and yellowish brown
+      1 Changed: white, red and black===========>white red and black
+      1 Changed: white, purple, pink===========>white purple pink
+      1 Changed: white, pink, purple===========>white pink purple
+      1 Changed: white, green, yellow===========>white green yellow
+      1 Changed: white/green===========>white green
+      1 Changed: white, brown, black===========>white brown black
+      1 Changed: white,blue,orange,yellow===========>white blue orange yellow
+      1 Changed: white, black and green===========>white black and green
+      1 Changed: what?===========>what
+      1 Changed: what flags?===========>what flags
+      1 Changed: what are you thinking?===========>what are you thinking
+      1 Changed: wd-40===========>wd 40
+      1 Changed: warm beer, lousy food, poor service===========>warm beer lousy food poor service
+      1 Changed: wall-papered===========>wall papered
+      1 Changed: v-neck===========>v neck
+      1 Changed: via dolce!===========>via dolce
+      1 Changed: vh-bne===========>vh bne
+      1 Changed: velocidad 297 km/h===========>velocidad 297 km h
+      1 Changed: us-1 whitehead st===========>us 1 whitehead st
+      1 Changed: up-hill===========>up hill
+      1 Changed: under-level===========>under level
+      1 Changed: umbrella, chairs and sand===========>umbrella chairs and sand
+      1 Changed: two women, cartoon===========>2 women cartoon
+      1 Changed: two on right===========>2 on right
+      1 Changed: tri-city fence company===========>tri city fence company
+      1 Changed: tow-away===========>tow away
+      1 Changed: to promote coffee/teas===========>to promote coffee teas
+      1 Changed: toothbrushes, toothpaste===========>toothbrushes toothpaste
+      1 Changed: tools, inc===========>tools inc
+      1 Changed: to multi-task===========>to multi task
+      1 Changed: tomato's red color makes everybody happy!===========>tomato's red color makes everybody happy
+      1 Changed: tomato, mushroom, pepperoni===========>tomato mushroom pepperoni
+      1 Changed: tomato, cheese, onion===========>tomato cheese onion
+      1 Changed: toilet, bathtub===========>toilet bathtub
+      1 Changed: to get smaller one to launch height===========>to get smaller 1 to launch height
+      1 Changed: toaster, coffee maker===========>toaster coffee maker
+      1 Changed: toast, eggs, corn, and coffee===========>toast eggs corn and coffee
+      1 Changed: t-mobile===========>t mobile
+      1 Changed: three twins===========>3 twins
+      1 Changed: the divine comedy===========>divine comedy
+      1 Changed: the croods===========>croods
+      1 Changed: the body shop===========>body shop
+      1 Changed: ten-speed bicycle===========>10 speed bicycle
+      1 Changed: tennis balls, and whiffle balls===========>tennis balls and whiffle balls
+      1 Changed: ten commandments===========>10 commandments
+      1 Changed: t-bone===========>t bone
+      1 Changed: tacoma, washington===========>tacoma washington
+      1 Changed: syracuse, scranton===========>syracuse scranton
+      1 Changed: "suggestions" to keep everyone's cooking experience safe===========>suggestions to keep everyone's cooking experience safe
+      1 Changed: store-bought===========>store bought
+      1 Changed: stop, no public access, no exit===========>stop no public access no exit
+      1 Changed: stop and one way===========>stop and 1 way
+      1 Changed: spring/summer===========>spring summer
+      1 Changed: splashdogs.com===========>splashdogscom
+      1 Changed: spinach, broccoli===========>spinach broccoli
+      1 Changed: spinach, artichoke===========>spinach artichoke
+      1 Changed: sp-gmt===========>sp gmt
+      1 Changed: sp-awf===========>sp awf
+      1 Changed: soup, broccoli, ham===========>soup broccoli ham
+      1 Changed: so that person can't score?===========>so that person can't score
+      1 Changed: sorry! i'm not in service===========>sorry i'm not in service
+      1 Changed: sook so <ee <it===========>sook so ee it
+      1 Changed: smitty's market, inc===========>smitty's market inc
+      1 Changed: small farm stand, still has leaves attached===========>small farm stand still has leaves attached
+      1 Changed: skating, skateboarding, and basketball===========>skating skateboarding and basketball
+      1 Changed: shirt, shovel, sky===========>shirt shovel sky
+      1 Changed: september 20, 2011===========>september 20 2011
+      1 Changed: seminary row, broadway, w 122 st===========>seminary row broadway w 122 st
+      1 Changed: sausage, cheese, peppers===========>sausage cheese peppers
+      1 Changed: rice, meat, vegetables===========>rice meat vegetables
+      1 Changed: rice, brussel sprouts,cucumbers, sour cream, burrito===========>rice brussel sproutscucumbers sour cream burrito
+      1 Changed: relish, carrots, tomatoes, onions, and mayonnaise===========>relish carrots tomatoes onions and mayonnaise
+      1 Changed: red, yellow, orange and blue===========>red yellow orange and blue
+      1 Changed: red, yellow, gray, white, black===========>red yellow gray white black
+      1 Changed: red, yellow and blue===========>red yellow and blue
+      1 Changed: red, white, yellow===========>red white yellow
+      1 Changed: red, white, purple===========>red white purple
+      1 Changed: red, white, green, black===========>red white green black
+      1 Changed: red, white and gray===========>red white and gray
+      1 Changed: red, tan, purple===========>red tan purple
+      1 Changed: red, purple,white===========>red purplewhite
+      1 Changed: red, pink, and burgundy===========>red pink and burgundy
+      1 Changed: red, orange, yellow, white===========>red orange yellow white
+      1 Changed: red, orange===========>red orange
+      1 Changed: red, orange and yellow===========>red orange and yellow
+      1 Changed: red, green, blue, and yellow===========>red green blue and yellow
+      1 Changed: red, green, and white===========>red green and white
+      1 Changed: red, blue, white, purple===========>red blue white purple
+      1 Changed: red, blue, green, white===========>red blue green white
+      1 Changed: red, black, blue===========>red black blue
+      1 Changed: purple, yellow, white, brown, green, red, orange, yellow, blue===========>purple yellow white brown green red orange yellow blue
+      1 Changed: purple, yellow, green, orange===========>purple yellow green orange
+      1 Changed: purple, pink white and blue===========>purple pink white and blue
+      1 Changed: purple, pink, orange and yellow===========>purple pink orange and yellow
+      1 Changed: purple,blue,yellow,white,black===========>purple blue yellow white black
+      1 Changed: purple,blue,black,white,brown===========>purple blue black white brown
+      1 Changed: pudong rd (s)===========>pudong rd s
+      1 Changed: potatoes,carrots, and bell peppers===========>potatoescarrots and bell peppers
+      1 Changed: potatoes, bananas===========>potatoes bananas
+      1 Changed: port-a-potties===========>port potties
+      1 Changed: pork chop, green beans===========>pork chop green beans
+      1 Changed: plates, fork, cups, cans, phone,===========>plates fork cups cans phone
+      1 Changed: plates, cups, napkins, silverware and flowers===========>plates cups napkins silverware and flowers
+      1 Changed: pj-biw===========>pj biw
+      1 Changed: pink, orange, red===========>pink orange red
+      1 Changed: pink, orange, blue, green, purple===========>pink orange blue green purple
+      1 Changed: pineapple, cheese, sauce, mushrooms===========>pineapple cheese sauce mushrooms
+      1 Changed: pineapple; apple; kiwi===========>pineapple apple kiwi
+      1 Changed: person with cigarette is on computer screen, lighter if off===========>person with cigarette is on computer screen lighter if off
+      1 Changed: peppers, sausage, spinach, cheese===========>peppers sausage spinach cheese
+      1 Changed: pepper, cheese, pepperoni===========>pepper cheese pepperoni
+      1 Changed: peas, carrots===========>peas carrots
+      1 Changed: pear, grapes===========>pear grapes
+      1 Changed: parent-child===========>parent child
+      1 Changed: panda, monkey, elephant===========>panda monkey elephant
+      1 Changed: palm trees, surfboards, banner===========>palm trees surfboards banner
+      1 Changed: pacific grove del monte ave exit 1/2 mile===========>pacific grove del monte ave exit 1 2 mile
+      1 Changed: p-18368===========>p 18368
+      1 Changed: orl-2===========>orl 2
+      1 Changed: orange/yellow plaid===========>orange yellow plaid
+      1 Changed: orange, yellow, pink===========>orange yellow pink
+      1 Changed: oranges, grapefruits and limes===========>oranges grapefruits and limes
+      1 Changed: orange, pink, & red===========>orange pink & red
+      1 Changed: orange one===========>orange 1
+      1 Changed: orange, green and white===========>orange green and white
+      1 Changed: orange, blue===========>orange blue
+      1 Changed: orange, apple===========>orange apple
+      1 Changed: oppassen! bouwverkeer===========>oppassen bouwverkeer
+      1 Changed: onions, relish===========>onions relish
+      1 Changed: onion, shrimp===========>onion shrimp
+      1 Changed: one-way===========>1 way
+      1 Changed: one solid color===========>1 solid color
+      1 Changed: one playing game; other holding hands together===========>1 playing game other holding hands together
+      1 Changed: one on foreground===========>1 on foreground
+      1 Changed: one love===========>1 love
+      1 Changed: one is sitting===========>1 is sitting
+      1 Changed: one is cut===========>1 is cut
+      1 Changed: one is broke===========>1 is broke
+      1 Changed: one is black===========>1 is black
+      1 Changed: one is bidet===========>1 is bidet
+      1 Changed: one in white shirt===========>1 in white shirt
+      1 Changed: one in white===========>1 in white
+      1 Changed: one for adult, one for child===========>1 for adult 1 for child
+      1 Changed: one combing his hair===========>1 combing his hair
+      1 Changed: olive, tomato, peppers, cheese===========>olive tomato peppers cheese
+      1 Changed: olives, tomato, cheese,===========>olives tomato cheese
+      1 Changed: olives, sauce and cheese===========>olives sauce and cheese
+      1 Changed: olives/mushrooms===========>olives mushrooms
+      1 Changed: olives, mushrooms===========>olives mushrooms
+      1 Changed: n-s elevated rd===========>n s elevated rd
+      1 Changed: no parking tuesday 10am-12noon cars towed away===========>no parking tuesday 10am 12noon cars towed away
+      1 Changed: no, open===========>no open
+      1 Changed: no one is walking===========>no 1 is walking
+      1 Changed: no one is using them===========>no 1 is using them
+      1 Changed: non-veg===========>non veg
+      1 Changed: non-fiction===========>non fiction
+      1 Changed: n/a===========>n
+      1 Changed: mozzarella,basil and tomato===========>mozzarella basil and tomato
+      1 Changed: monster, ollie pop===========>monster ollie pop
+      1 Changed: monday, wednesday, friday, saturday===========>monday wednesday friday saturday
+      1 Changed: modern/abstract===========>modern abstract
+      1 Changed: michael jackson only wore one===========>michael jackson only wore 1
+      1 Changed: meat, vegetables, fruit===========>meat vegetables fruit
+      1 Changed: meat, salad, orzo===========>meat salad orzo
+      1 Changed: meat, grain===========>meat grain
+      1 Changed: may 26, 2007===========>may 26 2007
+      1 Changed: may 11, 2008===========>may 11 2008
+      1 Changed: man is inside, woman is outside===========>man is inside woman is outside
+      1 Changed: lunch/dinner===========>lunch dinner
+      1 Changed: london, england===========>london england
+      1 Changed: liege-guillemins station, train===========>liege guillemins station train
+      1 Changed: lhewitt, n healey and ram===========>lhewitt n healey and ram
+      1 Changed: lettuce, onions===========>lettuce onions
+      1 Changed: konfirmanten-blase===========>konfirmanten blase
+      1 Changed: ketchup, relish and onions===========>ketchup relish and onions
+      1 Changed: ketchup, mustard, steak sauce===========>ketchup mustard steak sauce
+      1 Changed: keep elephants out/in===========>keep elephants out in
+      1 Changed: kai one===========>kai 1
+      1 Changed: k101 course-wide forum community===========>k101 course wide forum community
+      1 Changed: june 29, 2013===========>june 29 2013
+      1 Changed: july 23, 1998===========>july 23 1998
+      1 Changed: july 16, 2013===========>july 16 2013
+      1 Changed: iraq: stop killing gays!===========>iraq: stop killing gays
+      1 Changed: ipad, laptop, and cell phone===========>ipad laptop and cell phone
+      1 Changed: in distance, beyond street sign===========>in distance beyond street sign
+      1 Changed: huynh-thanh===========>huynh thanh
+      1 Changed: huan, hound of valinor===========>huan hound of valinor
+      1 Changed: http://foodiebakercom===========>http: foodiebakercom
+      1 Changed: how could i know that?===========>how could i know that
+      1 Changed: hot-dog and potatoes===========>hot dog and potatoes
+      1 Changed: horses, cows===========>horses cows
+      1 Changed: hitting one back===========>hitting 1 back
+      1 Changed: hannah-arendt-strasse===========>hannah arendt strasse
+      1 Changed: greta-garbo-strafe===========>greta garbo strafe
+      1 Changed: green, white, red, yellow===========>green white red yellow
+      1 Changed: green, white, red===========>green white red
+      1 Changed: green, white, black===========>green white black
+      1 Changed: green,white,black, and red===========>greenwhiteblack and red
+      1 Changed: green, white and gray===========>green white and gray
+      1 Changed: green, white and blue===========>green white and blue
+      1 Changed: green, blue, pink, white===========>green blue pink white
+      1 Changed: green, blue, black===========>green blue black
+      1 Changed: green, black===========>green black
+      1 Changed: grapes, apples, oranges===========>grapes apples oranges
+      1 Changed: good-sized===========>good sized
+      1 Changed: gold, green, and brown===========>gold green and brown
+      1 Changed: golden eagle, treffry, slippen, bonnet===========>golden eagle treffry slippen bonnet
+      1 Changed: god is my co-pilot===========>god is my co pilot
+      1 Changed: g-colt===========>g colt
+      1 Changed: g-cgtx===========>g cgtx
+      1 Changed: g-awgn===========>g awgn
+      1 Changed: full/0136===========>full 0136
+      1 Changed: frosting, shaving accessories===========>frosting shaving accessories
+      1 Changed: fried chicken, vegetables===========>fried chicken vegetables
+      1 Changed: fridge, stove, dishwasher===========>fridge stove dishwasher
+      1 Changed: four wheels===========>4 wheels
+      1 Changed: four waiting lanes ahead===========>4 waiting lanes ahead
+      1 Changed: fork, spoon, knife===========>fork spoon knife
+      1 Changed: fork, knife, pizza cutter===========>fork knife pizza cutter
+      1 Changed: flip-phone===========>flip phone
+      1 Changed: five star dips===========>5 star dips
+      1 Changed: f-gkxn===========>f gkxn
+      1 Changed: feeling hungry! come on in===========>feeling hungry come on in
+      1 Changed: f-150===========>f 150
+      1 Changed: every lane is a bike lane===========>every lane is bike lane
+      1 Changed: eu-south africa===========>eu south africa
+      1 Changed: estate homes low $500s!===========>estate homes low $500s
+      1 Changed: e-petition===========>e petition
+      1 Changed: eltiempo.com===========>eltiempocom
+      1 Changed: elephant, deer===========>elephant deer
+      1 Changed: egg, artichoke, prosciutto, olives, mushrooms===========>egg artichoke prosciutto olives mushrooms
+      1 Changed: e-820 cr ms 815 aj===========>e 820 cr ms 815 aj
+      1 Changed: dryden, linden, dinos===========>dryden linden dinos
+      1 Changed: drink coca-cola===========>drink coca cola
+      1 Changed: drill, hammer, and screwdriver===========>drill hammer and screwdriver
+      1 Changed: dress code?===========>dress code
+      1 Changed: dough, sauce, chicken, olives===========>dough sauce chicken olives
+      1 Changed: dine-in & takeout===========>dine in & takeout
+      1 Changed: destin, fl===========>destin fl
+      1 Changed: cs-dxs===========>cs dxs
+      1 Changed: cs-drz===========>cs drz
+      1 Changed: cross-legged===========>cross legged
+      1 Changed: come in and take look browsing is free!===========>come in and take look browsing is free
+      1 Changed: coke zero and water===========>coke 0 and water
+      1 Changed: close-up===========>close up
+      1 Changed: close door when you leave!!! thanks===========>close door when you leave thanks
+      1 Changed: circle, square, star===========>circle square star
+      1 Changed: cheese, pepperoni===========>cheese pepperoni
+      1 Changed: cheese, olives, onion, and sausage===========>cheese olives onion and sausage
+      1 Changed: cheese, meat, onions, spinach and lettuce===========>cheese meat onions spinach and lettuce
+      1 Changed: cheese, lettuce, chicken, tomato===========>cheese lettuce chicken tomato
+      1 Changed: cheese, hamburger===========>cheese hamburger
+      1 Changed: cheese,bell peppers, onion, sausage===========>cheesebell peppers onion sausage
+      1 Changed: chase, citibank===========>chase citibank
+      1 Changed: champ-de-mars===========>champ de mars
+      1 Changed: chair, wii remote, tv remotes===========>chair wii remote tv remotes
+      1 Changed: celery, cauliflower, green beans, carrots, squash, broccoli===========>celery cauliflower green beans carrots squash broccoli
+      1 Changed: carrots, lettuce, spinach===========>carrots lettuce spinach
+      1 Changed: carrots, celery, onions===========>carrots celery onions
+      1 Changed: carrot, cauliflower, broccoli===========>carrot cauliflower broccoli
+      1 Changed: camel, bear, monkey===========>camel bear monkey
+      1 Changed: c-3po===========>c 3po
+      1 Changed: byzantine-latino quarter===========>byzantine latino quarter
+      1 Changed: bx-df-45===========>bx df 45
+      1 Changed: bx-bs-76===========>bx bs 76
+      1 Changed: bustard rd, forty foot rd===========>bustard rd forty foot rd
+      1 Changed: brown, white, and red stripes===========>brown white and red stripes
+      1 Changed: brown, green===========>brown green
+      1 Changed: brown, blue, white===========>brown blue white
+      1 Changed: broccoli, chicken, potatoes===========>broccoli chicken potatoes
+      1 Changed: br-hz-39===========>br hz 39
+      1 Changed: bottom left corner, top left corner===========>bottom left corner top left corner
+      1 Changed: bottles, glasses, books, games, remotes===========>bottles glasses books games remotes
+      1 Changed: boston, albany ny===========>boston albany ny
+      1 Changed: bohemiantraveler.com===========>bohemiantravelercom
+      1 Changed: blue, yellow, white===========>blue yellow white
+      1 Changed: blue, yellow, red===========>blue yellow red
+      1 Changed: blue,yellow,pink===========>blue yellow pink
+      1 Changed: blue, yellow===========>blue yellow
+      1 Changed: blue, white, orange===========>blue white orange
+      1 Changed: blue, red, orange===========>blue red orange
+      1 Changed: blue, red, green and white===========>blue red green and white
+      1 Changed: blue, purple, white, green===========>blue purple white green
+      1 Changed: blue, pink, green===========>blue pink green
+      1 Changed: blue, green, gray===========>blue green gray
+      1 Changed: blue, green, and pink===========>blue green and pink
+      1 Changed: blue, gray, white===========>blue gray white
+      1 Changed: black, yellow, white===========>black yellow white
+      1 Changed: black, yellow, red, & blue===========>black yellow red & blue
+      1 Changed: black/yellow and blue/white===========>black yellow and blue white
+      1 Changed: black, white, yellow===========>black white yellow
+      1 Changed: black, white, pink===========>black white pink
+      1 Changed: black/silver===========>black silver
+      1 Changed: black, red, tan, white===========>black red tan white
+      1 Changed: black, red, green, brown===========>black red green brown
+      1 Changed: black, orange, green, and blue===========>black orange green and blue
+      1 Changed: black, gray and white===========>black gray and white
+      1 Changed: black, brown,red===========>black brownred
+      1 Changed: black, brown, and white===========>black brown and white
+      1 Changed: black, brown and white===========>black brown and white
+      1 Changed: black, blue, red===========>black blue red
+      1 Changed: blackberry, iphone and nokia===========>blackberry iphone and nokia
+      1 Changed: bike and horse-drawn carriage===========>bike and horse drawn carriage
+      1 Changed: bicycles, skates, skateboards===========>bicycles skates skateboards
+      1 Changed: best fried clams no lies try our breakfast 6am-11am===========>best fried clams no lies try our breakfast 6am 11am
+      1 Changed: bell peppers, cheese, and meat===========>bell peppers cheese and meat
+      1 Changed: before the wedding===========>before wedding
+      1 Changed: beans, ice===========>beans ice
+      1 Changed: bankofamericacom/redsox===========>bankofamericacom redsox
+      1 Changed: bananas, oranges, pears, peaches===========>bananas oranges pears peaches
+      1 Changed: banana's,orange's===========>banana's orange's
+      1 Changed: banana, pineapple, orange===========>banana pineapple orange
+      1 Changed: banana pepper, pickle, lettuce,===========>banana pepper pickle lettuce
+      1 Changed: banana, oranges, lemons, ginger root , plum===========>banana oranges lemons ginger root plum
+      1 Changed: banana, muffin, peanut butter===========>banana muffin peanut butter
+      1 Changed: banana, mango, oranges===========>banana mango oranges
+      1 Changed: b 0201-16l===========>b 0201 16l
+      1 Changed: avocado, ginger===========>avocado ginger
+      1 Changed: a-tex===========>tex
+      1 Changed: apples, oranges, grapes===========>apples oranges grapes
+      1 Changed: apples, orange and kiwi===========>apples orange and kiwi
+      1 Changed: apples, bananas, oranges===========>apples bananas oranges
+      1 Changed: apple, banana, pomegranate===========>apple banana pomegranate
+      1 Changed: anne-katrin gerner===========>anne katrin gerner
+      1 Changed: all-way to all-war===========>all way to all war
+      1 Changed: a flood can happen anywhere===========>flood can happen anywhere
+      1 Changed: 9-6 m-f===========>9 6 m f
+      1 Changed: 9-5===========>9 5
+      1 Changed: 9-1===========>9 1
+      1 Changed: 9/10===========>9 10
+      1 Changed: 8am-10pm===========>8am 10pm
+      1 Changed: 896-4247===========>896 4247
+      1 Changed: 8'2"===========>8'2
+      1 Changed: 810479-4===========>810479 4
+      1 Changed: 80-7293===========>80 7293
+      1 Changed: 800-262-4252===========>800 262 4252
+      1 Changed: 78-bbj-7===========>78 bbj 7
+      1 Changed: 761-167===========>761 167
+      1 Changed: 73, 54===========>73 54
+      1 Changed: 7/30/2006===========>7 30 2006
+      1 Changed: 718-721-4711===========>718 721 4711
+      1 Changed: 6-9===========>6 9
+      1 Changed: 658-7245===========>658 7245
+      1 Changed: 6-10===========>6 10
+      1 Changed: 604-808-7225===========>604 808 7225
+      1 Changed: 604-274-1277===========>604 274 1277
+      1 Changed: 5'9"===========>5'9
+      1 Changed: 513-226-2337===========>513 226 2337
+      1 Changed: 504-309-6865===========>504 309 6865
+      1 Changed: 503-222-9999===========>503 222 9999
+      1 Changed: 46-78===========>46 78
+      1 Changed: 4/5===========>4 5
+      1 Changed: 43-101===========>43 101
+      1 Changed: 416-0607===========>416 0607
+      1 Changed: 39, 1===========>39 1
+      1 Changed: 3/4 sleeve===========>3 4 sleeve
+      1 Changed: 33, 62, 35===========>33 62 35
+      1 Changed: 333-3333===========>333 3333
+      1 Changed: 323-377-1521===========>323 377 1521
+      1 Changed: 30-36===========>30 36
+      1 Changed: $300 lb, $200 lb===========>$300 lb $200 lb
+      1 Changed: 2-way===========>2 way
+      1 Changed: 2 males, 2 females===========>2 males 2 females
+      1 Changed: $2/lb===========>$2 lb
+      1 Changed: 2-6===========>2 6
+      1 Changed: 25/10/1999 09:47===========>25 10 1999 09:47
+      1 Changed: 24"===========>24
+      1 Changed: 24/04/2010===========>24 04 2010
+      1 Changed: 22-bbh-6===========>22 bbh 6
+      1 Changed: 22 3/4===========>22 3 4
+      1 Changed: 20 km/h===========>20 km h
+      1 Changed: 2011/08/13===========>2011 08 13
+      1 Changed: 2008/12/07===========>2008 12 07
+      1 Changed: 1998-2008===========>1998 2008
+      1 Changed: 1955, 2012, 1985===========>1955 2012 1985
+      1 Changed: 1-9===========>1 9
+      1 Changed: 1-800-usa-rail===========>1 800 usa rail
+      1 Changed: 1/7===========>1 7
+      1 Changed: 170 km/h===========>170 km h
+      1 Changed: 14 st-6 av===========>14 st 6 av
+      1 Changed: 1/4 mile===========>1 4 mile
+      1 Changed: 135-013===========>135 013
+      1 Changed: 13'2"===========>13'2
+      1 Changed: 1,2,3,4,5,6,7,8,9,0===========>1234567890
+      1 Changed: 12/28/2008===========>12 28 2008
+      1 Changed: 12-12-12===========>12 12 12
+      1 Changed: 11/30/98===========>11 30 98
+      1 Changed: 11/23/99===========>11 23 99
+      1 Changed: 10/30/2009===========>10 30 2009
+      1 Changed: 10/25/2011===========>10 25 2011
+      1 Changed: 1/02/2011===========>1 02 2011
+      1 Changed: 10-2===========>10 2
+      1 Changed: 10+===========>10
+      1 Changed: 100,000===========>100000
+      1 Changed: $1,000,000===========>$1000000
+      1 Changed: 09/15/2012===========>09 15 2012
+      1 Changed: 09/10/2008===========>09 10 2008
+      1 Changed: 09/03/08===========>09 03 08
+      1 Changed: 07/08/2010===========>07 08 2010
+      1 Changed: 07/07/2013===========>07 07 2013
+      1 Changed: 06/15/2013===========>06 15 2013
+      1 Changed: 06/07/2007===========>06 07 2007
+      1 Changed: 06/07/2006===========>06 07 2006
+      1 Changed: 06/07/2005===========>06 07 2005
+      1 Changed: 056_652===========>056 652
+      1 Changed: 056_012===========>056 012
+      1 Changed: 03/12===========>03 12
+      1 Changed: 03/11/2010===========>03 11 2010
+      1 Changed: 0304058613-2===========>0304058613 2
+      1 Changed: 0-3===========>0 3
+      1 Changed: @#!!===========>#
+      1 Changed: ?===========>
