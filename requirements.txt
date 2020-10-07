@@ -1,5 +1,6 @@
-spacy >= 2.0.18
-numpy >= 1.16.2
-
-
-
+torch
+wandb
+seaborn
+knockknock
+spacy
+ipdb
