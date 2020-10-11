@@ -302,7 +302,7 @@ class Net(nn.Module):
             ans_branch_feat = self.proj(ans_branch_feat)
             fused_feat = self.proj(fused_feat)
 
-            return proj_feat, ans_feat, fused_feat, z_proj, z_ans, z_fused
+            return ques_branch_feat, ans_branch_feat, fused_feat, z_ques_branch, z_ans_branch, z_fused
 
         else:
             return self.proj(ques_branch_feat)
