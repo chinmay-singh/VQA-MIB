@@ -1,6 +1,7 @@
 # --------------------------------------------------------
 # OpenVQA
 # Written by Yuhao Cui https://github.com/cuiyuhao1996
+# Modified at FrostLabs
 # --------------------------------------------------------
 
 from importlib import import_module
@@ -13,8 +14,8 @@ class ModelLoader:
         model_moudle_path = 'openvqa.models.' + self.model_use + '.net'
         self.model_moudle = import_module(model_moudle_path)
 
-    def Net(self, __arg1, __arg2, __arg3, __arg4 , __arg5, __arg6):
-        return self.model_moudle.Net(__arg1, __arg2, __arg3, __arg4, __arg5, __arg6)
+    def Net(self, **args, **kwargs):
+        return self.model_moudle.Net(**args, **kwargs)
 
 
 class CfgLoader:
