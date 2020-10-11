@@ -1,3 +1,8 @@
+#------------------------------------------------------------------
+# Written at FrostLabs
+# Licence: MIT
+#------------------------------------------------------------------
+
 import numpy as np
 import torch
 from sklearn.manifold import MDS
