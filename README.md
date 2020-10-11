@@ -1,6 +1,6 @@
 # Model-Agnostic Information Biasing for VQA
 
-![Model](images/model.png?raw=true)
+![Model](images/model.png)
 
 Architecture of the model. Only the question branch is used at the inference time.
 
