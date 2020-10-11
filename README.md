@@ -1,6 +1,6 @@
 # Model-Agnostic Information Biasing for VQA
 
-![Model][images/model.png?raw=true]
+![Model](images/model.png?raw=true)
 
 Architecture of the model. Only the question branch is used at the inference time.
 
@@ -97,7 +97,7 @@ The default configs should be sufficient to reproduce the results, however, you 
 
 ## Visualizations
 
-![Visualization][images/feature_tsne_vis.png?raw=true]
+![Visualization](images/feature_tsne_vis.png?raw=true)
 
 Visualizations such as the above can be plotted using the ```vis.sh``` script. Instruction for the same are included in the file itself.
 
