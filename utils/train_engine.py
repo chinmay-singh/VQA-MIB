@@ -1,6 +1,7 @@
 # --------------------------------------------------------
 # OpenVQA
 # Written by Yuhao Cui https://github.com/cuiyuhao1996
+# Modified at FrostLabs
 # --------------------------------------------------------
 
 import os, torch, datetime, shutil, time
@@ -19,16 +20,19 @@ import sys
 
 def train_engine(__C, dataset, dataset_eval=None):
 
+    print("Model being used is {}".format(__C.MODEL_USE))
+
+    """
+    Preparing for initializing the net
+    """
+
     data_size = dataset.data_size
     token_size = dataset.token_size
     ans_size = dataset.ans_size
     pretrained_emb = dataset.pretrained_emb
 
-    #Edits
     pretrained_emb_ans = dataset.pretrained_emb_ans
-    token_size_ans = dataset.token_size_ans #End of Edits
-
-    print("Model being used is {}".format(__C.MODEL_USE))
+    token_size_ans = dataset.token_size_ans
 
     net = ModelLoader(__C).Net(
         __C,
@@ -36,7 +40,8 @@ def train_engine(__C, dataset, dataset_eval=None):
         token_size,
         ans_size,
         pretrained_emb_ans,
-        token_size_ans
+        token_size_ans,
+        training=True
     )
 
     net.cuda()
@@ -53,12 +58,8 @@ def train_engine(__C, dataset, dataset_eval=None):
     if (__C.WITH_ANSWER and ((__C.VERSION) not in os.listdir(__C.SAVED_PATH))):
         os.mkdir(__C.SAVED_PATH + '/' + __C.VERSION)
 
-    ###############################################################
-    ######## Load the pretrained ans+img only model ###############
-    ###############################################################
-
-    if __C.LOAD_PRETRAINED:
-        print("using the pretrained model for ans+img encoder and decoder both parts")
+    if __C.TRAINING_MODE in ['pretrained_ans']:
+        print("Using the pretrained model to initialize the answer branch")
 
         path = __C.CKPTS_PATH + \
                '/ckpt_' + __C.CKPT_VERSION + \
@@ -69,44 +70,17 @@ def train_engine(__C, dataset, dataset_eval=None):
         print('Finish!')
 
         pretrained_state_dict = torch.load(path)['state_dict']
+        if __C.N_GPU > 1:
+            pretrained_state_dict = ckpt_proc(pretrained_state_dict)
 
-        #print("#################################################")
-        #print("printing the pretrained state dict")
-        #print(pretrained_state_dict)
-        #print("################################################\n\n\n")
-        #print("----------------------------------------------------\n\n\n")
-        
         net_state_dict = net.state_dict()
 
-        #print("filtering keys from pretrained state dict")
-        #pretrained_state_dict_updated = {k: v for k, v in pretrained_state_dict.items() if k in net_state_dict} 
-    
         print("updating keys in net_state_dict form pretrained state dict")
         net_state_dict.update(pretrained_state_dict)
 
-        #print("#################################################")
-        #print("printing the updated net state dict")
-        #print(net_state_dict)
-        #print("################################################\n\n\n")
-        #print("----------------------------------------------------\n\n\n")
         print("loading this state dict in the net")
 
-        '''
-        if __C.N_GPU > 1:
-            net.load_state_dict(ckpt_proc(net_state_dict))
-        else:
-        '''
-        net.load_state_dict(net_state_dict)
-        print("loaded net state dict succesfully")
- 
-        #print("#################################################")
-        #print("printing the updated net state dict")
-        #print(net.state_dict())
-        #print("################################################\n\n\n")
-        #print("----------------------------------------------------\n\n\n")
 
-        #sys.exit("------------------------------------------------------------")
-       
 
     # Load checkpoint if resume training
     if __C.RESUME:
@@ -152,17 +126,7 @@ def train_engine(__C, dataset, dataset_eval=None):
     named_params = list(net.named_parameters())
     grad_norm = np.zeros(len(named_params))
 
-    # Define multi-thread dataloader
-    # if __C.SHUFFLE_MODE in ['external']:
-    #     dataloader = Data.DataLoader(
-    #         dataset,
-    #         batch_size=__C.BATCH_SIZE,
-    #         shuffle=False,
-    #         num_workers=__C.NUM_WORKERS,
-    #         pin_memory=__C.PIN_MEM,
-    #         drop_last=True
-    #     )
-    # else:
+    
     dataloader = Data.DataLoader(
         dataset,
         batch_size=__C.BATCH_SIZE,
@@ -184,14 +148,10 @@ def train_engine(__C, dataset, dataset_eval=None):
     # os.environ['WANDB_MODE'] = 'dryrun' 
 
     # initializing the wandb project
-    # TODO to change the name of project later, once the proper coding starts
-    wandb.init(project="openvqa", name=__C.VERSION, config=__C)
+    wandb.init(project=__C.PROJECT_NAME, name=__C.VERSION, config=__C)
 
     # obtain histogram of each gradients in network as it trains
     wandb.watch(net, log="all")
-
-    wandb.save("./openvqa/models/" + str(__C.MODEL_USE) + "/net.py")
-    wandb.save("./utils1/train_engine.py")
 
     # Training script
     for epoch in range(start_epoch, __C.MAX_EPOCH):
@@ -282,11 +242,8 @@ def train_engine(__C, dataset, dataset_eval=None):
                              (accu_step + 1) * __C.SUB_BATCH_SIZE]
 
                 
-                # when making predictions also pass the ans_iter which is a dictionary from which you
-                # can extract answers and pass them through decoders
-
-                if (__C.WITH_ANSWER):
-                    pred_img_ques, pred_ans, pred_fused, z_img_ques, z_ans, z_fused = net(
+                if __C.TRAINING_MODE in ['simultaneous_qa', 'pretrained_ans']:
+                    pred, pred_ans_branch, pred_fused, z_img_ques, z_ans, z_fused = net(
                         sub_frcn_feat_iter,
                         sub_grid_feat_iter,
                         sub_bbox_feat_iter,
@@ -296,7 +253,7 @@ def train_engine(__C, dataset, dataset_eval=None):
                         epoch
                     )
                 else:
-                     pred_img_ques = net(
+                     pred = net(
                         sub_frcn_feat_iter,
                         sub_grid_feat_iter,
                         sub_bbox_feat_iter,
@@ -306,121 +263,62 @@ def train_engine(__C, dataset, dataset_eval=None):
                         epoch
                     )
                    
-                # we need to change the loss terms accordingly
-                # now we need to modify the loss terms for the same
-                
-                #Edits: creating the loss items for each of the prediction vector
-
-                loss_item_img_ques = [pred_img_ques, sub_ans_iter]
-
-                # only calculate the ans and interp loss in case of WITH_ANSWER
-                if (__C.WITH_ANSWER):
-                    loss_item_ans = [pred_ans, sub_ans_iter]
-                    loss_item_interp = [pred_fused, sub_ans_iter]
-
-                
                 loss_nonlinear_list = __C.LOSS_FUNC_NONLINEAR[__C.LOSS_FUNC]
                 
-                # applying the same transformation on the all three
-                # althought for 'bce' loss the following does nothing
+                loss_item_pred = [pred, sub_ans_iter]
                 for item_ix, loss_nonlinear in enumerate(loss_nonlinear_list):
                     if loss_nonlinear in ['flat']:
                         loss_item_img_ques[item_ix] = loss_item_img_ques[item_ix].view(-1)
                     elif loss_nonlinear:
                         loss_item_img_ques[item_ix] = eval('F.' + loss_nonlinear + '(loss_item_img_ques[item_ix], dim=1)')
 
-                for item_ix, loss_nonlinear in enumerate(loss_nonlinear_list):
-                    if loss_nonlinear in ['flat'] and __C.WITH_ANSWER:
-                        loss_item_ans[item_ix] = loss_item_ans[item_ix].view(-1)
-                    elif loss_nonlinear and __C.WITH_ANSWER:
-                        loss_item_ans[item_ix] = eval('F.' + loss_nonlinear + '(loss_item_ans[item_ix], dim=1)')
 
-                for item_ix, loss_nonlinear in enumerate(loss_nonlinear_list):
-                    if loss_nonlinear in ['flat'] and __C.WITH_ANSWER:
-                        loss_item_interp[item_ix] = loss_item_interp[item_ix].view(-1)
-                    elif loss_nonlinear and __C.WITH_ANSWER:
-                        loss_item_interp[item_ix] = eval('F.' + loss_nonlinear + '(loss_item_interp[item_ix], dim=1)')
+                # only calculate the ans and interp loss in case of WITH_ANSWER
+                if (__C.TRAINING_MODE in ['simultaneous_qa', 'pretrained_ans']):
+                    loss_item_ans = [pred_ans_branch, sub_ans_iter]
+                    loss_item_interp = [pred_fused, sub_ans_iter]
+                
+                    for item_ix, loss_nonlinear in enumerate(loss_nonlinear_list):
+                        if loss_nonlinear in ['flat']:
+                            loss_item_ans[item_ix] = loss_item_ans[item_ix].view(-1)
+                        elif loss_nonlinear:
+                            loss_item_ans[item_ix] = eval('F.' + loss_nonlinear + '(loss_item_ans[item_ix], dim=1)')
+
+                    for item_ix, loss_nonlinear in enumerate(loss_nonlinear_list):
+                        if loss_nonlinear in ['flat']:
+                            loss_item_interp[item_ix] = loss_item_interp[item_ix].view(-1)
+                        elif loss_nonlinear:
+                            loss_item_interp[item_ix] = eval('F.' + loss_nonlinear + '(loss_item_interp[item_ix], dim=1)')
 
 
                 # Now we create all the four losses and then add them
-                #print("shape of loss_item_img_ques[0] is {} and of loss_item_img_ques[1] is {}".format(loss_item_img_ques[0],loss_item_img_ques[1]))
-                loss_img_ques = loss_fn(loss_item_img_ques[0], loss_item_img_ques[1])
-
                 loss = 0
-                loss += loss_img_ques
+                loss_pred = loss_fn(loss_item_pred[0], loss_item_pred[1])
+                loss += loss_pred
                 
-                if (__C.WITH_ANSWER):
-
+                if __C.TRAINING_MODE in ['simultaneous_qa', 'pretrained_ans']:
                     # loss for the prediction from the answer
-                    #print("shape of loss_item_ans[0] is {} and of loss_item_ans[1] is {}".format(loss_item_ans[0],loss_item_ans[1]))
                     loss_ans = loss_fn(loss_item_ans[0], loss_item_ans[1])
                 
                     # Loss for the prediction from the fused vector
-                    # I am keeping the loss same as bce but we can change it later for more predictions
-                    # loss_fused = interpolation loss
-                    #print("shape of loss_item_interp[0] is {} and of loss_item_interp[1] is {}".format(loss_item_interp[0],loss_item_interp[1]))
                     loss_interp = loss_fn(loss_item_interp[0], loss_item_interp[1])
                     
                     # we also need to multiply this fused loss by a hyperparameter alpha
-                    # put the alpha in the config and uncomment the following line
                     loss_interp *= __C.ALPHA
                     loss += loss_ans + loss_interp
 
                     if (__C.WITH_FUSION_LOSS):
 
                         # Now calculate the fusion loss
-                        #1. Higher loss for higher distance between vectors predicted
+                        # 1.Higher loss for higher distance between vectors predicted
                         # by different models for same example
-
                         dist_calc = (z_img_ques - z_ans).pow(2).sum(1).sqrt()
-                        #print("Count of distances being clipped (true is clipped): ", np.unique((dist_calc > __C.CAP_DIST).cpu().numpy(), return_counts=True))
-
-                        '''
-                        loss_fusion = torch.min(
-                                torch.tensor(__C.CAP_DIST).cuda(),
-                                dist_calc
-                                ).mean()
-
-                        #2. Lower loss for more distance between two pred vectors of same model
-                        loss_fusion -= torch.min(
-                                torch.tensor(__C.CAP_DIST).cuda(), 
-                                torch.pdist(z_img_ques, 2)
-                                ).mean() 
-
-                        loss_fusion -= torch.min(
-                                torch.tensor(__C.CAP_DIST).cuda(), 
-                                torch.pdist(z_ans, 2)
-                                ).mean() 
-                        '''
-
                         loss_fusion = dist_calc.mean()
-
-                        #2. Lower loss for more distance between two pred vectors of same model
-                        '''
-                        calculating pairwise intra distance on same type questions
-                        '''
-                        '''
-                        types = ['other', 'yes/no', 'number']
-                        for i in range(3):
-                            j = (i+1)%3
-                            indices_i = [k for k, val in enumerate(ques_type) if val == types[i]]
-                            indices_j = [k for k, val in enumerate(ques_type) if val == types[j]]
-                            if ((indices_i != []) and (indices_j != [])):
-                                loss_fusion -= torch.cdist(z_img_ques[indices_i], z_img_ques[indices_j]).mean()
-                                loss_fusion -= torch.cdist(z_ans[indices_i], z_ans[indices_j]).mean()
-                            if (indices_i != []):
-                                loss_fusion += torch.pdist(z_img_ques[indices_i], 2).mean()
-                                loss_fusion += torch.pdist(z_ans[indices_i], 2).mean()
-                        '''
                         loss_fusion -= torch.pdist(z_img_ques, 2).mean() 
-
                         loss_fusion -= torch.pdist(z_ans, 2).mean() 
-
 
                         # Multiply the loss fusion with hyperparameter beta
                         loss_fusion *= __C.BETA
-
-                        #print('fusion loss is : {}'.format(loss_fusion))
 
                         loss += loss_fusion
 
@@ -432,8 +330,8 @@ def train_engine(__C, dataset, dataset_eval=None):
                 loss_sum += loss.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
 
                 # calculating temp loss of each type
-                if __C.WITH_ANSWER:
-                    loss_img_ques_tmp += loss_img_ques.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
+                if __C.TRAINING_MODE in ['simultaneous_qa', 'pretrained_ans']:
+                    loss_pred_tmp += loss_pred.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
                     loss_ans_tmp += loss_ans.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
                     loss_interp_tmp += loss_interp.cpu().data.numpy() * __C.GRAD_ACCU_STEPS
                     if (__C.WITH_FUSION_LOSS):
@@ -446,17 +344,17 @@ def train_engine(__C, dataset, dataset_eval=None):
                 else:
                     mode_str = __C.SPLIT['train'] + '->' + __C.SPLIT['test']
 
-                print("\r[Version %s][Epoch %2d][Step %4d/%4d] Loss: %.4f [iq: %.4f,ans: %.4f,interp: %.4f,fusion: %.4f]" % (
+                print("\r[Version %s][Epoch %2d][Step %4d/%4d] Loss: %.4f [main_pred: %.4f,ans: %.4f,interp: %.4f,fusion: %.4f]" % (
                     __C.VERSION,
                     epoch + 1,
                     step,
                     int(data_size / __C.BATCH_SIZE),
                     loss_tmp / __C.SUB_BATCH_SIZE,
-                    loss_img_ques_tmp / __C.SUB_BATCH_SIZE,
+                    loss_pred_tmp / __C.SUB_BATCH_SIZE,
                     loss_ans_tmp / __C.SUB_BATCH_SIZE,
                     loss_interp_tmp / __C.SUB_BATCH_SIZE,
                     loss_fusion_tmp / __C.SUB_BATCH_SIZE
-                ), end = '          ')
+                ), end = ' ')
 
             # Gradient norm clipping
             if __C.GRAD_NORM_CLIP > 0:
@@ -504,13 +402,6 @@ def train_engine(__C, dataset, dataset_eval=None):
             '/epoch' + str(epoch_finish) +
             '.pkl'
         )
-
-        wandb.save(
-            __C.CKPTS_PATH +
-            '/ckpt_' + __C.VERSION +
-            '/epoch' + str(epoch_finish) +
-            '.h5'
-        )
         
         # Logging
         logfile = open(
@@ -541,7 +432,6 @@ def train_engine(__C, dataset, dataset_eval=None):
         dic['version'] = __C.VERSION
         dic['epoch'] = epoch 
         dic['num_samples'] = 1000
-
         p = Pool(processes= 1)
         p.map_async(vis_func, (dic, ))
         p.close()
@@ -560,23 +450,6 @@ def train_engine(__C, dataset, dataset_eval=None):
                 epoch = 0
             )
         p.join()
-
-        # if self.__C.VERBOSE:
-        #     logfile = open(
-        #         self.__C.LOG_PATH +
-        #         '/log_run_' + self.__C.VERSION + '.txt',
-        #         'a+'
-        #     )
-        #     for name in range(len(named_params)):
-        #         logfile.write(
-        #             'Param %-3s Name %-80s Grad_Norm %-25s\n' % (
-        #                 str(name),
-        #                 named_params[name][0],
-        #                 str(grad_norm[name] / data_size * self.__C.BATCH_SIZE)
-        #             )
-        #         )
-        #     logfile.write('\n')
-        #     logfile.close()
 
         loss_sum = 0
         grad_norm = np.zeros(len(named_params))
