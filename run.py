@@ -1,10 +1,11 @@
 # --------------------------------------------------------
 # OpenVQA
 # Written by Yuhao Cui https://github.com/cuiyuhao1996
+# Modified at FrostLabs
 # --------------------------------------------------------
 
 from openvqa.models.model_loader import CfgLoader
-from utils1.exec1 import Execution 
+from utils.exec_module import Execution 
 import argparse, yaml
 
 
@@ -22,49 +23,15 @@ def parse_args():
 
     parser.add_argument('--MODEL', dest='MODEL',
                       choices=[
-                           'mcan_small',
-                           'mcan_small_wa',
-                           'mcan_large',
-                           'ban_4',
-                           #Edits
-                           'ban_8_wa',
-                           'baseline_wa',
-                           #End of Edits
-                           'ban_8',
                            'mfb',
-                           'mfb_wa',
                            'mfh',
-                           'mfh_wa',
-                           'mem',
                            'butd',
-                           'butd_wa',
-                           'baseline',
-                           'baseline_wa_no_fusion',
-                           'positional',
-                           'mcan_large_wa',
-                           'mcan_small_augmented',
-                           'mcan_small_without_a'
                            ]
                         ,
                       help='{'
-                           'mcan_small,'
-                           'mcan_small_wa,'
-                           'mcan_large,'
-                            #Edits
-                           'ban_wa,'
-                           'baseline_wa,'
-                           #End of Edits
-                           'ban_4,'
-                           'ban_8,'
                            'mfb,'
-                           'mfb_wa,'
                            'mfh,'
-                           'mfh_wa,'
                            'butd,'
-                           'butd_wa,'
-                           'baseline,'
-                           'baseline_wa_no_fusion,'
-                           'positional,'
                            '}'
                         ,
                       type=str, required=True)

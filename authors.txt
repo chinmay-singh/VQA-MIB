@@ -1,3 +1,0 @@
-git commit --author="Nikhil Shah <shnik456@iitkgp.ac.in>"
-git commit --author="Apoorve Singhal <sapoorve@outlook.com>"
-git commit --author="Yash Khandelwal <yash12khandelwal@gmail.com>"

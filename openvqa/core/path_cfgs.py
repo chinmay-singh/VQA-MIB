@@ -46,9 +46,9 @@ class PATH:
         self.RAW_PATH = {
             'vqa': {
                 'train': self.DATA_PATH['vqa'] + '/raw' + '/v2_OpenEnded_mscoco_train2014_questions.json',
-                'train-anno': self.DATA_PATH['vqa'] + '/raw' + '/VQA-E_train_set.json',
+                'train-anno': self.DATA_PATH['vqa'] + '/raw' + '/v2_mscoco_train2014_annotations.json',
                 'val': self.DATA_PATH['vqa'] + '/raw' + '/v2_OpenEnded_mscoco_val2014_questions.json',
-                'val-anno': self.DATA_PATH['vqa'] + '/raw' + '/VQA-E_val_set.json',
+                'val-anno': self.DATA_PATH['vqa'] + '/raw' + '/v2_mscoco_val2014_annotations.json',
                 'vg': self.DATA_PATH['vqa'] + '/raw' + '/VG_questions.json',
                 'vg-anno': self.DATA_PATH['vqa'] + '/raw' + '/VG_annotations.json',
                 'test': self.DATA_PATH['vqa'] + '/raw' + '/v2_OpenEnded_mscoco_test2015_questions.json'

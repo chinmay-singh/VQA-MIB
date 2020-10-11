@@ -1,6 +1,7 @@
 # --------------------------------------------------------
 # OpenVQA
 # Written by Yuhao Cui https://github.com/cuiyuhao1996
+# Modified at FrostLabs
 # --------------------------------------------------------
 
 from openvqa.core.path_cfgs import PATH
@@ -17,11 +18,8 @@ class BaseCfgs(PATH):
         # ---- Experimentation Parameters ----
         # ------------------------------------
 
-        self.WITH_ANSWER = False
         self.WITH_FUSION_LOSS = False
-
         self.AUGMENTED_ANSWER = False
-        self.EXPLANATION = True
 
         # Set Devices
         # If use multi-gpu training, you can set e.g.'0, 1, 2' instead
@@ -36,6 +34,9 @@ class BaseCfgs(PATH):
 
         # You can set a name to start new training
         self.VERSION = str(self.SEED)
+
+        # Project name
+        self.PROJECT_NAME = 'vqa-mib'
 
         # Use checkpoint to resume training
         self.RESUME = False
@@ -60,7 +61,6 @@ class BaseCfgs(PATH):
 
         # Maximum cap for distance betwen any vectors
         self.CAP_DIST = 0.3
-
 
         # ------------------------------
         # ---- Data Provider Params ----
@@ -342,15 +342,5 @@ class BaseCfgs(PATH):
                 __C_str += '{ %-17s }->' % attr + str(getattr(self, attr)) + '\n'
 
         return __C_str
-
-
-#
-#
-# if __name__ == '__main__':
-#     __C = Cfgs()
-#     __C.proc()
-
-
-
 
 

@@ -1,6 +1,7 @@
 # --------------------------------------------------------
 # OpenVQA
 # Written by Zhenwei Shao https://github.com/ParadoxZW
+# Modified at FrostLabs
 # --------------------------------------------------------
 
 from openvqa.utils.make_mask import make_mask
@@ -20,198 +21,267 @@ import math
 # -------------------------
 
 class Net(nn.Module):
-    def __init__(self, __C, pretrained_emb, token_size, answer_size, pretrain_emb_ans, token_size_ans):
+    def __init__(self, __C, pretrained_emb, token_size, answer_size, pretrain_emb_ans, token_size_ans, training=True):
         super(Net, self).__init__()
         self.__C = __C
+        self.training = training
 
-        if pretrain_emb_ans is None:
-            self.eval_flag = True
-        else:
-            self.eval_flag = False
+        """
+        Modes of training that this net should support
+        1. The original VQA model
+        2. Training only the answer (teacher) branch
+        3. Training both the question (student) and answer (teacher) branch simultaneously
+        4. Using the pre-trained answer branch and training the question branch
+        """
 
-        self.embedding = nn.Embedding(
-            num_embeddings=token_size,
-            embedding_dim=__C.WORD_EMBED_SIZE
-        )
+        if __C.TRAINING_MODE in ['original', 'simultaneous_qa', 'pretrained_ans']:
 
-        # Loading the GloVe embedding weights
-        if __C.USE_GLOVE:
-            self.embedding.weight.data.copy_(torch.from_numpy(pretrained_emb))
-
-        self.rnn = nn.LSTM(
-            input_size=__C.WORD_EMBED_SIZE,
-            hidden_size=__C.HIDDEN_SIZE,
-            num_layers=1,
-            batch_first=True
-        )
-
-        self.adapter = Adapter(__C)
-
-        self.backbone = TDA(__C)
-
-        # Decoder GRU
-        self.decoder_gru = nn.GRU(
-            input_size= __C.HIDDEN_SIZE,
-            hidden_size=__C.HIDDEN_SIZE,
-            num_layers=1,
-            batch_first=True
-        )
-
-        # Classification layers
-        layers = [
-            weight_norm(nn.Linear(__C.HIDDEN_SIZE,
-                                  __C.FLAT_OUT_SIZE), dim=None),
-            nn.ReLU(),
-            nn.Dropout(__C.CLASSIFER_DROPOUT_R, inplace=True),
-            weight_norm(nn.Linear(__C.FLAT_OUT_SIZE, answer_size), dim=None)
-        ]
-        self.classifer = nn.Sequential(*layers)
-
-        if(self.__C.WITH_ANSWER):
-
-            self.ans_embedding = nn.Embedding(
-                num_embeddings=token_size_ans,
+            """
+            The word embedding layer
+            """
+            self.embedding = nn.Embedding(
+                num_embeddings=token_size,
                 embedding_dim=__C.WORD_EMBED_SIZE
             )
 
             # Loading the GloVe embedding weights
             if __C.USE_GLOVE:
-                if not self.eval_flag:
-                    self.ans_embedding.weight.data.copy_(torch.from_numpy(pretrain_emb_ans))
+                self.embedding.weight.data.copy_(torch.from_numpy(pretrained_emb))
 
+            """
+            The lstm for processing the question
+            """
+            self.rnn = nn.LSTM(
+                input_size=__C.WORD_EMBED_SIZE,
+                hidden_size=__C.HIDDEN_SIZE,
+                num_layers=1,
+                batch_first=True
+            )
 
+            """
+            Adapter and the backbone
+            """
+
+            self.adapter = Adapter(__C)
+            self.backbone = TDA(__C)
+
+        if __C.TRAINING_MODE in ['simultaneous_qa', 'pretrained_ans'] and self.training: 
+
+            """
+            The word embedding layer
+            """
+            self.ans_embedding = nn.Embedding(
+                num_embeddings=token_size,
+                embedding_dim=__C.WORD_EMBED_SIZE
+            )
+
+            # Loading the GloVe embedding weights
+            if __C.USE_GLOVE:
+                self.ans_embedding.weight.data.copy_(torch.from_numpy(pretrained_emb_ans))
+
+            """
+            The lstm for processing the question
+            """
             self.ans_rnn = nn.LSTM(
                 input_size=__C.WORD_EMBED_SIZE,
                 hidden_size=__C.HIDDEN_SIZE,
                 num_layers=1,
                 batch_first=True
             )
+
+            """
+            Adapter and the backbone
+            """
+
+            self.ans_adapter = Adapter(__C)
+            self.ans_backbone = TDA(__C)
+
+            # Freeze the answer branch if it is pre-trained
+            if __C.TRAINING_MODE == 'pretrained_ans':
+                for params in self.ans_embedding.parameters():
+                    params.requires_grad = False
+                for params in self.ans_rnn.parameters():
+                    params.requires_grad = False
+                for params in self.ans_backbone.parameters():
+                    params.requires_grad = False
+                for params in self.ans_adapter.parameters():
+                    params.requires_grad = False
+
+        if __C.TRAINING_MODE == 'pretraining_ans':
+
+            """
+            The word embedding layer
+            """
+            self.ans_embedding = nn.Embedding(
+                num_embeddings=token_size,
+                embedding_dim=__C.WORD_EMBED_SIZE
+            )
+
+            # Loading the GloVe embedding weights
+            if __C.USE_GLOVE:
+                self.ans_embedding.weight.data.copy_(torch.from_numpy(pretrained_emb_ans))
+
+            """
+            The lstm for processing the question
+            """
+            self.ans_rnn = nn.LSTM(
+                input_size=__C.WORD_EMBED_SIZE,
+                hidden_size=__C.HIDDEN_SIZE,
+                num_layers=1,
+                batch_first=True
+            )
+
+            """
+            Adapter and the backbone
+            """
+
+            self.ans_adapter = Adapter(__C)
+            self.ans_backbone = TDA(__C)
             
+        """
+        Classification layers remain same for all training modes
+        """
+        layers = [
+            weight_norm(nn.Linear(__C.HIDDEN_SIZE, __C.FLAT_OUT_SIZE), dim=None),
+            nn.ReLU(),
+            nn.Dropout(__C.CLASSIFIER_DROPOUT_R, inplace=True),
+            weight_norm(nn.Linear(__C.FLAT_OUT_SIZE, answer_size), dim=None)
+        ]
+        self.classifier = nn.Sequential(*layers)
+
+        if __C.TRAINING_MODE in ['simultaneous_qa', 'pretrained_ans']:
             # parameters for storing npy arrays
             self.batch_size = int(__C.SUB_BATCH_SIZE/__C.N_GPU)
             self.num = math.ceil(1000/self.batch_size) #313
 
             # storing npy arrays
             self.shape = (self.num * self.batch_size, int(__C.HIDDEN_SIZE)) 
-            self.z_proj = np.zeros(shape=self.shape)
-            self.z_ans = np.zeros(shape=self.shape)
+            self.z_ques_branch = np.zeros(shape=self.shape)
+            self.z_ans_branch = np.zeros(shape=self.shape)
             self.z_fused = np.zeros(shape=self.shape)
 
 
     def forward(self, frcn_feat, grid_feat, bbox_feat, ques_ix, ans_ix, step, epoch):
 
-        # Pre-process Language Feature
-        # lang_feat_mask = make_mask(ques_ix.unsqueeze(2))
-        self.rnn.flatten_parameters()
-        lang_feat = self.embedding(ques_ix)
-        lang_feat, _ = self.rnn(lang_feat)
+        if self.__C.TRAINING_MODE in ['original', 'simultaneous_qa', 'pretrained_ans']:
+            """
+            Apply the image adapter
+            """
 
-        img_feat, _ = self.adapter(frcn_feat, grid_feat, bbox_feat)
+            img_feat, _ = self.adapter(frcn_feat, grid_feat, bbox_feat)
 
-        # Backbone Framework
-        proj_feat = self.backbone(
-            lang_feat[:, -1],
-            img_feat
-        )
-        
-        self.decoder_gru.flatten_parameters()
-
-        if (self.__C.WITH_ANSWER == False or self.eval_flag == True):
-            # use the decoder
-            proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
-            proj_feat = proj_feat.squeeze()
-
-            # Classification layers
-            proj_feat = self.classifer(proj_feat)
+            """
+            Process the language features
+            """
+            self.rnn.flatten_parameters()
+            ques_feat = self.embedding(ques_ix)
+            ques_feat = self.rnn(ques_feat)
             
-            if (self.eval_flag == True and self.__C.WITH_ANSWER == True):
-                #hack because test_engine expects multiple returns from net but only uses the first
-                return proj_feat, None 
+            """
+            Pass both image and ques features through backbone
+            """
+            ques_branch_feat = self.backbone(img_feat, ques_feat)
 
-            return proj_feat
-        
-        ############ WITH ANSWER ##############
-        else:
+        if self.__C.TRAINING_MODE in ['simultaneous_qa', 'pretrained_ans'] and self.training:
+            """
+            Apply the image adapter of the answer branch
+            """
 
-            # --------------------------- #
-            # ---- Answer embeddings ---- #
-            # --------------------------- #
+            ans_img_feat, _ = self.ans_adapter(frcn_feat, grid_feat, bbox_feat)
 
-            ans_feat = self.ans_embedding(ans_ix)
+            """
+            Process the language features for answers
+            """
             self.ans_rnn.flatten_parameters()
+            ans_feat = self.ans_embedding(ans_ix)
+            ans_feat = self.ans_rnn(ans_feat)
+            
+            """
+            Pass both image and ans features through backbone
+            """
+            ans_branch_feat = self.ans_backbone(ans_img_feat, ans_feat)
 
-            ans_feat, _ = self.ans_rnn(ans_feat)
-            ans_feat = ans_feat.sum(1)
-            ######### or do
-            #_, ans_feat = self.ans_rnn(ans_feat) 
-            ######## but summing makes more sense when using one word answers only
+        if self.__C.TRAINING_MODE == 'pretraining_ans':
+            """
+            Apply the image adapter of the answer branch
+            """
 
-            # ---------------------- #
-            # ---- Adding noise ---- #
-            # ---------------------- #
+            ans_img_feat, _ = self.ans_adapter(frcn_feat, grid_feat, bbox_feat)
+
+            """
+            Process the language features for answers
+            """
+            self.ans_rnn.flatten_parameters()
+            ans_feat = self.ans_embedding(ans_ix)
+            ans_feat = self.ans_rnn(ans_feat)
+            
+            """
+            Pass both image and ans features through backbone
+            """
+            ans_branch_feat = self.ans_backbone(ans_img_feat, ans_feat)
+
+
+        if self.__C.TRAINING_MODE == 'original':
+            return self.classifier(ques_branch_feat)
+
+        elif self.__C.TRAINING_MODE == 'pretraining_ans':
+            return self.classifier(ans_branch_feat)
+
+        elif self.training:
+            # If training we will have to use the answer branch
+        
+            """
+            Add noise to help create a homogeneous space
+            """
 
             # randomly sample a number 'u' between zero and one
             u = torch.rand(1).cuda()
 
-            proj_noise = self.__C.PROJ_STDDEV * torch.randn(proj_feat.shape).cuda()
-            ans_noise = self.__C.ANS_STDDEV * torch.randn(ans_feat.shape).cuda()
+            ques_branch_noise = self.__C.QUES_STDDEV * torch.randn(ques_branch_feat.shape).cuda()
+            ans_branch_noise = self.__C.ANS_STDDEV * torch.randn(ans_branch_feat.shape).cuda()
             
-            ans_feat += ans_noise
-            proj_feat += proj_noise
+            ques_branch_feat += ques_branch_noise
+            ans_branch_feat += ans_branch_noise
 
-            # now we can fuse the vector
-            # (batch_size, FLAT_OUT_SIZE)
-            #debug
-            fused_feat = torch.add(torch.mul(u, proj_feat), torch.mul(1-u, ans_feat))
+            fused_feat = torch.add(torch.mul(u, ques_branch_feat), torch.mul(1-u, ans_branch_feat))
 
-            # --------------------------- #
-            # ---- SAVE THE FEATURES ---- #
-            # --------------------------- #
+            """
+            Save the features for visualizations
+            """
 
             # For calculating Fusion Loss in train_engine
             # also normalize the vectors before calculating loss
-            z_proj = F.normalize(proj_feat.clone(), p=2, dim=1)
-            z_ans = F.normalize(ans_feat.clone(), p=2, dim=1)
+            z_ques_branch = F.normalize(ques_branch_feat.clone(), p=2, dim=1)
+            z_ans_branch = F.normalize(ans_branch_feat.clone(), p=2, dim=1)
             z_fused = F.normalize(fused_feat.clone(), p=2, dim=1)
 
             if (step < self.num):
-                self.z_proj[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = proj_feat.clone().detach().cpu().numpy()
-                self.z_ans[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = ans_feat.clone().detach().cpu().numpy()
-                self.z_fused[ (step * self.batch_size) : ((step+1) * self.batch_size) ] = fused_feat.clone().detach().cpu().numpy()
-
-
+                self.z_ques_branch[(step*self.batch_size):((step+1)*self.batch_size)] = ques_branch_feat.clone().detach().cpu().numpy()
+                self.z_ans_branch[(step*self.batch_size):((step+1)*self.batch_size)] = ans_branch_feat.clone().detach().cpu().numpy()
+                self.z_fused[(step*self.batch_size):((step+1)*self.batch_size)] = fused_feat.clone().detach().cpu().numpy()
             elif (step == self.num):
                 np.save(self.__C.SAVED_PATH + '/' + self.__C.VERSION + '/z_proj_' + str(epoch) + '.npy', self.z_proj)
                 np.save(self.__C.SAVED_PATH + '/' + self.__C.VERSION + '/z_ans_' + str(epoch) + '.npy', self.z_ans)
                 np.save(self.__C.SAVED_PATH + '/' + self.__C.VERSION + '/z_fused_' + str(epoch) + '.npy', self.z_fused)
 
             elif (step == (self.num + 1)):
-                self.z_proj = np.zeros(shape=self.shape)
-                self.z_ans = np.zeros(shape=self.shape)
+                self.z_ques_branch = np.zeros(shape=self.shape)
+                self.z_ans_branch = np.zeros(shape=self.shape)
                 self.z_fused = np.zeros(shape=self.shape)
 
-            # ----------------- #
-            # ---- DECODER ---- #
-            # ----------------- #
 
-            # (batch_size, HIDDEN_SIZE)
-            proj_feat, _ = self.decoder_gru(proj_feat.unsqueeze(1))
-            proj_feat = proj_feat.squeeze()
-            # (batch_size, answer_size)
-            proj_feat = self.classifer(proj_feat)
-            
-            # (batch_size, HIDDEN_SIZE)
-            ans_feat, _ = self.decoder_gru(ans_feat.unsqueeze(1))
-            ans_feat = ans_feat.squeeze()
-            # (batch_size, answer_size)
-            ans_feat = self.classifer(ans_feat)
-            
-            # (batch_size, HIDDEN_SIZE)
-            fused_feat, _ = self.decoder_gru(fused_feat.unsqueeze(1))
-            fused_feat = fused_feat.squeeze()
-            # (batch_size, answer_size)
-            fused_feat = self.classifer(fused_feat)
+            """
+            Apply the classifier layer
+            """
+            ques_branch_feat = self.classifier(ques_branch_feat)
+            ans_branch_feat = self.classifier(ans_branch_feat)
+            fused_feat = self.classifier(fused_feat)
 
-            return proj_feat, ans_feat, fused_feat, z_proj, z_ans, z_fused
+            return ques_branch_feat, ans_branch_feat, fused_feat, z_ques_branch, z_ans_branch, z_fused
 
- 
+        else:
+            return self.classifier(ques_branch_feat)
+
+
+
+        
