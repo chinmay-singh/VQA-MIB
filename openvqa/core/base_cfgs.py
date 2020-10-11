@@ -35,6 +35,9 @@ class BaseCfgs(PATH):
         # You can set a name to start new training
         self.VERSION = str(self.SEED)
 
+        # Project name
+        self.PROJECT_NAME = 'vqa-mib'
+
         # Use checkpoint to resume training
         self.RESUME = False
 
