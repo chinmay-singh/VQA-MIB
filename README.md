@@ -80,7 +80,7 @@ The configuration of any run can be tweaked using the config files present in th
 Choices for ```TRAINING_MODE```:
 
 1. __simultaneous_qa__: In this case, both the question and the answer branch will be trained simultaneously.
-2. __pretraining_ans: The answer branch will be trained. 
+2. __pretraining_ans__: The answer branch will be trained. 
 3. __pretrained_ans__: The pretrained weights will be used to initialize the answer branch.
 
 In all the cases, checkpoints will be saved under the ```ckpts/``` directory.
